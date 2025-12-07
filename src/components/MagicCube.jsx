@@ -24,6 +24,7 @@ const MagicCube = ({ onSelect, isOpening, isMobile }) => {
     const downPos = useRef({ x: 0, y: 0 });
     const hasDragged = useRef(false);
     const [cubeSize, setCubeSize] = useState(300);
+    const [isProfileFlipped, setIsProfileFlipped] = useState(false);
 
     const handlePointerDown = (e) => {
         if(isOpening) return;
@@ -80,7 +81,11 @@ const MagicCube = ({ onSelect, isOpening, isMobile }) => {
             const deltaX = e.clientX - prevPos.current.x;
             const deltaY = e.clientY - prevPos.current.y;
             prevPos.current = { x: e.clientX, y: e.clientY };
-            rotateY.set(rotateY.get() + deltaX * 0.5);
+
+            const xAngle = rotateX.get() * (Math.PI / 180);
+            const direction = Math.cos(xAngle);
+
+            rotateY.set(rotateY.get() + deltaX * 0.5 * direction);
             rotateX.set(rotateX.get() - deltaY * 0.5);
         };
         const handlePointerUp = () => {
@@ -102,7 +107,7 @@ const MagicCube = ({ onSelect, isOpening, isMobile }) => {
                 <CubeFace size={cubeSize} halfSize={HALF_SIZE} rotate="rotateY(0deg)" color="bg-brandGreen" borderColor="border-black" label="エンタメ" icon={<Gamepad2 size={isMobile ? 48 : 64} className="text-white" />} textColor="text-white" onClick={() => !hasDragged.current && onSelect('entame')} isMobile={isMobile} />
                 <CubeFace size={cubeSize} halfSize={HALF_SIZE} rotate="rotateY(90deg)" color="bg-accentGold" borderColor="border-black" label="楽しさ" icon={<Smile size={isMobile ? 48 : 64} className="text-black" />} textColor="text-black" onClick={() => !hasDragged.current && onSelect('fun')} isMobile={isMobile} />
                 <CubeFace size={cubeSize} halfSize={HALF_SIZE} rotate="rotateX(90deg)" color="bg-red-600" borderColor="border-black" label="音楽" icon={<Music size={isMobile ? 48 : 64} className="text-white" />} textColor="text-white" onClick={() => !hasDragged.current && onSelect('music')} isMobile={isMobile} />
-                <CubeFace size={cubeSize} halfSize={HALF_SIZE} rotate="rotateY(-90deg)" color="bg-transparent" borderColor="border-black" customContent={<SecretProfileFace isMobile={isMobile} />} onClick={() => {}} isMobile={isMobile} />
+                <CubeFace size={cubeSize} halfSize={HALF_SIZE} rotate="rotateY(-90deg)" color="bg-transparent" borderColor="border-black" customContent={<SecretProfileFace isMobile={isMobile} isFlipped={isProfileFlipped} />} onClick={() => !hasDragged.current && setIsProfileFlipped(prev => !prev)} isMobile={isMobile} />
                 <CubeFace size={cubeSize} halfSize={HALF_SIZE} rotate="rotateX(-90deg)" color="bg-black" borderColor="border-white" customContent={
                     <div className="w-full h-full p-6 flex flex-col justify-center items-center text-white text-center select-none bg-black">
                    <h4 className={`font-black ${isMobile ? 'text-xl' : 'text-2xl'} mb-2 text-[#FFD700]`}>{isNumunumuMode ? numuText : 'HISTORY'}</h4>
@@ -114,7 +119,7 @@ const MagicCube = ({ onSelect, isOpening, isMobile }) => {
                 <CubeFace size={cubeSize} halfSize={HALF_SIZE} rotate="rotateY(180deg)" color="bg-white" borderColor="border-black" customContent={
                     <div className="w-full h-full p-6 flex flex-col justify-center text-center select-none bg-white">
                         <h3 className={`font-black ${isMobile ? 'text-2xl' : 'text-3xl'} mb-4 border-b-4 border-black inline-block self-center`}>{isNumunumuMode ? numuText : 'WHO?'}</h3>
-                        <p className={`font-serif ${isMobile ? 'text-xs' : 'text-sm'} leading-relaxed text-left font-bold`}>{isNumunumuMode ? numuText : 'インターネットの片隅で、コラージュを軸に音楽やビジュアルなどのコンテンツを制作し活動している。'}<br/>{isNumunumuMode ? '' : '面白さで世界の境界線を破壊・再構築し、実験的かつ親しみのある作品世界を目指す。'}<br/><br/>{isNumunumuMode ? '' : '制作デスクにはいつもスルメ'}</p>
+                        <p className={`font-serif ${isMobile ? 'text-xs' : 'text-sm'} leading-relaxed text-left font-bold`}>{isNumunumuMode ? numuText : '大阪在住。'}<br/>{isNumunumuMode ? '' : 'インターネットの片隅で、コラージュを軸に音楽やビジュアルなどのコンテンツを制作し活動している。'}<br/>{isNumunumuMode ? '' : '面白さで世界の境界線を破壊・再構築し、実験的かつ親しみのある作品世界を目指す。'}<br/><br/>{isNumunumuMode ? '' : '制作デスクにはいつもスルメ'}</p>
                     </div>
                 } isMobile={isMobile} />
                 <div className="absolute inset-0 m-auto bg-black animate-pulse pointer-events-none" style={{ width: cubeSize * 0.5, height: cubeSize * 0.5, transform: 'translateZ(0)' }} />

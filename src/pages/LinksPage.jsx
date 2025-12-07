@@ -55,7 +55,6 @@ const LinksPage = ({ onSecretClick }) => {
         window.addEventListener('resize', drawRock);
 
         const handleClick = (e) => {
-            if (isBroken) return;
             const rect = inputLayer.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
@@ -140,7 +139,7 @@ const LinksPage = ({ onSecretClick }) => {
 
             <div className="text-center mb-8 bg-white border-2 border-black p-4 shadow-[4px_4px_0px_#000] relative z-50 pointer-events-none">
                 <h1 className="text-4xl font-black font-sans mb-2 text-black">{isNumunumuMode ? numuText : '相互リンク'}</h1>
-                <span className="font-serif text-sm bg-black text-[#FFD700] px-2 py-1 inline-block transform -rotate-1">{isNumunumuMode ? numuText : 'ページを削って相互リンクを掘り起こしてね！'}</span>
+                <span className="font-serif text-sm bg-black text-[#FFD700] px-2 py-1 inline-block transform -rotate-1">{isNumunumuMode ? numuText : 'ページを削って相互リンクを掘り起こせ'}</span>
             </div>
 
             <div ref={containerRef} className={`relative w-full max-w-4xl h-[70vh] bg-black border-4 border-black shadow-[12px_12px_0px_rgba(0,0,0,0.5)] overflow-hidden ${getShakeClass()} z-10`}>
