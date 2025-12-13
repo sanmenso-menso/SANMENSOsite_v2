@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, Tag, Globe, Send } from 'lucide-react';
+import { Home, Tag, Globe, Send, Gamepad2 } from 'lucide-react';
 import { useNumunumu } from '../NumunumuContext';
 
 const NavigationDock = ({ activePage, onNavigate, isOpening }) => {
@@ -9,8 +9,10 @@ const NavigationDock = ({ activePage, onNavigate, isOpening }) => {
     const items = [
         { id: 'home', label: 'HOME', icon: Home },
         { id: 'works', label: 'WORKS', icon: Tag },
+        { id: 'contents', label: 'CONTENTS', icon: Gamepad2 },
         { id: 'links', label: 'LINKS', icon: Globe },
         { id: 'contact', label: 'CONTACT', icon: Send },
+
     ];
 
     // isOpeningのアニメーションを単純なスタイルで代替

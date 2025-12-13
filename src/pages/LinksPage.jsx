@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { EXCAVATION_LINKS } from '../constants';
 import { useNumunumu } from '../NumunumuContext';
+import ImageWithFallback from '../components/ImageWithFallback';
 
 const LinksPage = ({ onSecretClick }) => {
     const { isNumunumuMode } = useNumunumu();
@@ -15,7 +16,10 @@ const LinksPage = ({ onSecretClick }) => {
     const maxHp = 40000;
     const [randomPositions, setRandomPositions] = useState([]);
 
-    const numuExcavationLinks = EXCAVATION_LINKS.map(link => ({...link, title: numuText, desc: numuText}));
+    const numuExcavationLinks = EXCAVATION_LINKS.map(link => (link.type === 'banner' 
+        ? {...link, alt: numuText, image: '/images/numunumu_icon.png'} 
+        : {...link, title: numuText, desc: numuText}
+    ));
     const finalLinks = isNumunumuMode ? numuExcavationLinks : EXCAVATION_LINKS;
 
     useEffect(() => {
@@ -150,10 +154,25 @@ const LinksPage = ({ onSecretClick }) => {
                 </div>
                 <div className={`absolute inset-0 z-10 pointer-events-none ${isBroken ? 'opacity-0 transform scale-150 transition-all duration-1000' : 'opacity-100'}`}>
                     {randomPositions.length > 0 && finalLinks.map((link, i) => (
-                        <a key={i} href={link.url} target="_blank" rel="noreferrer" className="absolute bg-white border-2 border-black p-4 flex flex-col items-center justify-center text-center shadow-[4px_4px_0px_rgba(0,0,0,0.3)] hover:scale-110 hover:z-50 transition-transform cursor-pointer pointer-events-auto w-48 h-24" style={{ top: randomPositions[i]?.top || '50%', left: randomPositions[i]?.left || '50%', transform: `rotate(${randomPositions[i]?.rotate || '0deg'})`, backgroundColor: isNumunumuMode ? '#f0f0f0' : link.color || 'white' }}>
-                            <span className="font-black font-sans text-lg leading-none">{link.title}</span>
-                            <span className="font-serif text-xs opacity-70 mt-1">{link.desc}</span>
-                        </a>
+                        link.type === 'banner' ? (
+                            <a key={i} href={link.url} target="_blank" rel="noreferrer" className="absolute block hover:scale-110 hover:z-50 transition-transform cursor-pointer pointer-events-auto w-64 h-16 overflow-hidden" style={{ top: randomPositions[i]?.top || '50%', left: randomPositions[i]?.left || '50%', transform: `rotate(${randomPositions[i]?.rotate || '0deg'})` }}>
+                                <ImageWithFallback
+                                    src={link.image}
+                                    alt={link.alt}
+                                    className="w-full h-full object-contain"
+                                    fallback={(
+                                        <div className="w-full h-full flex items-center justify-center bg-gray-100 p-2 text-center text-xs text-gray-600">
+                                            {link.alt}
+                                        </div>
+                                    )}
+                                />
+                            </a>
+                        ) : (
+                            <a key={i} href={link.url} target="_blank" rel="noreferrer" className="absolute bg-white border-2 border-black p-4 flex flex-col items-center justify-center text-center shadow-[4px_4px_0px_rgba(0,0,0,0.3)] hover:scale-110 hover:z-50 transition-transform cursor-pointer pointer-events-auto w-48 h-24" style={{ top: randomPositions[i]?.top || '50%', left: randomPositions[i]?.left || '50%', transform: `rotate(${randomPositions[i]?.rotate || '0deg'})`, backgroundColor: isNumunumuMode ? '#f0f0f0' : link.color || 'white' }}>
+                                <span className="font-black font-sans text-lg leading-none">{link.title}</span>
+                                <span className="font-serif text-xs opacity-70 mt-1">{link.desc}</span>
+                            </a>
+                        )
                     ))}
                 </div>
                 <canvas ref={canvasRef} className={`absolute inset-0 w-full h-full z-20 cursor-crosshair transition-opacity duration-1000 pointer-events-none ${isBroken || isNumunumuMode ? 'opacity-0' : 'opacity-100'}`} />

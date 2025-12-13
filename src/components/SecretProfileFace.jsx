@@ -3,7 +3,7 @@ import React from 'react';
 const SecretProfileFace = ({ isMobile, isFlipped }) => {
     return (
         <div 
-            className="w-full h-full relative cursor-pointer group bg-white">
+            className="w-full h-full relative group bg-white pointer-events-none">
             {/* 表面: プロフィール画像 */}
             <div className={`absolute inset-0 bg-white flex flex-col items-center justify-center select-none transition-opacity duration-300 ${isFlipped ? 'opacity-0' : 'opacity-100'}`}>
                 <div className={`${isMobile ? 'w-24 h-24' : 'w-32 h-32'} rounded-full border-4 border-black overflow-hidden mb-2 shadow-md relative transition-transform duration-300 group-hover:scale-105`}>

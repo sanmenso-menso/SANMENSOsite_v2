@@ -92,13 +92,112 @@ export const WORKS_DATA = [
 ];
 
 export const EXCAVATION_LINKS = [
-    { title: "FRIEND SITE A", desc: "Design / Art", url: "#", color: "#FF6B6B" },
-    { title: "GALLERY B", desc: "Illustrations", url: "#", color: "#4ECDC4" },
-    { title: "PORTFOLIO C", desc: "Web Works", url: "#", color: "#FFE66D" },
-    { title: "MUSIC D", desc: "Sound Cloud", url: "#", color: "#1A535C" },
-    { title: "SHOP E", desc: "Goods", url: "#", color: "#FFD700" },
-    { title: "BLOG F", desc: "Daily Log", url: "#", color: "#F7FFF7" },
+    { 
+        type: 'banner',
+        url: "https://hozumi.site/",
+        image: "https://hozumi.site/cdn/shop/t/6/assets/S__74637854.jpg?v=97761660025223919291763945063",
+        alt: "あなたは青い部屋が好きですか？",
+    },
+    { 
+        type: 'banner',
+        url: "https://ideoaves.github.io",
+        image:"https://ideoaves.github.io/banner.png",
+        alt: "ideoavesのホームページ",
+    },
+        { 
+        type: 'banner',
+        url: "https://www.namigroove.com",
+        image:"https://www.namigroove.com/wp-content/uploads/2023/12/namigroove_banner01.png",
+        alt: "なみぐるオフィシャルWEB バナー",
+    },
+  { 
+        type: 'banner',
+        url: "http://tmpra.jp",
+        image:"http://tmpra.jp/Banner.png",
+        alt: "TMPらのホームページ",
+    },
+    
 ];
+
+export const SONGS = [
+  {
+    id: 1,
+    title: "EPA EPA Txapeka",
+    genre: "未来的Conplextro",
+    duration: 180, 
+    color: "#00FFDD", 
+    bgAccent: "bg-[#00FFDD]",
+    flavor: "NEON GLITCH POP",
+    bpm: 128,
+    src: "/audio/EPA EPA Txapeka.wav" 
+  },
+  {
+    id: 2,
+    title: "Early Afternoon",
+    genre: "冷凍Click House",
+    duration: 210, 
+    color: "#D8E2E5", 
+    bgAccent: "bg-[#D8E2E5]",
+    flavor: "CRYSTAL CUBE SODA",
+    bpm: 110,
+    src: "/audio/Early afternoon.mp3"
+  },
+   {
+    id: 3,
+    title: "Cut,solid,solar panel",
+    genre: "CSS Core",
+    duration: 195, 
+    color: "#FF4500", 
+    bgAccent: "bg-[#FF4500]",
+    flavor: "CHAOS TROPICAL",
+    bpm: 140,
+    src: "/audio/Cut-solid-solar panel.wav" 
+  },
+  {
+    id: 4,
+    title: "Im busy But Lonely",
+    genre: "淡いelectro pop",
+    duration: 195, 
+    color: "#F48FB1", 
+    bgAccent: "bg-[#F48FB1]",
+    flavor: "LONELY PEACH PULP",
+    bpm: 140,
+    src: "/audio/Im busy But Lonely.wav" 
+  },
+  {
+    id: 5,
+    title: "It started to Rein",
+    genre: "不思議なアンビエントBGM",
+    duration: 195, 
+    color: "#076D6D", 
+    bgAccent: "bg-[#076D6D]",
+    flavor: "MYSTIC FOREST SAP",
+    bpm: 140,
+    src: "/audio/It started to Rein.mp3" 
+  },
+  {
+    id: 6,
+    title: "PouNtan tan",
+    genre: "ハイテンションTech Core",
+    duration: 195, 
+    color: "#F3BB7A", 
+    bgAccent: "bg-[#F3BB7A]",
+    flavor: "HEAVY BLACK COLE",
+    bpm: 140,
+    src: "/audio/PouNtan tan.mp3" 
+  },
+  {
+    id: 7,
+    title: "splash rush",
+    genre: "カットアップモリモリPop",
+    duration: 195, 
+    color: "#A4D65E", 
+    bgAccent: "bg-[#A4D65E]",
+    flavor: "FRESH SPLASH APPLE",
+    bpm: 140,
+    src: "/audio/splash rush.wav" 
+  }
+]
 
 export const SOCIAL_LINKS = [
     { name: 'X (Twitter)', url: 'https://x.com/SANMENSOUdrop' },

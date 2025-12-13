@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { THEME, FONTS } from './constants';
 import { NumunumuContext } from './NumunumuContext';
-
 // コンポーネントのインポート
 import LivingBackground from './components/LivingBackground';
 import Header from './components/Header';
@@ -10,9 +9,12 @@ import NavigationDock from './components/NavigationDock';
 import MagicCube from './components/MagicCube';
 
 // ページのインポート
+
+import { BrutalistBreaker } from './components/BrutalistBreaker';
 import WorksPage from './pages/WorksPage';
 import LinksPage from './pages/LinksPage';
 import ContactPage from './pages/ContactPage';
+import ContentsPage from './pages/ContentsPage';
 import SecretPage from './pages/SecretPage';
 
 function App() {
@@ -20,6 +22,7 @@ function App() {
     const [worksFilter, setWorksFilter] = useState('all');
     const [isOpening, setIsOpening] = useState(true);
     const [isMobile, setIsMobile] = useState(false);
+    const [showGame, setShowGame] = useState(false);
     const [isNumunumuMode, setIsNumunumuMode] = useState(false);
     const [input, setInput] = useState('');
     const target = 'numunumu';
@@ -84,6 +87,13 @@ function App() {
 
                 {/* <LivingBackground isOpening={isOpening} /> */}
 
+
+
+                <AnimatePresence>
+                    {showGame && <BrutalistBreaker onClose={() => setShowGame(false)} />}
+                </AnimatePresence>
+
+
                 {activePage === 'secret' ? (
                     <SecretPage onBack={() => setActivePage('home')} />
                 ) : (
@@ -101,6 +111,7 @@ function App() {
                                 </motion.div>
                             )}
                             {activePage === 'works' && <PageWrapper key="works"><WorksPage initialFilter={worksFilter} /></PageWrapper>}
+                            {activePage === 'contents' && <PageWrapper key="contents"><ContentsPage /></PageWrapper>}
                             {activePage === 'links' && <PageWrapper key="links"><LinksPage onSecretClick={() => setActivePage('secret')} /></PageWrapper>}
                             {activePage === 'contact' && <PageWrapper key="contact"><ContactPage /></PageWrapper>}
                         </AnimatePresence>
