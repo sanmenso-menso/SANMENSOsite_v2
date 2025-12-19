@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { EXCAVATION_LINKS } from '../constants';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { EXCAVATION_LINKS, SOCIAL_LINKS } from '../constants';
 import { useNumunumu } from '../NumunumuContext';
 import ImageWithFallback from '../components/ImageWithFallback';
+import { ExternalLink, Mail } from 'lucide-react';
 
 const LinksPage = ({ onSecretClick }) => {
     const { isNumunumuMode } = useNumunumu();
@@ -16,17 +17,28 @@ const LinksPage = ({ onSecretClick }) => {
     const maxHp = 40000;
     const [randomPositions, setRandomPositions] = useState([]);
 
-    const numuExcavationLinks = EXCAVATION_LINKS.map(link => (link.type === 'banner' 
-        ? {...link, alt: numuText, image: '/images/numunumu_icon.png'} 
-        : {...link, title: numuText, desc: numuText}
-    ));
-    const finalLinks = isNumunumuMode ? numuExcavationLinks : EXCAVATION_LINKS;
+    const finalLinks = useMemo(() => {
+        if (isNumunumuMode) {
+            return EXCAVATION_LINKS.map(link => (link.type === 'banner' 
+                ? {...link, alt: numuText, image: '/images/numunumu_icon.png'} 
+                : {...link, title: numuText, desc: numuText}
+            ));
+        }
+        return EXCAVATION_LINKS;
+    }, [isNumunumuMode]);
+
+    const numuSocialLinks = SOCIAL_LINKS.map(link => ({ ...link, name: numuText }));
+    const finalSocialLinks = isNumunumuMode ? numuSocialLinks : SOCIAL_LINKS;
 
     useEffect(() => {
         const positions = finalLinks.map(() => ({
             top: Math.random() * 60 + 10 + '%', 
             left: Math.random() * 60 + 10 + '%', 
             rotate: Math.random() * 30 - 15 + 'deg',
+            tx: (Math.random() - 0.5) * 200 + 'vw',
+            ty: (Math.random() - 0.5) * 200 + 'vh',
+            rotEnd: (Math.random() * 720 - 360) + 'deg',
+            delay: Math.random() * 0.2 + 's'
         }));
         setRandomPositions(positions);
     }, [finalLinks]);
@@ -132,30 +144,62 @@ const LinksPage = ({ onSecretClick }) => {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen py-20 px-4 w-full relative">
+            <>
+            <div className="flex flex-col items-center justify-center min-h-screen py-20 px-4 w-full">
+                <div className="w-full max-w-4xl">
+                    <div className="bg-white border-4 border-black p-8 shadow-[8px_8px_0px_#000]">
+                        <h2 className="text-3xl md:text-4xl font-black font-sans mb-6 text-center">{isNumunumuMode ? numuText : '三面相のリンクたち'}</h2>
+
+                        <div className="flex flex-wrap justify-center gap-4">
+                            {finalSocialLinks.map((link, i) => (
+                                <a key={i} href={link.url} target="_blank" rel="noreferrer" className="flex items-center gap-2 bg-black text-white px-6 py-3 font-bold hover:bg-[#FFD700] hover:text-black hover:-translate-y-1 transition-all border-2 border-black shadow-[4px_4px_0px_rgba(0,0,0,0.3)]">
+                                    <ExternalLink size={18} /> {link.name}
+                                </a>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="flex flex-col items-center justify-start pb-20 px-4 w-full relative">
             <style>{`
                 @keyframes shake-light { 0% { transform: translate(0, 0); } 50% { transform: translate(1px, 1px); } 100% { transform: translate(-1px, -1px); } }
                 @keyframes shake-heavy { 0% { transform: translate(0, 0) rotate(0deg); } 25% { transform: translate(-2px, 2px) rotate(1deg); } 50% { transform: translate(2px, -2px) rotate(-1deg); } 75% { transform: translate(-2px, -2px) rotate(0.5deg); } 100% { transform: translate(0, 0) rotate(0deg); } }
                 .animate-shake-light { animation: shake-light 0.1s infinite; }
                 .animate-shake-heavy { animation: shake-heavy 0.05s infinite; }
-                @keyframes fly-away { 0% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 1; } 100% { transform: translate(var(--tx), var(--ty)) rotate(var(--rot)) scale(0.8); opacity: 0; } }
+                @keyframes fly-away { 0% { transform: translate(0, 0) rotate(var(--start-rot, 0deg)) scale(1); opacity: 1; } 100% { transform: translate(var(--tx), var(--ty)) rotate(var(--rot)) scale(0.5); opacity: 0; } }
             `}</style>
 
-            <div className="text-center mb-8 bg-white border-2 border-black p-4 shadow-[4px_4px_0px_#000] relative z-50 pointer-events-none">
+            <div className="text-center mb-8 bg-white border-4 border-black p-4 shadow-[8px_8px_0px_#000] relative z-50 pointer-events-none">
                 <h1 className="text-4xl font-black font-sans mb-2 text-black">{isNumunumuMode ? numuText : '相互リンク'}</h1>
                 <span className="font-serif text-sm bg-black text-[#FFD700] px-2 py-1 inline-block transform -rotate-1">{isNumunumuMode ? numuText : 'ページを削って相互リンクを掘り起こせ'}</span>
             </div>
 
-            <div ref={containerRef} className={`relative w-full max-w-4xl h-[70vh] bg-black border-4 border-black shadow-[12px_12px_0px_rgba(0,0,0,0.5)] overflow-hidden ${getShakeClass()} z-10`}>
-                <div className="absolute inset-0 flex items-center justify-center z-0" style={{ background: 'radial-gradient(circle at center, #300 0%, #000 90%)' }}>
+            <div ref={containerRef} className={`relative w-full max-w-4xl h-[70vh] bg-black border-4 border-black shadow-[8px_8px_0px_#000] overflow-hidden ${getShakeClass()} z-10`}>
+                <div className={`absolute inset-0 flex items-center justify-center ${isBroken || isNumunumuMode ? 'z-50' : 'z-0'}`} style={{ background: 'radial-gradient(circle at center, #300 0%, #000 90%)' }}>
                     <a href="#" data-secret="true" onClick={(e) => { e.preventDefault(); onSecretClick(); }} className={`w-64 h-64 rounded-full border-2 border-red-500/50 flex flex-col items-center justify-center text-red-500 bg-black/90 rotate-12 hover:scale-105 hover:bg-red-900/20 transition-all cursor-pointer font-serif duration-1000 ${isBroken || isNumunumuMode ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
                         <span className="text-3xl font-bold">{isNumunumuMode ? numuText : 'SECRET'}</span>
                     </a>
                 </div>
-                <div className={`absolute inset-0 z-10 pointer-events-none ${isBroken ? 'opacity-0 transform scale-150 transition-all duration-1000' : 'opacity-100'}`}>
+                <div className={`absolute inset-0 z-10 pointer-events-none`}>
                     {randomPositions.length > 0 && finalLinks.map((link, i) => (
                         link.type === 'banner' ? (
-                            <a key={i} href={link.url} target="_blank" rel="noreferrer" className="absolute block hover:scale-110 hover:z-50 transition-transform cursor-pointer pointer-events-auto w-64 h-16 overflow-hidden" style={{ top: randomPositions[i]?.top || '50%', left: randomPositions[i]?.left || '50%', transform: `rotate(${randomPositions[i]?.rotate || '0deg'})` }}>
+                            <a 
+                                key={i} 
+                                href={link.url} 
+                                target="_blank" 
+                                rel="noreferrer" 
+                                className={`absolute block hover:scale-110 hover:z-50 transition-transform cursor-pointer pointer-events-auto w-64 h-16 overflow-hidden ${isBroken ? 'animate-[fly-away_1s_ease-in_forwards]' : ''}`} 
+                                style={{ 
+                                    top: randomPositions[i]?.top || '50%', 
+                                    left: randomPositions[i]?.left || '50%', 
+                                    transform: `rotate(${randomPositions[i]?.rotate || '0deg'})`,
+                                    '--tx': randomPositions[i]?.tx, 
+                                    '--ty': randomPositions[i]?.ty, 
+                                    '--rot': randomPositions[i]?.rotEnd, 
+                                    '--start-rot': randomPositions[i]?.rotate, 
+                                    animationDelay: randomPositions[i]?.delay 
+                                }}
+                            >
                                 <ImageWithFallback
                                     src={link.image}
                                     alt={link.alt}
@@ -168,8 +212,25 @@ const LinksPage = ({ onSecretClick }) => {
                                 />
                             </a>
                         ) : (
-                            <a key={i} href={link.url} target="_blank" rel="noreferrer" className="absolute bg-white border-2 border-black p-4 flex flex-col items-center justify-center text-center shadow-[4px_4px_0px_rgba(0,0,0,0.3)] hover:scale-110 hover:z-50 transition-transform cursor-pointer pointer-events-auto w-48 h-24" style={{ top: randomPositions[i]?.top || '50%', left: randomPositions[i]?.left || '50%', transform: `rotate(${randomPositions[i]?.rotate || '0deg'})`, backgroundColor: isNumunumuMode ? '#f0f0f0' : link.color || 'white' }}>
-                                <span className="font-black font-sans text-lg leading-none">{link.title}</span>
+                            <a 
+                                key={i} 
+                                href={link.url} 
+                                target="_blank" 
+                                rel="noreferrer" 
+                                className={`absolute bg-white border-2 border-black p-4 flex flex-col items-center justify-center text-center shadow-[4px_4px_0px_rgba(0,0,0,0.3)] hover:scale-110 hover:z-50 transition-transform cursor-pointer pointer-events-auto w-48 h-24 ${isBroken ? 'animate-[fly-away_1s_ease-in_forwards]' : ''}`} 
+                                style={{ 
+                                    top: randomPositions[i]?.top || '50%', 
+                                    left: randomPositions[i]?.left || '50%', 
+                                    transform: `rotate(${randomPositions[i]?.rotate || '0deg'})`, 
+                                    backgroundColor: isNumunumuMode ? '#f0f0f0' : 'white',
+                                    '--tx': randomPositions[i]?.tx, 
+                                    '--ty': randomPositions[i]?.ty, 
+                                    '--rot': randomPositions[i]?.rotEnd, 
+                                    '--start-rot': randomPositions[i]?.rotate, 
+                                    animationDelay: randomPositions[i]?.delay 
+                                }}
+                            >
+                                <span className="font-black font-sans text-lg leading-none flex items-center justify-center gap-2">{link.title}</span>
                                 <span className="font-serif text-xs opacity-70 mt-1">{link.desc}</span>
                             </a>
                         )
@@ -193,7 +254,8 @@ const LinksPage = ({ onSecretClick }) => {
                     <button onClick={() => window.location.reload()} className="absolute bottom-4 right-4 z-50 text-white font-mono text-xs opacity-50 hover:opacity-100 pointer-events-auto">{isNumunumuMode ? numuText : '[ RESTORE REALITY ]'}</button>
                 )}
             </div>
-        </div>
+            </div>
+        </>
     );
 };
 

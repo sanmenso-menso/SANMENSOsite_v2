@@ -8,6 +8,7 @@ const SecretPage = ({ onBack }) => {
     const [colors, setColors] = useState({ bg: '#000000', text: '#00FF00', border: '#FFFFFF' });
     const maxZRef = useRef(5000);
     const timeRef = useRef(0);
+    const isNoiseActiveRef = useRef(isNoiseActive);
     const reqRef = useRef(null);
     const itemsRef = useRef([]);
 
@@ -53,17 +54,17 @@ const SecretPage = ({ onBack }) => {
         return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgContent);
     };
 
-    const createWindow = useCallback((content, title = `LOG_${Math.floor(Math.random()*999)}.TXT`, type='text') => {
+    const createWindow = useCallback((content, title = `LOG_${Math.floor(Math.random()*999)}.TXT`, type='text', overrides = {}) => {
         const winW = window.innerWidth;
         const winH = window.innerHeight;
         const id = generateId();
         const newItem = {
             id,
             type: 'window',
-            x: Math.random() * (winW - 300),
-            y: Math.random() * (winH - 300) + 50,
-            baseX: Math.random() * (winW - 300),
-            baseY: Math.random() * (winH - 300) + 50,
+            x: overrides.x ?? (Math.random() * (winW - 300)),
+            y: overrides.y ?? (Math.random() * (winH - 300) + 50),
+            baseX: overrides.baseX ?? (Math.random() * (winW - 300)),
+            baseY: overrides.baseY ?? (Math.random() * (winH - 300) + 50),
             title,
             content,
             contentType: type,
@@ -71,10 +72,11 @@ const SecretPage = ({ onBack }) => {
                 phase: Math.random() * Math.PI * 2,
                 scrollSpeedY: (Math.random() - 0.5) * 3,
                 scrollSpeedX: (Math.random() - 0.5) * 2,
-                rotateSpeedX: (Math.random() - 0.5) * 5.0, 
-                rotateSpeedY: (Math.random() - 0.5) * 5.0,
-                rotateSpeedZ: (Math.random() - 0.5) * 3.0,
-                isDragging: false
+                rotateSpeedX: (Math.random() - 0.5) * 15.0, 
+                rotateSpeedY: (Math.random() - 0.5) * 15.0,
+                rotateSpeedZ: (Math.random() - 0.5) * 10.0,
+                isDragging: false,
+                ...overrides.params
             }
         };
         
@@ -111,7 +113,9 @@ const SecretPage = ({ onBack }) => {
                     width: Math.random() * 150 + 50,
                     params: {
                         scrollSpeedY: (Math.random() - 0.5) * 15,
-                        rotateSpeed: (Math.random() - 0.5) * 5,
+                        rotateSpeedX: (Math.random() - 0.5) * 15,
+                        rotateSpeedY: (Math.random() - 0.5) * 15,
+                        rotateSpeedZ: (Math.random() - 0.5) * 15,
                         baseX: Math.random() * winW,
                         baseY: Math.random() * winH,
                     }
@@ -122,14 +126,16 @@ const SecretPage = ({ onBack }) => {
                 const item = {
                     id,
                     type: 'chaos_text',
-                    text: ["NULL", "ERROR", "VOID", "0x00", "NaN", "???", "†", "█"][Math.floor(Math.random()*8)],
+                    text: ["(ﾟ∀ﾟ)", "？", "おい", "！", "(ﾉ)・ω・(ヾ)", "for", "･ﾟ･(ﾉд<)･ﾟ", "(=^・・^=)"][Math.floor(Math.random()*8)],
                     x: Math.random() * winW,
                     y: Math.random() * winH,
                     color: ['#FF00FF', '#00FF00', '#FFFFFF', '#FFFF00'][Math.floor(Math.random()*4)],
                     fontSize: Math.random() * 8 + 4 + 'rem',
                     params: {
                         scrollSpeedY: (Math.random() - 0.5) * 25,
-                        rotateSpeed: (Math.random() - 0.5) * 10,
+                        rotateSpeedX: (Math.random() - 0.5) * 20,
+                        rotateSpeedY: (Math.random() - 0.5) * 20,
+                        rotateSpeedZ: (Math.random() - 0.5) * 20,
                         baseX: Math.random() * winW,
                         baseY: Math.random() * winH,
                     }
@@ -142,9 +148,13 @@ const SecretPage = ({ onBack }) => {
     };
 
     const randomizeColors = () => {
-        const rc = () => '#' + Math.floor(Math.random()*16777215).toString(16);
+        const rc = () => '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
         setColors({ bg: rc(), text: rc(), border: rc() });
     };
+
+    useEffect(() => {
+        isNoiseActiveRef.current = isNoiseActive;
+    }, [isNoiseActive]);
 
     useEffect(() => {
         const works = [
@@ -169,9 +179,16 @@ const SecretPage = ({ onBack }) => {
                 const el = document.getElementById(item.id);
                 if (!el || (item.params.isDragging && item.type === 'window')) return;
 
-                if (!isNoiseActive) {
+                if (!isNoiseActiveRef.current) {
                         el.style.transform = `translate3d(${item.x}px, ${item.y - scrollY}px, 0)`;
                         return;
+                }
+
+                if (item.params.velocity) {
+                    item.x += item.params.velocity.x;
+                    item.y += item.params.velocity.y;
+                    item.params.velocity.y += 0.5;
+                    item.params.velocity.x *= 0.98;
                 }
 
                 let nx, ny;
@@ -190,20 +207,14 @@ const SecretPage = ({ onBack }) => {
                     ny = item.y + floatY + sY;
                     
                     el.style.transform = `translate3d(${nx}px, ${ny}px, ${moveZ}px) rotateX(${rotX}deg) rotateY(${rotY}deg) rotateZ(${rotZ}deg)`;
-                } else if (item.type === 'chaos_text') {
+                } else if (item.type === 'chaos_text' || item.type === 'chaos_face') {
                     const sY = -scrollY * item.params.scrollSpeedY;
-                    const rotSpeed = scrollY * item.params.rotateSpeed;
-                    const timeRot = Math.sin(t * 0.5) * 5;
+                    const rX = scrollY * (item.params.rotateSpeedX || 0);
+                    const rY = scrollY * (item.params.rotateSpeedY || 0);
+                    const rZ = scrollY * (item.params.rotateSpeedZ || item.params.rotateSpeed || 0);
                     nx = item.x;
                     ny = item.y + sY;
-                    el.style.transform = `translate3d(${nx}px, ${ny}px, 0) rotate(${rotSpeed + timeRot}deg)`;
-                } else if (item.type === 'chaos_face') {
-                    const sY = -scrollY * item.params.scrollSpeedY;
-                    const rotSpeed = scrollY * item.params.rotateSpeed;
-                    const timeRot = Math.sin(t * 0.5) * 10;
-                    nx = item.x;
-                    ny = item.y + sY;
-                    el.style.transform = `translate3d(${nx}px, ${ny}px, 0) rotate(${rotSpeed + timeRot}deg)`;
+                    el.style.transform = `translate3d(${nx}px, ${ny}px, 0) rotateX(${rX}deg) rotateY(${rY}deg) rotateZ(${rZ}deg)`;
                 }
             });
             reqRef.current = requestAnimationFrame(loop);
@@ -211,7 +222,7 @@ const SecretPage = ({ onBack }) => {
         
         reqRef.current = requestAnimationFrame(loop);
         return () => cancelAnimationFrame(reqRef.current);
-    }, [isNoiseActive, createWindow]);
+    }, [createWindow]);
 
     const handleDragStart = (e, id) => {
         const item = itemsRef.current.find(i => i.id === id);
@@ -261,8 +272,8 @@ const SecretPage = ({ onBack }) => {
             ref={containerRef} 
             className="fixed inset-0 z-[9000] overflow-hidden" 
             style={{ 
-                backgroundColor: '#000000', 
-                color: '#00FF00', 
+                backgroundColor: colors.bg, 
+                color: colors.text, 
                 fontFamily: '"Courier New", monospace, serif',
                 perspective: '1200px',
                 backgroundImage: `
@@ -312,7 +323,7 @@ const SecretPage = ({ onBack }) => {
                     onTouchStart={(e) => handleDragStart(e, win.id)} 
                     className="absolute bg-black border-2 flex flex-col w-[250px] shadow-[5px_5px_0px_rgba(255,255,255,0.2)] select-none" 
                     style={{ 
-                        borderColor: '#FFFFFF', 
+                        borderColor: colors.border, 
                         top: 0, left: 0, 
                         transformStyle: 'preserve-3d' 
                     }}
@@ -322,12 +333,12 @@ const SecretPage = ({ onBack }) => {
                         <span className="cursor-pointer hover:text-red-500" onClick={() => { setWindows(w => w.filter(x => x.id !== win.id)); itemsRef.current = itemsRef.current.filter(x => x.id !== win.id); }}>[x]</span>
                     </div>
                     <div className="p-2 flex flex-col gap-2 bg-black">
-                        <fieldset className="border border-green-500 p-2 m-0">
-                            <legend className="px-1 text-[10px] font-mono text-green-500">preview</legend>
+                        <fieldset className="border p-2 m-0" style={{ borderColor: colors.text }}>
+                            <legend className="px-1 text-[10px] font-mono" style={{ color: colors.text }}>preview</legend>
                             {win.contentType === 'image' ? (
-                                <img src={win.content} alt="content" className="w-full h-auto border border-green-500 pointer-events-none bg-white/10" />
+                                <img src={win.content} alt="content" className="w-full h-auto border pointer-events-none bg-white/10" style={{ borderColor: colors.text }} />
                             ) : (
-                                <div className="font-mono text-xs whitespace-pre-wrap h-32 overflow-y-auto text-green-500 scrollbar-hide">
+                                <div className="font-mono text-xs whitespace-pre-wrap h-32 overflow-y-auto scrollbar-hide" style={{ color: colors.text }}>
                                     {win.content}
                                 </div>
                             )}
