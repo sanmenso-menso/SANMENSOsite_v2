@@ -145,7 +145,7 @@ const LinksPage = ({ onSecretClick }) => {
 
     return (
             <>
-            <div className="flex flex-col items-center justify-center min-h-screen py-20 px-4 w-full">
+            <div className="flex flex-col items-center pt-24 pb-12 px-4 w-full">
                 <div className="w-full max-w-4xl">
                     <div className="bg-white border-4 border-black p-8 shadow-[8px_8px_0px_#000]">
                         <h2 className="text-3xl md:text-4xl font-black font-sans mb-6 text-center">{isNumunumuMode ? numuText : '三面相のリンクたち'}</h2>
@@ -169,7 +169,7 @@ const LinksPage = ({ onSecretClick }) => {
                 @keyframes fly-away { 0% { transform: translate(0, 0) rotate(var(--start-rot, 0deg)) scale(1); opacity: 1; } 100% { transform: translate(var(--tx), var(--ty)) rotate(var(--rot)) scale(0.5); opacity: 0; } }
             `}</style>
 
-            <div className="text-center mb-8 bg-white border-4 border-black p-4 shadow-[8px_8px_0px_#000] relative z-50 pointer-events-none">
+            <div className="text-center mb-8 bg-white border-4 border-black p-4 shadow-[8px_8px_0px_#000] relative z-20 pointer-events-none">
                 <h1 className="text-4xl font-black font-sans mb-2 text-black">{isNumunumuMode ? numuText : '相互リンク'}</h1>
                 <span className="font-serif text-sm bg-black text-[#FFD700] px-2 py-1 inline-block transform -rotate-1">{isNumunumuMode ? numuText : 'ページを削って相互リンクを掘り起こせ'}</span>
             </div>
