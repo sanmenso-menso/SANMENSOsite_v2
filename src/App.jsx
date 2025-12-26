@@ -21,7 +21,6 @@ function App() {
     const [activePage, setActivePage] = useState('home');
     const [worksFilter, setWorksFilter] = useState('all');
     const [isOpening, setIsOpening] = useState(true);
-    const [isMobile, setIsMobile] = useState(false);
     const [showGame, setShowGame] = useState(false);
     const [isNumunumuMode, setIsNumunumuMode] = useState(false);
     const [input, setInput] = useState('');
@@ -42,16 +41,16 @@ function App() {
     }, []);
 
     useEffect(() => {
-        const checkMobile = () => setIsMobile(window.innerWidth < 768);
-        checkMobile();
-        window.addEventListener('resize', checkMobile);
-        
+        // ページが切り替わった時にウィンドウの最上部にスクロールする
+        window.scrollTo(0, 0);
+    }, [activePage]);
+
+    useEffect(() => {
         const timer = setTimeout(() => {
             setIsOpening(false);
         }, 900); 
         return () => {
             clearTimeout(timer);
-            window.removeEventListener('resize', checkMobile);
         };
     }, []);
 
@@ -75,19 +74,18 @@ function App() {
 
     return (
         <NumunumuContext.Provider value={{ isNumunumuMode }}>
-            <div className="min-h-screen w-full relative overflow-x-hidden selection:bg-black selection:text-[#FFD700]" style={{ backgroundColor: THEME.bgBase }}>
+            <div className="min-h-screen w-full relative overflow-x-hidden selection:bg-black selection:text-[#FFD700]">
                 {/* フォント等のスタイル定義 */}
                 <style>{`
-                    body { font-family: ${FONTS.sans}; }
+                    body { 
+                        font-family: ${FONTS.sans};
+                        background-color: ${THEME.bgBase};
+                    }
                     .font-serif { font-family: ${FONTS.serif}; }
                     .font-sans { font-family: ${FONTS.sans}; }
                     .bg-brandGreen { background-color: ${THEME.brandGreen}; }
                     .bg-accentGold { background-color: ${THEME.accentGold}; }
                 `}</style>
-
-                {/* <LivingBackground isOpening={isOpening} /> */}
-
-
 
                 <AnimatePresence>
                     {showGame && <BrutalistBreaker onClose={() => setShowGame(false)} />}
@@ -104,9 +102,9 @@ function App() {
                         <AnimatePresence mode='wait'>
                             {activePage === 'home' && (
                                 <motion.div key="home" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="relative z-10 w-full h-screen flex flex-col items-center justify-center p-4">
-                                    <div className="mb-20"><MagicCube onSelect={handleCubeSelect} isOpening={isOpening} isMobile={isMobile} /></div>
+                                    <div className="mb-20"><MagicCube onSelect={handleCubeSelect} isOpening={isOpening} /></div>
                                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: isOpening ? 0 : 1 }} transition={{ delay: 2.5 }} className="absolute bottom-32 pointer-events-none">
-                                        <p className="font-serif text-sm md:text-lg bg-black text-[#FFD700] px-4 py-1 md:px-6 md:py-2 transform -rotate-2 border-2 border-white shadow-[4px_4px_0px_rgba(0,0,0,0.3)] whitespace-nowrap">{isNumunumuMode ? 'ぬむぬむとんかつ' : 'ドラッグして CUBE を回せ'}</p>
+                                        <p className="font-serif text-xs sm:text-sm md:text-lg bg-black text-[#FFD700] px-3 py-1 sm:px-4 md:px-6 md:py-2 transform -rotate-2 border-2 border-white shadow-[4px_4px_0px_rgba(0,0,0,0.3)] whitespace-nowrap">{isNumunumuMode ? 'ぬむぬむとんかつ' : 'ドラッグして CUBE を回せ'}</p>
                                     </motion.div>
                                 </motion.div>
                             )}

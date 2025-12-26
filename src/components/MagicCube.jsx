@@ -4,7 +4,7 @@ import { Music, Gamepad2, Smile } from 'lucide-react';
 import { useNumunumu } from '../NumunumuContext';
 import SecretProfileFace from './SecretProfileFace';
 
-const MagicCube = ({ onSelect, isOpening, isMobile }) => { 
+const MagicCube = ({ onSelect, isOpening }) => { 
     const { isNumunumuMode } = useNumunumu();
     const numuText = 'ぬむぬむとんかつ';
 
@@ -40,9 +40,9 @@ const MagicCube = ({ onSelect, isOpening, isMobile }) => {
     useEffect(() => {
         const updateSize = () => {
             if (window.innerWidth < 768) {
-                setCubeSize(180); 
+                setCubeSize(195); 
             } else {
-                setCubeSize(300); 
+                setCubeSize(280); 
             }
         };
         updateSize();
@@ -64,7 +64,8 @@ const MagicCube = ({ onSelect, isOpening, isMobile }) => {
             }, 1600);
             return () => clearTimeout(timer);
         }
-    }, [isOpening, rotateX, rotateY, z]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isOpening]);
 
     useEffect(() => {
         const handlePointerMove = (e) => {
@@ -104,50 +105,50 @@ const MagicCube = ({ onSelect, isOpening, isMobile }) => {
     return (
         <div ref={containerRef} className="relative z-20 flex items-center justify-center cursor-grab active:cursor-grabbing touch-none" style={{ width: '100%', height: '60vh', perspective: '1200px' }} onPointerDown={handlePointerDown}>
             <motion.div style={{ width: cubeSize, height: cubeSize, position: 'relative', transformStyle: 'preserve-3d', rotateX: springRotateX, rotateY: springRotateY, z: springZ, rotateZ: -5 }}>
-                <CubeFace size={cubeSize} halfSize={HALF_SIZE} rotate="rotateY(0deg)" color="bg-brandGreen" borderColor="border-black" label="エンタメ" icon={<Gamepad2 size={isMobile ? 48 : 64} className="text-white" />} textColor="text-white" onClick={() => !hasDragged.current && onSelect('entame')} isMobile={isMobile} />
-                <CubeFace size={cubeSize} halfSize={HALF_SIZE} rotate="rotateY(90deg)" color="bg-accentGold" borderColor="border-black" label="楽しさ" icon={<Smile size={isMobile ? 48 : 64} className="text-black" />} textColor="text-black" onClick={() => !hasDragged.current && onSelect('fun')} isMobile={isMobile} />
-                <CubeFace size={cubeSize} halfSize={HALF_SIZE} rotate="rotateX(90deg)" color="bg-red-600" borderColor="border-black" label="音楽" icon={<Music size={isMobile ? 48 : 64} className="text-white" />} textColor="text-white" onClick={() => !hasDragged.current && onSelect('music')} isMobile={isMobile} />
-                <CubeFace size={cubeSize} halfSize={HALF_SIZE} rotate="rotateY(-90deg)" color="bg-transparent" borderColor="border-black" customContent={<SecretProfileFace isMobile={isMobile} isFlipped={isProfileFlipped} />} onClick={() => !hasDragged.current && setIsProfileFlipped(prev => !prev)} isMobile={isMobile} />
+                <CubeFace size={cubeSize} halfSize={HALF_SIZE} rotate="rotateY(0deg)" color="bg-brandGreen" borderColor="border-black" label="エンタメ" icon={<Gamepad2 className="text-white w-12 h-12 md:w-16 md:h-16" />} textColor="text-white" onClick={() => !hasDragged.current && onSelect('entame')} />
+                <CubeFace size={cubeSize} halfSize={HALF_SIZE} rotate="rotateY(90deg)" color="bg-accentGold" borderColor="border-black" label="楽しさ" icon={<Smile className="text-black w-12 h-12 md:w-16 md:h-16" />} textColor="text-black" onClick={() => !hasDragged.current && onSelect('fun')} />
+                <CubeFace size={cubeSize} halfSize={HALF_SIZE} rotate="rotateX(90deg)" color="bg-red-600" borderColor="border-black" label="音楽" icon={<Music className="text-white w-12 h-12 md:w-16 md:h-16" />} textColor="text-white" onClick={() => !hasDragged.current && onSelect('music')} />
+                <CubeFace size={cubeSize} halfSize={HALF_SIZE} rotate="rotateY(-90deg)" color="bg-transparent" borderColor="border-black" customContent={<SecretProfileFace isFlipped={isProfileFlipped} />} onClick={() => !hasDragged.current && setIsProfileFlipped(prev => !prev)} />
                 <CubeFace size={cubeSize} halfSize={HALF_SIZE} rotate="rotateX(-90deg)" color="bg-black" borderColor="border-white" customContent={
                     <div className="w-full h-full p-6 flex flex-col justify-center items-center text-white text-center select-none bg-black">
-                   <h4 className={`font-black ${isMobile ? 'text-xl' : 'text-2xl'} mb-2 text-[#FFD700]`}>{isNumunumuMode ? numuText : 'HISTORY'}</h4>
-                        <p className={`font-mono ${isMobile ? 'text-xs' : 'text-sm'} leading-tight mb-4 opacity-80`}>{isNumunumuMode ? numuText : '2022: 三日月タロウとして活動開始'}<br/>{isNumunumuMode ? '' : '↓'}<br/>{isNumunumuMode ? '' : '2024: 三面相に改名'}</p>
-                        <h4 className={`font-black ${isMobile ? 'text-xl' : 'text-2xl'} mb-2 text-[#FFD700]`}>{isNumunumuMode ? numuText : "I'm in the"}</h4>
-                        <p className={`font-mono ${isMobile ? 'text-xs' : 'text-sm'} leading-tight mb-4 opacity-80`}>{isNumunumuMode ? numuText : 'CDs'}</p>     
+                   <h4 className="font-black text-xl md:text-2xl mb-2 text-[#FFD700]">{isNumunumuMode ? numuText : 'HISTORY'}</h4>
+                        <p className="font-mono text-xs md:text-sm leading-tight mb-4 opacity-80">{isNumunumuMode ? numuText : '2022: 三日月タロウとして活動開始'}<br/>{isNumunumuMode ? '' : '↓'}<br/>{isNumunumuMode ? '' : '2024: 三面相に改名'}</p>
+                        <h4 className="font-black text-xl md:text-2xl mb-2 text-[#FFD700]">{isNumunumuMode ? numuText : "I'm in the"}</h4>
+                        <p className="font-mono text-xs md:text-sm leading-tight mb-4 opacity-80">{isNumunumuMode ? numuText : 'CDs'}</p>     
                     </div>
-                } isMobile={isMobile} />
+                } />
                 <CubeFace size={cubeSize} halfSize={HALF_SIZE} rotate="rotateY(180deg)" color="bg-white" borderColor="border-black" customContent={
                     <div className="w-full h-full p-6 flex flex-col justify-center text-center select-none bg-white">
-                        <h3 className={`font-black ${isMobile ? 'text-2xl' : 'text-3xl'} mb-4 border-b-4 border-black inline-block self-center`}>{isNumunumuMode ? numuText : 'WHO?'}</h3>
-                        <p className={`font-serif ${isMobile ? 'text-xs' : 'text-sm'} leading-relaxed text-left font-bold`}>{isNumunumuMode ? numuText : '大阪在住。'}<br/>{isNumunumuMode ? '' : 'インターネットの片隅で、コラージュを軸に音楽やビジュアルなどのコンテンツを制作し活動している。'}<br/>{isNumunumuMode ? '' : '面白さで世界の境界線を破壊・再構築し、実験的かつ親しみのある作品世界を目指す。'}<br/><br/>{isNumunumuMode ? '' : '制作デスクにはいつもスルメ'}</p>
+                        <h3 className="font-black text-2xl md:text-3xl mb-4 border-b-4 border-black inline-block self-center">{isNumunumuMode ? numuText : 'WHO?'}</h3>
+                        <p className="font-serif text-xs md:text-sm leading-relaxed text-left font-bold">{isNumunumuMode ? numuText : '大阪在住。'}<br/>{isNumunumuMode ? '' : 'インターネットの片隅で、コラージュを軸に音楽やビジュアルなどのコンテンツを制作し活動している。'}<br/>{isNumunumuMode ? '' : '面白さで世界の境界線を破壊・再構築し、実験的かつ親しみのある作品世界を目指す。'}<br/><br/>{isNumunumuMode ? '' : '制作デスクにはいつもスルメ'}</p>
                     </div>
-                } isMobile={isMobile} />
+                } />
                 <div className="absolute inset-0 m-auto bg-black animate-pulse pointer-events-none" style={{ width: cubeSize * 0.5, height: cubeSize * 0.5, transform: 'translateZ(0)' }} />
             </motion.div>
         </div>
     );
 };
 
-const CubeFace = ({ size, halfSize, rotate, color, borderColor, label, icon, onClick, textColor, customContent, isMobile }) => {
+const CubeFace = ({ size, halfSize, rotate, color, borderColor, label, icon, onClick, textColor, customContent }) => {
     const { isNumunumuMode } = useNumunumu();
     const numuText = 'ぬむぬむとんかつ';
-    const numuIcon = <img src="/images/numunumu_icon.png" alt={numuText} className={isMobile ? "w-12 h-12" : "w-16 h-16"} />;
+    const numuIcon = <img src="/images/numunumu_icon.png" alt={numuText} className="w-12 h-12 md:w-16 md:h-16" />;
     const [isHovered, setIsHovered] = useState(false);
 
     return (
-        <motion.div className={`absolute inset-0 border-[6px] ${borderColor} ${color} flex items-center justify-center cursor-pointer overflow-hidden group select-none shadow-[inset_0_0_40px_rgba(0,0,0,0.2)]`} style={{ width: size, height: size, transform: `${rotate} translateZ(${halfSize}px)`, backfaceVisibility: 'visible' }} onHoverStart={() => !isMobile && setIsHovered(true)} onHoverEnd={() => !isMobile && setIsHovered(false)} onClick={onClick}>
+        <motion.div className={`absolute inset-0 border-[6px] ${borderColor} ${color} flex items-center justify-center cursor-pointer overflow-hidden group select-none shadow-[inset_0_0_40px_rgba(0,0,0,0.2)]`} style={{ width: size, height: size, transform: `${rotate} translateZ(${halfSize}px)`, backfaceVisibility: 'visible' }} onHoverStart={() => setIsHovered(true)} onHoverEnd={() => setIsHovered(false)} onClick={onClick}>
             {isNumunumuMode ? (
-                <div className={`absolute inset-0 flex flex-col items-center justify-center ${textColor}`}>{numuIcon}<h3 className={`${isMobile ? 'text-xl' : 'text-4xl'} font-black mt-4 font-sans tracking-tight`}>{numuText}</h3></div>
+                <div className={`absolute inset-0 flex flex-col items-center justify-center p-2 ${textColor}`}>{numuIcon}<h3 className="text-xl md:text-4xl font-black mt-4 font-sans tracking-tight">{numuText}</h3></div>
             ) : customContent ? (
                 <div className={`absolute inset-0 ${textColor} w-full h-full`}>{customContent}</div>
             ) : (
                 <>
-                    {!isMobile && (
+                    <div className="hidden md:group-hover:block">
                         <motion.div className={`absolute inset-0 ${color} z-10 flex items-center justify-center border-4 border-white/20`} animate={{ x: isHovered ? "100%" : "0%" }} transition={{ type: "spring", stiffness: 100, damping: 15 }}>
                             <div className={`w-20 h-20 border-4 ${textColor === 'text-white' ? 'border-white' : 'border-black'} rounded-full flex items-center justify-center`}><div className={`w-4 h-4 ${textColor === 'text-white' ? 'bg-white' : 'bg-black'} rounded-full animate-ping`} /></div>
                         </motion.div>
-                    )}
-                    <div className={`absolute inset-0 flex flex-col items-center justify-center ${textColor}`}>{icon}<h3 className={`${isMobile ? 'text-xl' : 'text-4xl'} font-black mt-4 font-sans tracking-tight`}>{label}</h3></div>
+                    </div>
+                    <div className={`absolute inset-0 flex flex-col items-center justify-center p-2 ${textColor}`}>{icon}<h3 className="text-2xl md:text-4xl font-black mt-4 font-sans tracking-tight">{label}</h3></div>
                 </>
             )}
         </motion.div>

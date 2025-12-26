@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Mail } from 'lucide-react';
 import { useNumunumu } from '../NumunumuContext';
 import { motion, AnimatePresence } from 'framer-motion';
+import ContactHeader from '../components/ContactHeader';
 
 const ContactPage = () => {
     const { isNumunumuMode } = useNumunumu();
@@ -11,7 +12,9 @@ const ContactPage = () => {
     const spinningText = "LET'S HAVE FUN TOGETHER ";
 
     return (
-        <div className="max-w-5xl mx-auto px-6 pt-40 pb-96 flex flex-col items-center justify-center min-h-[50vh] text-center overflow-hidden">
+        <>
+            <ContactHeader />
+            <div className="max-w-5xl mx-auto px-6 py-20 md:py-32 flex flex-col items-center justify-center text-center overflow-hidden">
             <style>
                 {`
                 @import url('https://fonts.googleapis.com/css2?family=Recursive:slnt,wght,CASL,CRSV,MONO@-15..0,300..1000,0..1,0..1,0..1&display=swap');
@@ -78,7 +81,8 @@ const ContactPage = () => {
                     </AnimatePresence>
                 </div>
             </div>
-        </div>
+            </div>
+        </>
     );
 };
 

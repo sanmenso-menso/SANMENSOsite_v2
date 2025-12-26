@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { motion } from 'framer-motion';
 
 const SecretPage = ({ onBack }) => {
     const containerRef = useRef(null);
@@ -11,11 +12,12 @@ const SecretPage = ({ onBack }) => {
     const isNoiseActiveRef = useRef(isNoiseActive);
     const reqRef = useRef(null);
     const itemsRef = useRef([]);
+    const mousePosRef = useRef({ x: 0, y: 0 });
 
     const ORACLE_MESSAGES = [
-        "SYSTEM_HALTED // SOUL_NOT_FOUND", "The void stares back.", "Error 404: Future missing.",
-        "Rebooting consciousness...", "Data corruption in sector 9.", "I see you.", "Connection reset by peer.",
-        "Buffer overflow in dream.exe", "Who is watching the watcher?", "Digital decay detected."
+        "2030年を迎えるまでに何ができるのか考えるんだけど、毎月の生活費の見通しさえできない自分にとってはパピコを買う事しか出来なかった。", "わたくしといふ現象は、仮定された有機交流電燈のひとつの青い照明です（あらゆる透明な幽霊の複合体）風景やみんなといつしよにせはしくせはしく明滅しながら、いかにもたしかにともりつづける因果交流電燈のひとつの青い照明です（ひかりはたもち　その電燈は失はれ）", "Error 404: 何故見たのですか？",
+        "このページに特に深い意味はない。漂うだけ", "エンコード失敗", "I see you.", "適当な発言をするムーブをする奴が本質を突く発言を通せると思うな",
+        "バッファサイズを見誤る", "何故みているのですか？", "ごめんね"
     ];
 
     const generateId = () => Math.random().toString(36).substr(2, 9);
@@ -58,23 +60,23 @@ const SecretPage = ({ onBack }) => {
         const winW = window.innerWidth;
         const winH = window.innerHeight;
         const id = generateId();
+        const baseX = overrides.x ?? (Math.random() * (winW - 300));
+        const baseY = overrides.y ?? (Math.random() * (winH - 300) + 50);
         const newItem = {
             id,
             type: 'window',
-            x: overrides.x ?? (Math.random() * (winW - 300)),
-            y: overrides.y ?? (Math.random() * (winH - 300) + 50),
-            baseX: overrides.baseX ?? (Math.random() * (winW - 300)),
-            baseY: overrides.baseY ?? (Math.random() * (winH - 300) + 50),
+            x: baseX,
+            y: baseY,
+            baseX: baseX,
+            baseY: baseY,
             title,
             content,
             contentType: type,
             params: {
                 phase: Math.random() * Math.PI * 2,
-                scrollSpeedY: (Math.random() - 0.5) * 3,
-                scrollSpeedX: (Math.random() - 0.5) * 2,
-                rotateSpeedX: (Math.random() - 0.5) * 15.0, 
-                rotateSpeedY: (Math.random() - 0.5) * 15.0,
-                rotateSpeedZ: (Math.random() - 0.5) * 10.0,
+                vx: 0,
+                vy: 0,
+                behavior: Math.random() > 0.5 ? 'attract' : 'repel',
                 isDragging: false,
                 ...overrides.params
             }
@@ -102,22 +104,24 @@ const SecretPage = ({ onBack }) => {
             const winH = window.innerHeight;
             
             const isFace = Math.random() > 0.8;
+            const baseX = Math.random() * winW;
+            const baseY = Math.random() * winH;
 
             if (isFace) {
                 const item = {
                     id,
                     type: 'chaos_face', 
                     content: generateRandomFace(),
-                    x: Math.random() * winW,
-                    y: Math.random() * winH,
+                    x: baseX,
+                    y: baseY,
+                    baseX: baseX,
+                    baseY: baseY,
                     width: Math.random() * 150 + 50,
                     params: {
-                        scrollSpeedY: (Math.random() - 0.5) * 15,
-                        rotateSpeedX: (Math.random() - 0.5) * 15,
-                        rotateSpeedY: (Math.random() - 0.5) * 15,
-                        rotateSpeedZ: (Math.random() - 0.5) * 15,
-                        baseX: Math.random() * winW,
-                        baseY: Math.random() * winH,
+                        phase: Math.random() * Math.PI * 2,
+                        vx: 0,
+                        vy: 0,
+                        behavior: Math.random() > 0.5 ? 'attract' : 'repel',
                     }
                 };
                 newChaos.push(item);
@@ -126,18 +130,18 @@ const SecretPage = ({ onBack }) => {
                 const item = {
                     id,
                     type: 'chaos_text',
-                    text: ["(ﾟ∀ﾟ)", "？", "おい", "！", "(ﾉ)・ω・(ヾ)", "for", "･ﾟ･(ﾉд<)･ﾟ", "(=^・・^=)"][Math.floor(Math.random()*8)],
-                    x: Math.random() * winW,
-                    y: Math.random() * winH,
+                    text: ["(ﾟ∀ﾟ)", "？", "Ö", "！", "(ﾉ)・ω・(ヾ)", "ⓘ", "･ﾟ･(ﾉд<)･ﾟ", "(=^・・^=)"][Math.floor(Math.random()*8)],
+                    x: baseX,
+                    y: baseY,
+                    baseX: baseX,
+                    baseY: baseY,
                     color: ['#FF00FF', '#00FF00', '#FFFFFF', '#FFFF00'][Math.floor(Math.random()*4)],
                     fontSize: Math.random() * 8 + 4 + 'rem',
                     params: {
-                        scrollSpeedY: (Math.random() - 0.5) * 25,
-                        rotateSpeedX: (Math.random() - 0.5) * 20,
-                        rotateSpeedY: (Math.random() - 0.5) * 20,
-                        rotateSpeedZ: (Math.random() - 0.5) * 20,
-                        baseX: Math.random() * winW,
-                        baseY: Math.random() * winH,
+                        phase: Math.random() * Math.PI * 2,
+                        vx: 0,
+                        vy: 0,
+                        behavior: Math.random() > 0.5 ? 'attract' : 'repel',
                     }
                 };
                 newChaos.push(item);
@@ -157,10 +161,18 @@ const SecretPage = ({ onBack }) => {
     }, [isNoiseActive]);
 
     useEffect(() => {
+        const handleMouseMove = (e) => {
+            mousePosRef.current = { x: e.clientX, y: e.clientY };
+        };
+        window.addEventListener('mousemove', handleMouseMove);
+        return () => window.removeEventListener('mousemove', handleMouseMove);
+    }, []);
+
+    useEffect(() => {
         const works = [
-            { type: 'image', title: 'IMG_0092.JPG', src: 'https://placehold.co/250x300/blue/white?text=MY_ART_01', caption: 'fig.01: Distortion Study' },
-            { type: 'image', title: 'SCAN_ERROR.PNG', src: 'https://placehold.co/300x200/red/black?text=GLITCH_FACE', caption: 'fig.02: Face Reconstruction' },
-            { type: 'text', title: 'NOTE.TXT', content: 'There is nothing here but raw data.', caption: 'memo' },
+            { type: 'image', title: 'IMG_2023.PMG', src: '/images/before_icon.png', caption: 'fig.01: かつての姿' },
+            { type: 'image', title: 'SCAN_Collage.PNG', src: '/images/colage1.png', caption: 'fig.02: Face or prototype' },
+            { type: 'text', title: 'NOTE.TXT', content: 'ここはシークレットページです。特に何かがあるわけじゃないけど。まあ見てってよ。', caption: 'memo' },
             { type: 'image', title: 'UNKNOWN_ENTITY.SVG', src: generateRandomFace(), caption: 'detected_entity' }
         ];
         
@@ -170,51 +182,70 @@ const SecretPage = ({ onBack }) => {
         works.forEach(w => createWindow(w.src || w.content, w.title, w.type));
         injectChaos();
 
+        const REPULSION_RADIUS = 200;
+        const REPULSION_STRENGTH = 15;
+        const SPRING_STRENGTH = 0.01;
+        const DAMPING = 0.9;
+        const FOLLOW_RADIUS = 400;
+
         const loop = () => {
             timeRef.current += 0.02;
             const t = timeRef.current;
-            const scrollY = window.scrollY;
+            const mouseX = mousePosRef.current.x;
+            const mouseY = mousePosRef.current.y;
 
             itemsRef.current.forEach(item => {
                 const el = document.getElementById(item.id);
-                if (!el || (item.params.isDragging && item.type === 'window')) return;
+                if (!el) return;
 
-                if (!isNoiseActiveRef.current) {
-                        el.style.transform = `translate3d(${item.x}px, ${item.y - scrollY}px, 0)`;
-                        return;
-                }
+                if (item.params.isDragging) {
+                    item.params.vx = 0;
+                    item.params.vy = 0;
+                    el.style.transform = `translate3d(${item.x}px, ${item.y}px, 0)`;
+                } else {
+                    if (!isNoiseActiveRef.current) {
+                        item.x += (item.baseX - item.x) * 0.1;
+                        item.y += (item.baseY - item.y) * 0.1;
+                    } else {
+                        let springTargetX = item.baseX;
+                        let springTargetY = item.baseY;
+                        let interactionX = 0;
+                        let interactionY = 0;
 
-                if (item.params.velocity) {
-                    item.x += item.params.velocity.x;
-                    item.y += item.params.velocity.y;
-                    item.params.velocity.y += 0.5;
-                    item.params.velocity.x *= 0.98;
-                }
+                        if (item.params.behavior === 'attract') {
+                            const distFromBaseToMouse = Math.sqrt(Math.pow(mouseX - item.baseX, 2) + Math.pow(mouseY - item.baseY, 2));
+                            if (distFromBaseToMouse < FOLLOW_RADIUS) {
+                                // マウスが定位置の近くにいる場合、目標地点をマウスにする
+                                springTargetX = mouseX;
+                                springTargetY = mouseY;
+                            }
+                        } else { // 'repel'
+                            const dx = item.x - mouseX;
+                            const dy = item.y - mouseY;
+                            const dist = Math.sqrt(dx * dx + dy * dy);
+                            if (dist < REPULSION_RADIUS) {
+                                const force = (REPULSION_RADIUS - dist) / REPULSION_RADIUS;
+                                const angle = Math.atan2(dy, dx);
+                                interactionX = Math.cos(angle) * force * REPULSION_STRENGTH;
+                                interactionY = Math.sin(angle) * force * REPULSION_STRENGTH;
+                            }
+                        }
 
-                let nx, ny;
-
-                if (item.type === 'window') {
-                    const floatX = Math.sin(t + item.params.phase) * 10;
-                    const floatY = Math.cos(t * 0.8 + item.params.phase) * 10;
-                    const sY = -scrollY * item.params.scrollSpeedY;
-                    const sX = scrollY * item.params.scrollSpeedX;
-                    const rotX = scrollY * (item.params.rotateSpeedX || 0.5);
-                    const rotY = scrollY * (item.params.rotateSpeedY || 0.5);
-                    const rotZ = Math.sin(t*0.5)*5 + scrollY * (item.params.rotateSpeedZ || 0.2);
-                    const moveZ = Math.sin(t * 0.3 + item.params.phase) * 100;
-
-                    nx = item.x + floatX + sX;
-                    ny = item.y + floatY + sY;
+                        // 目標地点へのスプリング力
+                        const springX = (springTargetX - item.x) * SPRING_STRENGTH;
+                        const springY = (springTargetY - item.y) * SPRING_STRENGTH;
+                        item.params.vx += springX + interactionX;
+                        item.params.vy += springY + interactionY;
+                        item.params.vx *= DAMPING;
+                        item.params.vy *= DAMPING;
+                        item.x += item.params.vx;
+                        item.y += item.params.vy;
+                    }
                     
-                    el.style.transform = `translate3d(${nx}px, ${ny}px, ${moveZ}px) rotateX(${rotX}deg) rotateY(${rotY}deg) rotateZ(${rotZ}deg)`;
-                } else if (item.type === 'chaos_text' || item.type === 'chaos_face') {
-                    const sY = -scrollY * item.params.scrollSpeedY;
-                    const rX = scrollY * (item.params.rotateSpeedX || 0);
-                    const rY = scrollY * (item.params.rotateSpeedY || 0);
-                    const rZ = scrollY * (item.params.rotateSpeedZ || item.params.rotateSpeed || 0);
-                    nx = item.x;
-                    ny = item.y + sY;
-                    el.style.transform = `translate3d(${nx}px, ${ny}px, 0) rotateX(${rX}deg) rotateY(${rY}deg) rotateZ(${rZ}deg)`;
+                    const floatX = Math.sin(t + item.params.phase) * 5;
+                    const floatY = Math.cos(t * 0.8 + item.params.phase) * 5;
+                    const rotZ = Math.sin(t * 0.5 + item.params.phase) * 3;
+                    el.style.transform = `translate3d(${item.x + floatX}px, ${item.y + floatY}px, 0) rotateZ(${rotZ}deg)`;
                 }
             });
             reqRef.current = requestAnimationFrame(loop);
@@ -227,6 +258,7 @@ const SecretPage = ({ onBack }) => {
     const handleDragStart = (e, id) => {
         const item = itemsRef.current.find(i => i.id === id);
         if(!item) return;
+        e.preventDefault();
 
         item.params.isDragging = true;
         const el = document.getElementById(id);
@@ -237,18 +269,14 @@ const SecretPage = ({ onBack }) => {
         
         const clientX = e.clientX || e.touches?.[0].clientX;
         const clientY = e.clientY || e.touches?.[0].clientY;
-        const rect = el.getBoundingClientRect();
-        const offsetX = clientX - rect.left;
-        const offsetY = clientY - rect.top;
+        const offsetX = clientX - item.x;
+        const offsetY = clientY - item.y;
 
         const handleMove = (ev) => {
             const cx = ev.clientX || ev.touches?.[0].clientX;
             const cy = ev.clientY || ev.touches?.[0].clientY;
-            const newX = cx - offsetX;
-            const newY = cy - offsetY;
-            el.style.transform = `translate3d(${newX}px, ${newY}px, 0)`;
-            item.x = newX;
-            item.y = newY;
+            item.x = cx - offsetX;
+            item.y = cy - offsetY;
         };
 
         const handleUp = () => {
@@ -275,7 +303,6 @@ const SecretPage = ({ onBack }) => {
                 backgroundColor: colors.bg, 
                 color: colors.text, 
                 fontFamily: '"Courier New", monospace, serif',
-                perspective: '1200px',
                 backgroundImage: `
                     linear-gradient(rgba(0, 255, 0, 0.1) 1px, transparent 1px),
                     linear-gradient(90deg, rgba(0, 255, 0, 0.1) 1px, transparent 1px)
@@ -300,10 +327,10 @@ const SecretPage = ({ onBack }) => {
 
             <div className="fixed bottom-4 right-4 z-[9999] flex flex-col gap-2 items-end">
                 {[
-                    { l: '🔮 CONSULT_ORACLE', fn: consultOracle }, 
-                    { l: '💉 INJECT_CHAOS', fn: injectChaos }, 
+                    { l: 'ORACLE', fn: consultOracle }, 
+                    { l: 'CHAOS', fn: injectChaos }, 
                     { l: isNoiseActive ? 'NOISE: ON' : 'NOISE: OFF', fn: () => setIsNoiseActive(!isNoiseActive) }, 
-                    { l: '🎨 COLOR_CHAOS', fn: randomizeColors }
+                    { l: 'COLOR', fn: randomizeColors }
                 ].map((btn, i) => (
                     <button 
                         key={i} 
@@ -315,56 +342,58 @@ const SecretPage = ({ onBack }) => {
                 ))}
             </div>
 
-            {windows.map(win => (
-                <div 
-                    id={win.id} 
-                    key={win.id} 
-                    onMouseDown={(e) => handleDragStart(e, win.id)} 
-                    onTouchStart={(e) => handleDragStart(e, win.id)} 
-                    className="absolute bg-black border-2 flex flex-col w-[250px] shadow-[5px_5px_0px_rgba(255,255,255,0.2)] select-none" 
-                    style={{ 
-                        borderColor: colors.border, 
-                        top: 0, left: 0, 
-                        transformStyle: 'preserve-3d' 
-                    }}
-                >
-                    <div className="flex justify-between items-center px-2 py-0.5 text-xs text-black bg-white cursor-move font-bold font-mono">
-                        <span>{win.title}</span>
-                        <span className="cursor-pointer hover:text-red-500" onClick={() => { setWindows(w => w.filter(x => x.id !== win.id)); itemsRef.current = itemsRef.current.filter(x => x.id !== win.id); }}>[x]</span>
+            <div className="absolute inset-0" style={{ transformStyle: 'preserve-3d' }}>
+                {windows.map(win => (
+                    <div 
+                        id={win.id} 
+                        key={win.id} 
+                        onMouseDown={(e) => handleDragStart(e, win.id)} 
+                        onTouchStart={(e) => handleDragStart(e, win.id)} 
+                        className="absolute bg-black border-2 flex flex-col w-[250px] shadow-[5px_5px_0px_rgba(255,255,255,0.2)] select-none" 
+                        style={{ 
+                            borderColor: colors.border, 
+                            top: 0, left: 0, 
+                            transformStyle: 'preserve-3d' 
+                        }}
+                    >
+                        <div className="flex justify-between items-center px-2 py-0.5 text-xs text-black bg-white cursor-move font-bold font-mono">
+                            <span>{win.title}</span>
+                            <span className="cursor-pointer hover:text-red-500" onClick={() => { setWindows(w => w.filter(x => x.id !== win.id)); itemsRef.current = itemsRef.current.filter(x => x.id !== win.id); }}>[x]</span>
+                        </div>
+                        <div className="p-2 flex flex-col gap-2 bg-black">
+                            <fieldset className="border p-2 m-0" style={{ borderColor: colors.text }}>
+                                <legend className="px-1 text-[10px] font-mono" style={{ color: colors.text }}>preview</legend>
+                                {win.contentType === 'image' ? (
+                                    <img src={win.content} alt="content" className="w-full h-auto border pointer-events-none bg-white/10" style={{ borderColor: colors.text }} />
+                                ) : (
+                                    <div className="font-mono text-xs whitespace-pre-wrap h-32 overflow-y-auto scrollbar-hide" style={{ color: colors.text }}>
+                                        {win.content}
+                                    </div>
+                                )}
+                            </fieldset>
+                            {win.params.caption && <div className="text-[10px] text-gray-400 underline font-mono">{win.params.caption}</div>}
+                        </div>
                     </div>
-                    <div className="p-2 flex flex-col gap-2 bg-black">
-                        <fieldset className="border p-2 m-0" style={{ borderColor: colors.text }}>
-                            <legend className="px-1 text-[10px] font-mono" style={{ color: colors.text }}>preview</legend>
-                            {win.contentType === 'image' ? (
-                                <img src={win.content} alt="content" className="w-full h-auto border pointer-events-none bg-white/10" style={{ borderColor: colors.text }} />
-                            ) : (
-                                <div className="font-mono text-xs whitespace-pre-wrap h-32 overflow-y-auto scrollbar-hide" style={{ color: colors.text }}>
-                                    {win.content}
-                                </div>
-                            )}
-                        </fieldset>
-                        {win.params.caption && <div className="text-[10px] text-gray-400 underline font-mono">{win.params.caption}</div>}
+                ))}
+                
+                {chaosItems.map(item => (
+                    <div 
+                        id={item.id} 
+                        key={item.id} 
+                        className="absolute font-black pointer-events-none mix-blend-exclusion whitespace-nowrap"
+                        style={{ 
+                            color: item.color || '#00FF00', 
+                            fontSize: item.fontSize, 
+                            top: 0, left: 0,
+                            width: item.width 
+                        }}
+                    >
+                        {item.type === 'chaos_text' ? item.text : (
+                            <img src={item.content} alt="chaos" style={{ width: '100%', height: 'auto' }} />
+                        )}
                     </div>
-                </div>
-            ))}
-            
-            {chaosItems.map(item => (
-                <div 
-                    id={item.id} 
-                    key={item.id} 
-                    className="absolute font-black pointer-events-none mix-blend-exclusion whitespace-nowrap"
-                    style={{ 
-                        color: item.color || '#00FF00', 
-                        fontSize: item.fontSize, 
-                        top: 0, left: 0,
-                        width: item.width 
-                    }}
-                >
-                    {item.type === 'chaos_text' ? item.text : (
-                        <img src={item.content} alt="chaos" style={{ width: '100%', height: 'auto' }} />
-                    )}
-                </div>
-            ))}
+                ))}
+            </div>
             
             <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[15vw] font-serif text-white/10 pointer-events-none whitespace-nowrap rotate-[-15deg] mix-blend-overlay">
                 DATA_LOSS // VOID

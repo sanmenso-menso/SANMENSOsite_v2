@@ -11,7 +11,21 @@ const WorksPage = ({ initialFilter = 'all' }) => {
 
     const [filter, setFilter] = useState(initialFilter);
     const [selectedWork, setSelectedWork] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const ITEMS_PER_PAGE = 9; // 1ページあたりの表示件数
 
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    // フィルターが変更されたら、1ページ目に戻す
+    const handleFilterChange = (newFilter) => {
+        setFilter(newFilter);
+        // 1ページ目に戻してスクロール
+        handlePageChange(1);
+    };
+    
     const filteredWorks = useMemo(() => {
         const sorted = [...WORKS_DATA].sort((a, b) => b.id - a.id);
 
@@ -33,6 +47,43 @@ const WorksPage = ({ initialFilter = 'all' }) => {
         return filtered;
     }, [filter, isNumunumuMode]);
 
+    // 現在のページに表示する作品と総ページ数を計算
+    const { currentWorks, totalPages } = useMemo(() => {
+        const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+        const endIndex = startIndex + ITEMS_PER_PAGE;
+        const currentWorks = filteredWorks.slice(startIndex, endIndex);
+        const totalPages = Math.ceil(filteredWorks.length / ITEMS_PER_PAGE);
+        return { currentWorks, totalPages };
+    }, [filteredWorks, currentPage]);
+
+    const PaginationControls = () => {
+        if (totalPages <= 1) return null;
+
+        return (
+            <div className="flex justify-center items-center gap-2 md:gap-4 py-8">
+                <button 
+                    onClick={() => handlePageChange(Math.max(currentPage - 1, 1))} 
+                    disabled={currentPage === 1}
+                    className="h-12 w-12 flex items-center justify-center border-2 border-black bg-white text-black font-bold shadow-[4px_4px_0px_#000] hover:bg-yellow-100 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white"
+                >
+                    &lt;
+                </button>
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                    <button key={page} onClick={() => handlePageChange(page)} className={`h-12 w-12 flex items-center justify-center border-2 border-black font-bold shadow-[4px_4px_0px_#000] hover:-translate-y-1 hover:shadow-[6px_6px_0px_#000] transition-all ${currentPage === page ? 'bg-black text-[#FFD700]' : 'bg-white text-black hover:bg-yellow-100'}`}>
+                        {page}
+                    </button>
+                ))}
+                <button 
+                    onClick={() => handlePageChange(Math.min(currentPage + 1, totalPages))} 
+                    disabled={currentPage === totalPages}
+                    className="h-12 w-12 flex items-center justify-center border-2 border-black bg-white text-black font-bold shadow-[4px_4px_0px_#000] hover:bg-yellow-100 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white"
+                >
+                    &gt;
+                </button>
+            </div>
+        );
+    };
+
     const CATEGORIES = [
         { id: 'all', label: 'ALL', icon: null },
         { id: 'music', label: 'MUSIC', icon: Music },
@@ -51,22 +102,26 @@ const WorksPage = ({ initialFilter = 'all' }) => {
                 </div>
                 <div className="flex gap-2 flex-wrap justify-end">
                     {CATEGORIES.map(cat => (
-                        <button key={cat.id} onClick={() => setFilter(cat.id)} className={`h-12 px-4 flex items-center justify-center gap-2 border-2 border-black transition-all shadow-[4px_4px_0px_#000] hover:-translate-y-1 hover:shadow-[6px_6px_0px_#000] active:translate-y-0 active:shadow-none font-bold font-sans ${filter === cat.id ? 'bg-black text-[#FFD700]' : 'bg-white text-black hover:bg-yellow-100'}`}>
+                        <button key={cat.id} onClick={() => handleFilterChange(cat.id)} className={`h-12 px-4 flex items-center justify-center gap-2 border-2 border-black transition-all shadow-[4px_4px_0px_#000] hover:-translate-y-1 hover:shadow-[6px_6px_0px_#000] active:translate-y-0 active:shadow-none font-bold font-sans ${filter === cat.id ? 'bg-black text-[#FFD700]' : 'bg-white text-black hover:bg-yellow-100'}`}>
                             {cat.icon && <cat.icon size={18} />}<span>{isNumunumuMode ? numuText : cat.label}</span>
                         </button>
                     ))}
                 </div>
             </header>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-32">
+
+            <PaginationControls />
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-16">
                 <AnimatePresence mode='popLayout'>
-                    {filteredWorks.map((work) => (
-                        <motion.div key={work.id} layout initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9 }} transition={{ duration: 0.3 }} onClick={() => setSelectedWork(work)} className="group relative bg-white border-4 border-black p-4 h-full flex flex-col transition-all duration-300 hover:-translate-y-2 hover:rotate-1 hover:shadow-[12px_12px_0px_#000] shadow-[6px_6px_0px_#000] cursor-pointer overflow-hidden">
+                    {currentWorks.map((work) => (
+                        <motion.div key={work.id} initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9 }} transition={{ duration: 0.3 }} onClick={() => setSelectedWork(work)} className="group relative bg-white border-4 border-black p-4 h-full flex flex-col transition-all duration-300 hover:-translate-y-2 hover:rotate-1 hover:shadow-[12px_12px_0px_#000] shadow-[6px_6px_0px_#000] cursor-pointer overflow-hidden">
                             <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 bg-yellow-400/80 rotate-[-2deg] opacity-80 shadow-sm z-10"></div>
                             <div className="w-full aspect-video border-2 border-black mb-4 bg-gray-100 relative overflow-hidden flex items-center justify-center">
                                 <ImageWithFallback
                                     src={work.image}
                                     alt={work.title}
                                     className="w-full h-full object-cover"
+                                    loading="lazy"
                                     fallback={(
                                         <>
                                             <div className="absolute inset-0 opacity-20" style={{ backgroundColor: work.color }}></div>
@@ -93,10 +148,13 @@ const WorksPage = ({ initialFilter = 'all' }) => {
                     ))}
                 </AnimatePresence>
             </div>
+
+            <PaginationControls />
+
             <AnimatePresence>
                 {selectedWork && (
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8">
-                        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setSelectedWork(null)}></div>
+                        <div className="absolute inset-0 bg-black/75" onClick={() => setSelectedWork(null)}></div>
                         <motion.div initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95, y: 20 }} className="relative w-full max-w-5xl h-[90vh] bg-[#f0f0f0] border-[6px] border-black shadow-[16px_16px_0px_#000] flex flex-col md:flex-row overflow-hidden z-10">
                             <button onClick={() => setSelectedWork(null)} className="absolute top-0 right-0 z-20 bg-black text-white p-3 hover:bg-[#FFD700] hover:text-black transition-colors"><X size={32} /></button>
                             <div className="w-full md:w-2/5 bg-gray-200 border-b-4 md:border-b-0 md:border-r-4 border-black relative overflow-hidden group flex items-center justify-center">

@@ -1,15 +1,9 @@
 import React, { useState } from 'react';
-import { BrutalistBreaker } from '../components/BrutalistBreaker';
 import PopVectorPlayer from '../components/PopVectorPlayer';
+import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 
 const contents = [
-    {
-        id: 'brutalist-breaker',
-        title: 'ドキドキブロック崩し',
-        description: 'ブロック崩しゲームです。何があるかはお楽しみ。',
-        component: BrutalistBreaker,
-    },
     {
         id: 'pop-vector-player',
         title: 'デモトラック＠ドリンクバー',
@@ -35,13 +29,49 @@ const ContentsPage = () => {
         return <ContentComponent onClose={handleBack} />;
     }
 
+    const title = "Interactive Contents";
+    const titleChars = title.split("");
+
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                delayChildren: 0.23, // アニメーション全体の開始を0.1秒遅らせる
+                staggerChildren: 0.03, // 各文字のアニメーション開始をずらす
+            },
+        },
+    };
+
+    const letterVariants = {
+        hidden: {
+            x: '20vw',      // 右側から登場
+            opacity: 0,
+            skewY: 10,      // Y軸を傾けて、上部が遅れるような効果を出す
+        },
+        visible: {
+            x: 0,
+            opacity: 1,
+            skewY: 0,
+            transition: {
+                type: "spring", // バネのような物理アニメーション
+                damping: 15,    // バネの減衰（値が小さいほど弾む）
+                stiffness: 200, // バネの硬さ
+            },
+        },
+    };
+
     return (
         <div className="max-w-7xl mx-auto px-6 py-8">
             <header className="mb-12 border-b-4 border-black pb-6 border-double">
                 <div>
-                    <h1 className="text-6xl md:text-8xl font-black tracking-tighter leading-none font-sans">
-                        Interactive Contents
-                    </h1>
+                    <motion.h1 className="text-6xl md:text-8xl font-black tracking-tighter leading-none font-sans overflow-hidden" variants={containerVariants} initial="hidden" animate="visible" aria-label={title}>
+                        {titleChars.map((char, index) => (
+                            <motion.span key={`${char}-${index}`} variants={letterVariants} className="inline-block">
+                                {char === " " ? "\u00A0" : char}
+                            </motion.span>
+                        ))}
+                    </motion.h1>
                     <p className="font-mono font-bold text-black text-lg md:text-xl tracking-wide mt-2">
                         三面相が制作した、触って遊べるコンテンツです。
                     </p>
