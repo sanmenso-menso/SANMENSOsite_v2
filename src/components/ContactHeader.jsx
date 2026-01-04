@@ -1,11 +1,6 @@
 import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
-
-const textLines = ["世の中に", "楽しいことを", "もっと"];
-
-// Find the dimensions of our "character grid"
-const GRID_ROWS = textLines.length;
-const GRID_COLS = Math.max(...textLines.map(line => line.length));
+import { useNumunumu } from '../NumunumuContext';
 
 // 勢いの強いイージングカーブのセット
 const strongEasings = [
@@ -20,20 +15,31 @@ const strongEasings = [
     [0, 0.55, 0.45, 1],   // 円を描くような滑らかな減速
 ];
 
-// 中心からの距離を計算し、外側の要素ほど遅延が小さくなるように設定
-const calculateDelay = (row, col) => {
-    const centerRow = (GRID_ROWS - 1) / 2;
-    const centerCol = (GRID_COLS - 1) / 2;
-    const dist = Math.sqrt(Math.pow(row - centerRow, 2) + Math.pow(col - centerCol, 2));
-    const maxDist = Math.sqrt(Math.pow(GRID_ROWS / 2, 2) + Math.pow(GRID_COLS / 2, 2));
-    // 外側から始まる (maxDist - dist)
-    // 0.7秒の範囲で遅延を分散させる
-    return ((maxDist - dist) / maxDist) * 0.7;
-};
-
 const ContactHeader = () => {
+    const { isNumunumuMode } = useNumunumu();
+    const numuText = 'ぬむぬむとんかつ';
+
+    const textLines = useMemo(() => isNumunumuMode 
+        ? [numuText, numuText, numuText] 
+        : ["世の中に", "楽しいことを", "もっと"], [isNumunumuMode]);
+
+    // Find the dimensions of our "character grid"
+    const GRID_ROWS = textLines.length;
+    const GRID_COLS = Math.max(...textLines.map(line => line.length));
+
     // 各文字のランダムな値を事前に計算してメモ化
     const linesWithCharData = useMemo(() => {
+        // 中心からの距離を計算し、外側の要素ほど遅延が小さくなるように設定
+        const calculateDelay = (row, col) => {
+            const centerRow = (GRID_ROWS - 1) / 2;
+            const centerCol = (GRID_COLS - 1) / 2;
+            const dist = Math.sqrt(Math.pow(row - centerRow, 2) + Math.pow(col - centerCol, 2));
+            const maxDist = Math.sqrt(Math.pow(GRID_ROWS / 2, 2) + Math.pow(GRID_COLS / 2, 2));
+            // 外側から始まる (maxDist - dist)
+            // 0.7秒の範囲で遅延を分散させる
+            return ((maxDist - dist) / maxDist) * 0.7;
+        };
+
         return textLines.map((line, lineIndex) => {
             return line.split('').map((char, charIndex) => {
                 // 0:top, 1:bottom, 2:left, 3:right の4方向からランダムに登場方向を決定
@@ -80,7 +86,7 @@ const ContactHeader = () => {
                 };
             });
         });
-    }, []);
+    }, [textLines, GRID_ROWS, GRID_COLS]);
 
     const charBoxVariants = {
         initial: (custom) => ({
@@ -109,7 +115,7 @@ const ContactHeader = () => {
     };
 
     return (
-        <div className="relative w-full flex flex-col items-center justify-center py-20 md:py-28 overflow-hidden">
+        <div className="relative w-full flex flex-col items-center justify-center py-16 sm:py-20 md:py-28 overflow-hidden">
             <motion.div
                 className="text-center"
                 initial="initial"
@@ -120,7 +126,7 @@ const ContactHeader = () => {
                         {line.map((charData, charIndex) => (
                             <motion.div
                                 key={charIndex}
-                                className="text-5xl md:text-7xl font-black text-black leading-tight tracking-tighter"
+                                className="text-4xl sm:text-5xl md:text-7xl font-black text-black leading-tight tracking-tighter"
                                 style={{ fontFamily: "'Recursive', sans-serif" }}
                                 variants={charBoxVariants}
                                 custom={charData.custom}

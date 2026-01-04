@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import * as THREE from 'three';
 import { Play, Pause, SkipBack, SkipForward, Music, X } from 'lucide-react';
 import { SONGS } from '../constants';
@@ -274,13 +274,21 @@ const PopVectorPlayer = ({ onClose }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const { isNumunumuMode } = useNumunumu();
+  const numuText = 'ぬむぬむとんかつ';
   
   const audioRef = useRef(null);
   const audioContextRef = useRef(null);
   const analyserRef = useRef(null);
   const [analyser, setAnalyser] = useState(null);
 
-  const currentSong = SONGS[currentSongIndex];
+  const rawSong = SONGS[currentSongIndex];
+  const currentSong = useMemo(() => isNumunumuMode ? {
+      ...rawSong,
+      title: numuText,
+      genre: numuText,
+      flavor: numuText
+  } : rawSong, [isNumunumuMode, rawSong]);
 
   const initAudio = () => {
     if (!audioContextRef.current) {
@@ -328,9 +336,9 @@ const PopVectorPlayer = ({ onClose }) => {
 
   return (
     <motion.div 
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.9 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
         className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/30 backdrop-blur-sm"
     >
       <audio 
@@ -342,13 +350,17 @@ const PopVectorPlayer = ({ onClose }) => {
       />
 
       {/* MAIN CONTAINER: Brutalist / Neo-Pop Style */}
-      <div className="relative z-10 w-full max-w-4xl bg-white border-4 border-black shadow-[16px_16px_0px_0px_rgba(0,0,0,1)] rounded-3xl p-6 md:p-12 flex flex-col md:flex-row gap-8 md:gap-12 items-center">
+      <motion.div 
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.9, opacity: 0 }}
+        className="relative z-10 w-full max-w-4xl bg-white border-4 border-black shadow-[8px_8px_0px_#000] md:shadow-[16px_16px_0px_#000] rounded-2xl md:rounded-3xl p-4 sm:p-6 md:p-12 flex flex-col md:flex-row gap-6 md:gap-12 items-center">
         <button onClick={onClose} className="absolute top-2 right-2 z-20 p-2 text-black bg-white/50 rounded-full hover:bg-black hover:text-white transition-colors">
             <X size={24} />
         </button>
         
         {/* LEFT: 3D VIEWPORT */}
-        <div className="relative w-full md:w-5/12 aspect-[3/4] border-4 border-black rounded-2xl overflow-hidden bg-white">
+        <div className="relative w-full sm:w-2/3 md:w-5/12 aspect-video sm:aspect-square md:aspect-[3/4] border-4 border-black rounded-2xl overflow-hidden bg-white">
              {/* Background Pattern inside viewport */}
              <div className="absolute inset-0 opacity-10" 
                   style={{ backgroundImage: `linear-gradient(135deg, ${currentSong.color} 25%, transparent 25%, transparent 50%, ${currentSong.color} 50%, ${currentSong.color} 75%, transparent 75%, transparent)`, backgroundSize: '20px 20px' }}>
@@ -363,23 +375,23 @@ const PopVectorPlayer = ({ onClose }) => {
              </div>
 
              {/* STICKER LABEL */}
-             <div className="absolute bottom-4 right-4 bg-white border-2 border-black px-3 py-1 transform -rotate-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                <span className="font-black text-xs uppercase tracking-widest">{currentSong.flavor}</span>
+             <div className="absolute bottom-2 right-2 sm:bottom-4 sm:right-4 bg-white border-2 border-black px-2 py-0.5 sm:px-3 sm:py-1 transform -rotate-3 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] sm:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center">
+                <span className="font-black text-[10px] sm:text-xs uppercase tracking-widest leading-none">{currentSong.flavor}</span>
              </div>
         </div>
 
         {/* RIGHT: UI CONTROLS */}
-        <div className="w-full md:w-7/12 flex flex-col justify-between h-full space-y-8">
+        <div className="w-full md:w-7/12 flex flex-col justify-between h-full space-y-3 sm:space-y-4 md:space-y-8">
             
             {/* TEXT INFO */}
-            <div className="space-y-2 text-center md:text-left">
-                <div className="inline-block bg-black text-white px-3 py-1 text-xs font-bold uppercase tracking-wider mb-2 transform -rotate-1">
+            <div className="space-y-1 sm:space-y-2 text-center md:text-left">
+                <div className="inline-block bg-black text-white px-2 py-0.5 sm:px-3 sm:py-1 text-[10px] sm:text-xs font-bold uppercase tracking-wider mb-1 sm:mb-2 transform -rotate-1">
                     Now Playing
                 </div>
-                <h1 className="text-4xl md:text-6xl font-black leading-[0.9] tracking-tighter uppercase stroke-text">
+                <h1 className="text-2xl sm:text-4xl md:text-6xl font-black leading-[0.9] tracking-tighter uppercase stroke-text break-words">
                     {currentSong.title}
                 </h1>
-                <p className="text-xl font-bold text-gray-400 font-mono border-b-4 border-black inline-block pb-1">
+                <p className="text-sm sm:text-lg md:text-xl font-bold text-gray-400 font-mono border-b-4 border-black inline-block pb-1">
                     {currentSong.genre}
                 </p>
             </div>
@@ -410,27 +422,27 @@ const PopVectorPlayer = ({ onClose }) => {
             </div>
 
             {/* BUTTONS */}
-            <div className="flex items-center justify-center md:justify-start gap-4 pt-4">
-                <button onClick={handlePrev} className="w-14 h-14 border-4 border-black bg-white flex items-center justify-center shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all rounded-lg">
-                    <SkipBack size={24} strokeWidth={3} />
+            <div className="flex items-center justify-center md:justify-start gap-3 sm:gap-4 pt-2 sm:pt-4">
+                <button onClick={handlePrev} className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 border-4 border-black bg-white flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] sm:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all rounded-lg">
+                    <SkipBack className="w-5 h-5 sm:w-6 sm:h-6" strokeWidth={3} />
                 </button>
 
                 <button 
                     onClick={togglePlay} 
-                    className={`flex-1 h-20 border-4 border-black ${currentSong.bgAccent} flex items-center justify-center gap-2 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-[8px] active:translate-y-[8px] active:shadow-none transition-all rounded-xl text-black`}
+                    className={`flex-1 h-12 sm:h-16 md:h-20 border-4 border-black ${currentSong.bgAccent} flex items-center justify-center gap-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] sm:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-[8px] active:translate-y-[8px] active:shadow-none transition-all rounded-xl text-black`}
                 >
-                    {isPlaying ? <Pause size={32} strokeWidth={2} /> : <Play size={32} strokeWidth={2} />}
-                    <span className="font-black text-2xl tracking-widest italic">{isPlaying ? "PAUSE" : "PLAY"}</span>
+                    {isPlaying ? <Pause className="w-6 h-6 sm:w-8 sm:h-8" strokeWidth={2} /> : <Play className="w-6 h-6 sm:w-8 sm:h-8" strokeWidth={2} />}
+                    <span className="font-black text-lg sm:text-xl md:text-2xl tracking-widest italic">{isPlaying ? "PAUSE" : "PLAY"}</span>
                 </button>
 
-                <button onClick={handleNext} className="w-14 h-14 border-4 border-black bg-white flex items-center justify-center shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all rounded-lg">
-                    <SkipForward size={24} strokeWidth={3} />
+                <button onClick={handleNext} className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 border-4 border-black bg-white flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] sm:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all rounded-lg">
+                    <SkipForward className="w-5 h-5 sm:w-6 sm:h-6" strokeWidth={3} />
                 </button>
             </div>
 
         </div>
 
-      </div>
+      </motion.div>
     </motion.div>
   );
 };

@@ -20,6 +20,7 @@ const MagicCube = ({ onSelect, isOpening }) => {
     const springZ = useSpring(z, springConfig); 
 
     const isDragging = useRef(false);
+    const isScrolling = useRef(null);
     const prevPos = useRef({ x: 0, y: 0 });
     const downPos = useRef({ x: 0, y: 0 });
     const hasDragged = useRef(false);
@@ -30,12 +31,11 @@ const MagicCube = ({ onSelect, isOpening }) => {
         if(isOpening) return;
         isDragging.current = true;
         hasDragged.current = false;
+        isScrolling.current = false;
         const pos = { x: e.clientX, y: e.clientY };
         prevPos.current = pos;
         downPos.current = pos;
-        e.preventDefault
-        ();
-    };
+    };    
 
     useEffect(() => {
         const updateSize = () => {
@@ -70,11 +70,13 @@ const MagicCube = ({ onSelect, isOpening }) => {
     useEffect(() => {
         const handlePointerMove = (e) => {
             if (!isDragging.current) return;
+
             
+            // If it's a drag (or a mouse move), rotate the cube.
             if (!hasDragged.current) {
                 const deltaXSinceDown = Math.abs(e.clientX - downPos.current.x);
                 const deltaYSinceDown = Math.abs(e.clientY - downPos.current.y);
-                if (deltaXSinceDown > 5 || deltaYSinceDown > 5) {
+                if (deltaXSinceDown > 20 || deltaYSinceDown > 20) {
                     hasDragged.current = true;
                 }
             }
@@ -91,6 +93,7 @@ const MagicCube = ({ onSelect, isOpening }) => {
         };
         const handlePointerUp = () => {
             isDragging.current = false;
+            isScrolling.current = null;
         };
         window.addEventListener('pointermove', handlePointerMove);
         window.addEventListener('pointerup', handlePointerUp);
@@ -103,7 +106,7 @@ const MagicCube = ({ onSelect, isOpening }) => {
     const HALF_SIZE = cubeSize / 2;
 
     return (
-        <div ref={containerRef} className="relative z-20 flex items-center justify-center cursor-grab active:cursor-grabbing touch-none" style={{ width: '100%', height: '60vh', perspective: '1200px' }} onPointerDown={handlePointerDown}>
+        <div ref={containerRef} className="relative z-20 flex items-center justify-center cursor-grab active:cursor-grabbing" style={{ width: '100%', height: '60vh', perspective: '1200px', touchAction: 'none' }} onPointerDown={handlePointerDown}>
             <motion.div style={{ width: cubeSize, height: cubeSize, position: 'relative', transformStyle: 'preserve-3d', rotateX: springRotateX, rotateY: springRotateY, z: springZ, rotateZ: -5 }}>
                 <CubeFace size={cubeSize} halfSize={HALF_SIZE} rotate="rotateY(0deg)" color="bg-brandGreen" borderColor="border-black" label="エンタメ" icon={<Gamepad2 className="text-white w-12 h-12 md:w-16 md:h-16" />} textColor="text-white" onClick={() => !hasDragged.current && onSelect('entame')} />
                 <CubeFace size={cubeSize} halfSize={HALF_SIZE} rotate="rotateY(90deg)" color="bg-accentGold" borderColor="border-black" label="楽しさ" icon={<Smile className="text-black w-12 h-12 md:w-16 md:h-16" />} textColor="text-black" onClick={() => !hasDragged.current && onSelect('fun')} />
@@ -118,9 +121,9 @@ const MagicCube = ({ onSelect, isOpening }) => {
                     </div>
                 } />
                 <CubeFace size={cubeSize} halfSize={HALF_SIZE} rotate="rotateY(180deg)" color="bg-white" borderColor="border-black" customContent={
-                    <div className="w-full h-full p-6 flex flex-col justify-center text-center select-none bg-white">
-                        <h3 className="font-black text-2xl md:text-3xl mb-4 border-b-4 border-black inline-block self-center">{isNumunumuMode ? numuText : 'WHO?'}</h3>
-                        <p className="font-serif text-xs md:text-sm leading-relaxed text-left font-bold">{isNumunumuMode ? numuText : '大阪在住。'}<br/>{isNumunumuMode ? '' : 'インターネットの片隅で、コラージュを軸に音楽やビジュアルなどのコンテンツを制作し活動している。'}<br/>{isNumunumuMode ? '' : '面白さで世界の境界線を破壊・再構築し、実験的かつ親しみのある作品世界を目指す。'}<br/><br/>{isNumunumuMode ? '' : '制作デスクにはいつもスルメ'}</p>
+                    <div className="w-full h-full p-3 md:p-6 flex flex-col justify-center text-center select-none bg-white">
+                        <h3 className="font-black text-xl md:text-3xl mb-3 md:mb-5 border-b-2 md:border-b-4 border-black inline-block self-center">{isNumunumuMode ? numuText : 'WHO?'}</h3>
+                        <p className="font-serif text-[10px] md:text-sm leading-snug md:leading-relaxed text-left font-bold">{isNumunumuMode ? numuText : '大阪在住。'}<br/>{isNumunumuMode ? '' : 'インターネットの片隅で、コラージュを軸に音楽やビジュアルなどのコンテンツを制作し活動している。'}<br/>{isNumunumuMode ? '' : '面白さで世界の境界線を破壊・再構築し、実験的かつ親しみのある作品世界を目指す。'}<br/>{isNumunumuMode ? '' : '制作デスクにはいつもスルメ'}</p>
                     </div>
                 } />
                 <div className="absolute inset-0 m-auto bg-black animate-pulse pointer-events-none" style={{ width: cubeSize * 0.5, height: cubeSize * 0.5, transform: 'translateZ(0)' }} />
@@ -133,21 +136,15 @@ const CubeFace = ({ size, halfSize, rotate, color, borderColor, label, icon, onC
     const { isNumunumuMode } = useNumunumu();
     const numuText = 'ぬむぬむとんかつ';
     const numuIcon = <img src="/images/numunumu_icon.png" alt={numuText} className="w-12 h-12 md:w-16 md:h-16" />;
-    const [isHovered, setIsHovered] = useState(false);
 
     return (
-        <motion.div className={`absolute inset-0 border-[6px] ${borderColor} ${color} flex items-center justify-center cursor-pointer overflow-hidden group select-none shadow-[inset_0_0_40px_rgba(0,0,0,0.2)]`} style={{ width: size, height: size, transform: `${rotate} translateZ(${halfSize}px)`, backfaceVisibility: 'visible' }} onHoverStart={() => setIsHovered(true)} onHoverEnd={() => setIsHovered(false)} onClick={onClick}>
+        <motion.div className={`absolute inset-0 border-[6px] ${borderColor} ${color} flex items-center justify-center cursor-pointer overflow-hidden group select-none shadow-[inset_0_0_40px_rgba(0,0,0,0.2)]`} style={{ width: size, height: size, transform: `${rotate} translateZ(${halfSize}px)`, backfaceVisibility: 'visible' }} onClick={onClick}>
             {isNumunumuMode ? (
                 <div className={`absolute inset-0 flex flex-col items-center justify-center p-2 ${textColor}`}>{numuIcon}<h3 className="text-xl md:text-4xl font-black mt-4 font-sans tracking-tight">{numuText}</h3></div>
             ) : customContent ? (
                 <div className={`absolute inset-0 ${textColor} w-full h-full`}>{customContent}</div>
             ) : (
                 <>
-                    <div className="hidden md:group-hover:block">
-                        <motion.div className={`absolute inset-0 ${color} z-10 flex items-center justify-center border-4 border-white/20`} animate={{ x: isHovered ? "100%" : "0%" }} transition={{ type: "spring", stiffness: 100, damping: 15 }}>
-                            <div className={`w-20 h-20 border-4 ${textColor === 'text-white' ? 'border-white' : 'border-black'} rounded-full flex items-center justify-center`}><div className={`w-4 h-4 ${textColor === 'text-white' ? 'bg-white' : 'bg-black'} rounded-full animate-ping`} /></div>
-                        </motion.div>
-                    </div>
                     <div className={`absolute inset-0 flex flex-col items-center justify-center p-2 ${textColor}`}>{icon}<h3 className="text-2xl md:text-4xl font-black mt-4 font-sans tracking-tight">{label}</h3></div>
                 </>
             )}

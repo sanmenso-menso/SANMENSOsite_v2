@@ -1,7 +1,12 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { useNumunumu } from '../NumunumuContext';
 
-const SecretPage = ({ onBack }) => {
+const SecretPage = () => {
+    const navigate = useNavigate();
+    const { isNumunumuMode } = useNumunumu();
+    const numuText = 'ぬむぬむとんかつ';
     const containerRef = useRef(null);
     const [windows, setWindows] = useState([]);
     const [chaosItems, setChaosItems] = useState([]);
@@ -14,7 +19,7 @@ const SecretPage = ({ onBack }) => {
     const itemsRef = useRef([]);
     const mousePosRef = useRef({ x: 0, y: 0 });
 
-    const ORACLE_MESSAGES = [
+    const ORACLE_MESSAGES = isNumunumuMode ? [numuText] : [
         "2030年を迎えるまでに何ができるのか考えるんだけど、毎月の生活費の見通しさえできない自分にとってはパピコを買う事しか出来なかった。", "わたくしといふ現象は、仮定された有機交流電燈のひとつの青い照明です（あらゆる透明な幽霊の複合体）風景やみんなといつしよにせはしくせはしく明滅しながら、いかにもたしかにともりつづける因果交流電燈のひとつの青い照明です（ひかりはたもち　その電燈は失はれ）", "Error 404: 何故見たのですか？",
         "このページに特に深い意味はない。漂うだけ", "エンコード失敗", "I see you.", "適当な発言をするムーブをする奴が本質を突く発言を通せると思うな",
         "バッファサイズを見誤る", "何故みているのですか？", "ごめんね"
@@ -130,7 +135,7 @@ const SecretPage = ({ onBack }) => {
                 const item = {
                     id,
                     type: 'chaos_text',
-                    text: ["(ﾟ∀ﾟ)", "？", "Ö", "！", "(ﾉ)・ω・(ヾ)", "ⓘ", "･ﾟ･(ﾉд<)･ﾟ", "(=^・・^=)"][Math.floor(Math.random()*8)],
+                    text: isNumunumuMode ? numuText : ["(ﾟ∀ﾟ)", "？", "Ö", "！", "(ﾉ)・ω・(ヾ)", "ⓘ", "･ﾟ･(ﾉд<)･ﾟ", "(=^・・^=)"][Math.floor(Math.random()*8)],
                     x: baseX,
                     y: baseY,
                     baseX: baseX,
@@ -169,9 +174,14 @@ const SecretPage = ({ onBack }) => {
     }, []);
 
     useEffect(() => {
-        const works = [
+        const works = isNumunumuMode ? [
+            { type: 'text', title: numuText, content: numuText, caption: numuText },
+            { type: 'text', title: numuText, content: numuText, caption: numuText },
+            { type: 'text', title: numuText, content: numuText, caption: numuText },
+            { type: 'text', title: numuText, content: numuText, caption: numuText }
+        ] : [
             { type: 'image', title: 'IMG_2023.PMG', src: '/images/before_icon.png', caption: 'fig.01: かつての姿' },
-            { type: 'image', title: 'SCAN_Collage.PNG', src: '/images/colage1.png', caption: 'fig.02: Face or prototype' },
+            { type: 'image', title: 'SCAN_Collage.PNG', src: '/images/colage1.jpg', caption: 'fig.02: Face or prototype' },
             { type: 'text', title: 'NOTE.TXT', content: 'ここはシークレットページです。特に何かがあるわけじゃないけど。まあ見てってよ。', caption: 'memo' },
             { type: 'image', title: 'UNKNOWN_ENTITY.SVG', src: generateRandomFace(), caption: 'detected_entity' }
         ];
@@ -253,12 +263,12 @@ const SecretPage = ({ onBack }) => {
         
         reqRef.current = requestAnimationFrame(loop);
         return () => cancelAnimationFrame(reqRef.current);
-    }, [createWindow]);
+    }, [createWindow, isNumunumuMode]);
 
     const handleDragStart = (e, id) => {
         const item = itemsRef.current.find(i => i.id === id);
         if(!item) return;
-        e.preventDefault();
+        if (e.type === 'mousedown') e.preventDefault();
 
         item.params.isDragging = true;
         const el = document.getElementById(id);
@@ -319,8 +329,8 @@ const SecretPage = ({ onBack }) => {
             />
             
             <button 
-                onClick={() => onBack('home')} 
-                className="fixed top-4 left-4 z-[9999] bg-black border-2 border-white text-white px-2 py-1 hover:bg-white hover:text-black font-mono font-bold text-sm tracking-widest"
+                onClick={() => navigate('/')} 
+                className="fixed top-4 left-4 z-[9999] bg-black border-2 border-white text-white px-2 py-1 hover:bg-white hover:text-black font-mono font-bold text-xs sm:text-sm tracking-widest"
             >
                 ← ROOT_DIR
             </button>
@@ -335,7 +345,7 @@ const SecretPage = ({ onBack }) => {
                     <button 
                         key={i} 
                         onClick={btn.fn} 
-                        className="bg-black border border-green-500 text-green-500 px-2 py-1 min-w-[140px] text-xs font-mono hover:bg-green-500 hover:text-black active:border-white transition-colors"
+                        className="bg-black border border-green-500 text-green-500 px-2 py-1 min-w-[100px] sm:min-w-[140px] text-[10px] sm:text-xs font-mono hover:bg-green-500 hover:text-black active:border-white transition-colors"
                     >
                         {btn.l}
                     </button>
@@ -349,29 +359,29 @@ const SecretPage = ({ onBack }) => {
                         key={win.id} 
                         onMouseDown={(e) => handleDragStart(e, win.id)} 
                         onTouchStart={(e) => handleDragStart(e, win.id)} 
-                        className="absolute bg-black border-2 flex flex-col w-[250px] shadow-[5px_5px_0px_rgba(255,255,255,0.2)] select-none" 
+                        className="absolute bg-black border-2 flex flex-col w-[200px] sm:w-[250px] shadow-[5px_5px_0px_rgba(255,255,255,0.2)] select-none touch-none" 
                         style={{ 
                             borderColor: colors.border, 
                             top: 0, left: 0, 
                             transformStyle: 'preserve-3d' 
                         }}
                     >
-                        <div className="flex justify-between items-center px-2 py-0.5 text-xs text-black bg-white cursor-move font-bold font-mono">
+                        <div className="flex justify-between items-center px-2 py-0.5 text-[10px] sm:text-xs text-black bg-white cursor-move font-bold font-mono">
                             <span>{win.title}</span>
                             <span className="cursor-pointer hover:text-red-500" onClick={() => { setWindows(w => w.filter(x => x.id !== win.id)); itemsRef.current = itemsRef.current.filter(x => x.id !== win.id); }}>[x]</span>
                         </div>
                         <div className="p-2 flex flex-col gap-2 bg-black">
                             <fieldset className="border p-2 m-0" style={{ borderColor: colors.text }}>
-                                <legend className="px-1 text-[10px] font-mono" style={{ color: colors.text }}>preview</legend>
+                                <legend className="px-1 text-[8px] sm:text-[10px] font-mono" style={{ color: colors.text }}>preview</legend>
                                 {win.contentType === 'image' ? (
                                     <img src={win.content} alt="content" className="w-full h-auto border pointer-events-none bg-white/10" style={{ borderColor: colors.text }} />
                                 ) : (
-                                    <div className="font-mono text-xs whitespace-pre-wrap h-32 overflow-y-auto scrollbar-hide" style={{ color: colors.text }}>
+                                    <div className="font-mono text-[10px] sm:text-xs whitespace-pre-wrap h-32 overflow-y-auto scrollbar-hide" style={{ color: colors.text }}>
                                         {win.content}
                                     </div>
                                 )}
                             </fieldset>
-                            {win.params.caption && <div className="text-[10px] text-gray-400 underline font-mono">{win.params.caption}</div>}
+                            {win.params.caption && <div className="text-[8px] sm:text-[10px] text-gray-400 underline font-mono">{win.params.caption}</div>}
                         </div>
                     </div>
                 ))}
@@ -396,7 +406,7 @@ const SecretPage = ({ onBack }) => {
             </div>
             
             <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[15vw] font-serif text-white/10 pointer-events-none whitespace-nowrap rotate-[-15deg] mix-blend-overlay">
-                DATA_LOSS // VOID
+                {isNumunumuMode ? numuText : 'DATA_LOSS // VOID'}
             </div>
         </div>
     );

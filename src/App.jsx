@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { THEME, FONTS } from './constants';
 import { NumunumuContext } from './NumunumuContext';
@@ -17,8 +18,17 @@ import ContactPage from './pages/ContactPage';
 import ContentsPage from './pages/ContentsPage';
 import SecretPage from './pages/SecretPage';
 
-function App() {
-    const [activePage, setActivePage] = useState('home');
+function AppContent() {
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    const getActivePage = () => {
+        const path = location.pathname;
+        if (path === '/') return 'home';
+        return path.substring(1);
+    };
+    const activePage = getActivePage();
+
     const [worksFilter, setWorksFilter] = useState('all');
     const [isOpening, setIsOpening] = useState(true);
     const [showGame, setShowGame] = useState(false);
@@ -41,11 +51,6 @@ function App() {
     }, []);
 
     useEffect(() => {
-        // ページが切り替わった時にウィンドウの最上部にスクロールする
-        window.scrollTo(0, 0);
-    }, [activePage]);
-
-    useEffect(() => {
         const timer = setTimeout(() => {
             setIsOpening(false);
         }, 900); 
@@ -57,17 +62,18 @@ function App() {
     const handleCubeSelect = (key) => {
         if (['music', 'entame', 'fun'].includes(key)) {
             setWorksFilter(key);
-            setActivePage('works');
+            navigate('/works');
         } 
     };
 
     const handleNavSelect = (page) => {
-        setActivePage(page);
+        const path = page === 'home' ? '/' : `/${page}`;
+        navigate(path);
         if (page === 'works') setWorksFilter('all');
     };
 
     const PageWrapper = ({ children }) => (
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="w-full min-h-screen pt-24 pb-32">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="w-full min-h-screen pt-20 pb-28 sm:pt-24 sm:pb-32">
             {children}
         </motion.div>
     );
@@ -91,32 +97,41 @@ function App() {
                     {showGame && <BrutalistBreaker onClose={() => setShowGame(false)} />}
                 </AnimatePresence>
 
-
-                {activePage === 'secret' ? (
-                    <SecretPage onBack={() => setActivePage('home')} />
-                ) : (
+                {activePage !== 'secret' && (
                     <>
                         <Header onNavigate={handleNavSelect} isOpening={isOpening} />
                         <NavigationDock activePage={activePage} onNavigate={handleNavSelect} isOpening={isOpening} />
-                        
-                        <AnimatePresence mode='wait'>
-                            {activePage === 'home' && (
-                                <motion.div key="home" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="relative z-10 w-full h-screen flex flex-col items-center justify-center p-4">
-                                    <div className="mb-20"><MagicCube onSelect={handleCubeSelect} isOpening={isOpening} /></div>
-                                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: isOpening ? 0 : 1 }} transition={{ delay: 2.5 }} className="absolute bottom-32 pointer-events-none">
-                                        <p className="font-serif text-xs sm:text-sm md:text-lg bg-black text-[#FFD700] px-3 py-1 sm:px-4 md:px-6 md:py-2 transform -rotate-2 border-2 border-white shadow-[4px_4px_0px_rgba(0,0,0,0.3)] whitespace-nowrap">{isNumunumuMode ? 'ぬむぬむとんかつ' : 'ドラッグして CUBE を回せ'}</p>
-                                    </motion.div>
-                                </motion.div>
-                            )}
-                            {activePage === 'works' && <PageWrapper key="works"><WorksPage initialFilter={worksFilter} /></PageWrapper>}
-                            {activePage === 'contents' && <PageWrapper key="contents"><ContentsPage /></PageWrapper>}
-                            {activePage === 'links' && <PageWrapper key="links"><LinksPage onSecretClick={() => setActivePage('secret')} /></PageWrapper>}
-                            {activePage === 'contact' && <PageWrapper key="contact"><ContactPage /></PageWrapper>}
-                        </AnimatePresence>
                     </>
                 )}
+
+                <AnimatePresence mode='wait' onExitComplete={() => window.scrollTo(0, 0)}>
+                    <Routes location={location} key={location.pathname.startsWith('/contents') ? 'contents' : location.pathname}>
+                        <Route path="/" element={
+                            <motion.div key="home" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="relative z-10 w-full h-screen flex flex-col items-center justify-center p-4">
+                                <div className="mb-16 sm:mb-20"><MagicCube onSelect={handleCubeSelect} isOpening={isOpening} /></div>
+                                <motion.div initial={{ opacity: 0 }} animate={{ opacity: isOpening ? 0 : 1 }} transition={{ delay: 2.5 }} className="absolute bottom-28 sm:bottom-32 pointer-events-none">
+                                    <p className="font-serif text-xs sm:text-sm md:text-lg bg-black text-[#FFD700] px-3 py-1 sm:px-4 md:px-6 md:py-2 transform -rotate-2 border-2 border-white shadow-[4px_4px_0px_rgba(0,0,0,0.3)] whitespace-nowrap">{isNumunumuMode ? 'ぬむぬむとんかつ' : 'ドラッグして CUBE を回せ'}</p>
+                                </motion.div>
+                            </motion.div>
+                        } />
+                        <Route path="/works" element={<PageWrapper><WorksPage initialFilter={worksFilter} /></PageWrapper>} />
+                        <Route path="/contents" element={<PageWrapper><ContentsPage /></PageWrapper>} />
+                        <Route path="/contents/:id" element={<PageWrapper><ContentsPage /></PageWrapper>} />
+                        <Route path="/links" element={<PageWrapper><LinksPage /></PageWrapper>} />
+                        <Route path="/contact" element={<PageWrapper><ContactPage /></PageWrapper>} />
+                        <Route path="/secret" element={<SecretPage />} />
+                    </Routes>
+                </AnimatePresence>
             </div>
         </NumunumuContext.Provider>
+    );
+}
+
+function App() {
+    return (
+        <BrowserRouter>
+            <AppContent />
+        </BrowserRouter>
     );
 }
 

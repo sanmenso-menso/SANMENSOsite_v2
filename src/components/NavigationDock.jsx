@@ -19,7 +19,9 @@ const NavigationDock = ({ activePage, onNavigate, isOpening }) => {
     const openingStyle = {
         transform: isOpening ? 'translateY(100px)' : 'translateY(0)',
         opacity: isOpening ? 0 : 1,
-        transition: 'transform 0.8s 2.2s, opacity 0.8s 2.2s',
+        transition: isOpening 
+            ? 'transform 0.8s 2.2s, opacity 0.8s 2.2s' 
+            : 'transform 0.8s 0s, opacity 0.8s 0s',
     };
 
     return (

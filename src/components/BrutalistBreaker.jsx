@@ -2,11 +2,14 @@ import React, { useRef, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { X, RotateCcw } from 'lucide-react';
 import { THEME } from '../constants';
+import { useNumunumu } from '../NumunumuContext';
 
 export const BrutalistBreaker = ({ onClose }) => {
     const canvasRef = useRef(null);
     const [gameState, setGameState] = useState('menu'); // menu, playing, gameover, win
     const [score, setScore] = useState(0);
+    const { isNumunumuMode } = useNumunumu();
+    const numuText = 'ぬむぬむとんかつ';
 
     // ゲーム定数
     const PADDLE_WIDTH = 100;
@@ -247,9 +250,9 @@ export const BrutalistBreaker = ({ onClose }) => {
                 {/* Header */}
                 <div className="flex justify-between items-center mb-4 border-b-4 border-black pb-2">
                     <h2 className="text-2xl md:text-4xl font-black italic tracking-tighter">
-                        BRUTAL_BREAKER
+                        {isNumunumuMode ? numuText : 'BRUTAL_BREAKER'}
                     </h2>
-                    <div className="font-mono text-xl font-bold">SCORE: {score.toString().padStart(5, '0')}</div>
+                    <div className="font-mono text-xl font-bold">{isNumunumuMode ? numuText : 'SCORE'}: {score.toString().padStart(5, '0')}</div>
                     <button onClick={onClose} className="p-2 hover:bg-black hover:text-white transition-colors">
                         <X size={32} />
                     </button>
@@ -267,30 +270,30 @@ export const BrutalistBreaker = ({ onClose }) => {
                     {/* UI Overlays */}
                     {gameState === 'menu' && (
                         <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 text-white">
-                            <h3 className="text-4xl font-black text-[#FFD700] mb-4 animate-pulse">READY?</h3>
+                            <h3 className="text-4xl font-black text-[#FFD700] mb-4 animate-pulse">{isNumunumuMode ? numuText : 'READY?'}</h3>
                             <button onClick={startGame} className="bg-white text-black px-8 py-3 font-black text-xl hover:bg-[#FFD700] transform hover:-translate-y-1 transition-transform">
-                                START GAME
+                                {isNumunumuMode ? numuText : 'START GAME'}
                             </button>
-                            <p className="mt-4 font-mono text-sm opacity-60">ARROW KEYS or TOUCH to Move</p>
+                            <p className="mt-4 font-mono text-sm opacity-60">{isNumunumuMode ? numuText : 'ARROW KEYS or TOUCH to Move'}</p>
                         </div>
                     )}
                     
                     {gameState === 'gameover' && (
                         <div className="absolute inset-0 flex flex-col items-center justify-center bg-red-900/90 text-white">
-                            <h3 className="text-6xl font-black text-white mb-4 tracking-tighter">GAME OVER</h3>
-                            <p className="font-mono text-xl mb-6">SCORE: {score}</p>
+                            <h3 className="text-6xl font-black text-white mb-4 tracking-tighter">{isNumunumuMode ? numuText : 'GAME OVER'}</h3>
+                            <p className="font-mono text-xl mb-6">{isNumunumuMode ? numuText : 'SCORE'}: {score}</p>
                             <button onClick={startGame} className="bg-black text-white border-2 border-white px-8 py-3 font-black text-xl hover:bg-[#FFD700] hover:text-black hover:border-black flex items-center gap-2">
-                                <RotateCcw /> RETRY
+                                <RotateCcw /> {isNumunumuMode ? numuText : 'RETRY'}
                             </button>
                         </div>
                     )}
 
                     {gameState === 'win' && (
                         <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#FFD700]/90 text-black">
-                            <h3 className="text-6xl font-black mb-4 tracking-tighter">YOU WIN</h3>
-                            <p className="font-black text-2xl mb-6">EXCELLENT WORK</p>
+                            <h3 className="text-6xl font-black mb-4 tracking-tighter">{isNumunumuMode ? numuText : 'YOU WIN'}</h3>
+                            <p className="font-black text-2xl mb-6">{isNumunumuMode ? numuText : 'EXCELLENT WORK'}</p>
                             <button onClick={startGame} className="bg-black text-white px-8 py-3 font-black text-xl hover:scale-110 transition-transform">
-                                PLAY AGAIN
+                                {isNumunumuMode ? numuText : 'PLAY AGAIN'}
                             </button>
                         </div>
                     )}

@@ -14,7 +14,7 @@ const ContactPage = () => {
     return (
         <>
             <ContactHeader />
-            <div className="max-w-5xl mx-auto px-6 py-20 md:py-32 flex flex-col items-center justify-center text-center overflow-hidden">
+            <div className="max-w-5xl mx-auto px-4 md:px-6 py-16 md:py-24 flex flex-col items-center justify-center text-center overflow-hidden">
             <style>
                 {`
                 @import url('https://fonts.googleapis.com/css2?family=Recursive:slnt,wght,CASL,CRSV,MONO@-15..0,300..1000,0..1,0..1,0..1&display=swap');
@@ -44,16 +44,16 @@ const ContactPage = () => {
                 }
                 `}
             </style>
-            <div className="bg-white border-4 border-black p-8 shadow-[8px_8px_0px_#000]">
+            <div className="bg-white border-4 border-black p-6 md:p-8 shadow-[8px_8px_0px_#000]">
                 <h2 className="text-4xl md:text-6xl font-black font-sans mb-6">{isNumunumuMode ? numuText : 'CONTACT'}</h2>
-                <p className="font-serif font-bold text-lg mb-6">{isNumunumuMode ? numuText : 'お仕事のご依頼やお問い合わせは、'}<br/>{isNumunumuMode ? '' : '以下のメールアドレスまでご連絡ください。'}</p>
+                <p className="font-serif font-bold text-base md:text-lg mb-6">{isNumunumuMode ? numuText : 'お仕事のご依頼やお問い合わせは、'}<br/>{isNumunumuMode ? '' : '以下のメールアドレスまでご連絡ください。'}</p>
                 
                 <div 
                     className="relative mb-8"
                     onMouseEnter={() => !isNumunumuMode && setIsHovered(true)}
                     onMouseLeave={() => setIsHovered(false)}
                 >
-                    <a href={isNumunumuMode ? '#' : "mailto:sanmensoworks@gmail.com"} className="relative z-10 inline-flex items-center gap-3 bg-[#FFD700] text-black px-8 py-4 font-bold text-xl hover:bg-black hover:text-[#FFD700] hover:-translate-y-1 transition-all border-2 border-black shadow-[4px_4px_0px_rgba(0,0,0,0.3)]">
+                    <a href={isNumunumuMode ? '#' : "mailto:sanmensoworks@gmail.com"} className="relative z-10 inline-flex items-center gap-2 md:gap-3 bg-[#FFD700] text-black px-6 py-3 md:px-8 md:py-4 font-bold text-lg md:text-xl hover:bg-black hover:text-[#FFD700] hover:-translate-y-1 transition-all border-2 border-black shadow-[4px_4px_0px_rgba(0,0,0,0.3)]">
                         <Mail size={24} />
                         {isNumunumuMode ? numuText : 'sanmensoworks@gmail.com'}
                     </a>

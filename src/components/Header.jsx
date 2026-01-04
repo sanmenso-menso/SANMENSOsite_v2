@@ -19,7 +19,7 @@ const Header = ({ onNavigate, isOpening }) => {
             y: 0, 
             opacity: 1,
             // 初期表示用のアニメーション設定
-            transition: { duration: 0.8, delay: 2, type: "spring", stiffness: 80 }
+            transition: { duration: 0.8, delay: isOpening ? 2 : 0, type: "spring", stiffness: 80 }
         },
     };
 
@@ -30,10 +30,10 @@ const Header = ({ onNavigate, isOpening }) => {
             animate={isOpening ? "hidden" : "visible"}
             // オープニングアニメーション完了後に、スクロールと連動したy座標の動きを適用します
             style={!isOpening ? { y } : {}}
-            className="fixed top-0 left-0 p-4 md:p-8 z-50 pointer-events-auto cursor-pointer"
+            className="fixed top-0 left-0 px-4 py-3 md:p-8 z-50 pointer-events-auto cursor-pointer"
             onClick={() => onNavigate('home')}
         >
-            <div className="group flex flex-row items-center gap-4">
+            <div className="group flex flex-row items-center gap-3 md:gap-4">
                 <img src={isNumunumuMode ? numuIcon : "/images/SANMENlogo.jpg"} alt={isNumunumuMode ? numuText : "SANMENSO logo"} className="w-auto h-14 md:h-20"/>
                 <div className="flex flex-col items-start">
                     <h1 className="text-2xl md:text-4xl font-black font-sans tracking-tighter leading-none text-black group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r from-[#2E8B57] to-[#FFD700] transition-all">{isNumunumuMode ? numuText : 'SANMENSO'}</h1>
