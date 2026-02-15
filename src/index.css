@@ -1,0 +1,20 @@
+/* Tailwind CSSの読み込み */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* グローバルスタイル */
+body {
+  margin: 0;
+  overflow-x: hidden;
+  background-color: #f2f5f3;
+}
+
+/* スクロールバーを隠すユーティリティ */
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
