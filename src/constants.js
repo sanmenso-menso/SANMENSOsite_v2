@@ -687,6 +687,19 @@ export const WORKS_DATA = [
         url:"https://www.nicovideo.jp/watch/sm45975101",
         image: "/images/CHOCOLATE.png",
     },
+    { 
+        id: 53, 
+        title: "『Chill』コンピ ",
+        type: "music", 
+        year: "2026", 
+        role: "Composition", 
+        desc: "コンピレーションアルバムに参加しました", 
+        detailText: "Lo-Fi Hip Hop,ボサノバ,シンセポップなどの『チルい音楽』が醸し出す音楽的要素と、様々な合成音声を掛け合わせた楽曲が集まる合成音声コンピレーションアルバムです。\n\n「あさのよかん」という楽曲で参加しています。",
+        credits: ["Composition:三面相,あたたかい水族館,あなざ～せかい.,鮎川ぱて@しゅわしゅわP,稲むり,米教タルタル,桶屋-Okeya,オオウチアラタ,荻凪裕作,d.j.ァネイロ,ETE,ｋｏｎｄｏ,namitape,POPFACES,Rulmry.,uotak", "Mastering:SOZEN OTSUBO", "jacket design:のぞみ,おおつく(あなざ～せかい.)", "logo design:オオウチアラタ (Philtz),石川ひびき (Philtz)", "disc design:オオウチアラタ (Philtz)", "3D model:uotak(Philtz)", "Special Thanks,雨漏りP"],
+        color: "#FF6B6B",
+        url:"https://youtu.be/XBIYO-n2pRg",
+        image: "/images/vocachillconpi.png",
+    },
 ];
 
 export const EXCAVATION_LINKS = [
@@ -711,12 +724,26 @@ export const EXCAVATION_LINKS = [
         image:"/images/banner/namigroove_banner01.png",
         alt: "なみぐるオフィシャルWEB バナー",
     },
-  { 
+    { 
         id: 4,
         type: 'banner',
         url: "http://tmpra.jp",
         image:"images/banner/tmpra_banner.png",
         alt: "TMPらのホームページ",
+    },
+    { 
+        id: 5,
+        type: 'banner',
+        url: "https://sites.google.com/view/0-u2bo/home",
+        image:"images/banner/U2bo_banner.png",
+        alt: "Rei Utsuboのホームページ",
+    },
+    { 
+        id: 6,
+        type: 'banner',
+        url: "https://www.awara-hasegawa.com/",
+        image:"images/banner/hasegawa_banner.png",
+        alt: "長谷川旅館のホームページ",
     },
     
 ];
@@ -809,3 +836,11 @@ export const SOCIAL_LINKS = [
     { name: 'booth', url: 'https://sanmen.booth.pm/' },
     { name: 'soundcloud', url: 'https://soundcloud.com/sanmenso' },
 ];
+
+export const SITE_META = {
+    title: '三面相 - SANMENso',
+    description: '三面相のポートフォリオサイトです。楽曲制作、DJ、デザインなどの活動情報を掲載しています。',
+    url: 'https://sanmenso.com', 
+    image: '/images/sanmenso_icon.jpg', // ※SNSで表示させたい画像のパス（1200x630px推奨）
+    twitterUsername: '@SANMENSOUdrop',
+};

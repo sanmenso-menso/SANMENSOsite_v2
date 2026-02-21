@@ -19,6 +19,12 @@ import ContentsPage from './pages/ContentsPage';
 import SecretPage from './pages/SecretPage';
 import NotFoundPage from './pages/NotfoundPage';
 
+const PageWrapper = ({ children }) => (
+    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="w-full min-h-screen pt-20 pb-28 sm:pt-24 sm:pb-32">
+        {children}
+    </motion.div>
+);
+
 function AppContent() {
     const location = useLocation();
     const navigate = useNavigate();
@@ -46,6 +52,7 @@ function AppContent() {
 
     useEffect(() => {
         const handler = (e) => {
+            if (e.key.length !== 1) return;
             setInput(prevInput => {
                 const new_input = (prevInput + e.key.toLowerCase()).slice(-target.length);
                 if (new_input === target) {
@@ -79,12 +86,6 @@ function AppContent() {
         navigate(path);
         if (page === 'works') setWorksFilter('all');
     };
-
-    const PageWrapper = ({ children }) => (
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="w-full min-h-screen pt-20 pb-28 sm:pt-24 sm:pb-32">
-            {children}
-        </motion.div>
-    );
 
     return (
         <NumunumuContext.Provider value={{ isNumunumuMode }}>
