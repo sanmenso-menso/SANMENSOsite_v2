@@ -841,6 +841,6 @@ export const SITE_META = {
     title: '三面相 - SANMENso',
     description: '三面相のポートフォリオサイトです。楽曲制作、DJ、デザインなどの活動情報を掲載しています。',
     url: 'https://sanmenso.com', 
-    image: '/images/sanmenso_icon.jpg', // ※SNSで表示させたい画像のパス（1200x630px推奨）
+    image: 'https://sanmenso.com/images/sanmenso_icon.jpg', // ※SNSで表示させたい画像のパス（1200x630px推奨）
     twitterUsername: '@SANMENSOUdrop',
 };

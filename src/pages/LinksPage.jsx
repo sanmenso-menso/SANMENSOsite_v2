@@ -119,6 +119,8 @@ const LinksPage = () => {
 
         const ctx = canvas.getContext('2d', { willReadFrequently: true });
         
+        let prevWidth = container.clientWidth;
+        
         const drawRock = () => {
             const width = container.clientWidth;
             const height = container.clientHeight;
@@ -135,8 +137,16 @@ const LinksPage = () => {
             }
         };
 
+        const handleResize = () => {
+            const currentWidth = container.clientWidth;
+            if (currentWidth !== prevWidth) {
+                prevWidth = currentWidth;
+                drawRock();
+            }
+        };
+
         drawRock();
-        window.addEventListener('resize', drawRock);
+        window.addEventListener('resize', handleResize);
 
         const handleTouchStart = (e) => {
             // 最初のタッチ位置を記録し、スクロール判定をリセット
@@ -230,7 +240,7 @@ const LinksPage = () => {
         inputLayer.addEventListener('click', handleClick);
 
         return () => {
-            window.removeEventListener('resize', drawRock);
+            window.removeEventListener('resize', handleResize);
             if(inputLayer) {
                 inputLayer.removeEventListener('touchstart', handleTouchStart);
                 inputLayer.removeEventListener('mousemove', scratch);
