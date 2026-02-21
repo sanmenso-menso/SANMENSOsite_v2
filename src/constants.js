@@ -731,7 +731,7 @@ export const SONGS = [
     bgAccent: "bg-[#00FFDD]",
     flavor: "NEON GLITCH POP",
     bpm: 128,
-    src: "/audio/EPA EPA Txapeka.wav" 
+    src: "/audio/EPA EPA Txapeka.mp3" 
   },
   {
     id: 2,
