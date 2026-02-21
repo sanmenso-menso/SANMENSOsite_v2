@@ -753,7 +753,7 @@ export const SONGS = [
     bgAccent: "bg-[#FF4500]",
     flavor: "CHAOS TROPICAL",
     bpm: 140,
-    src: "/audio/Cut-solid-solar panel.wav" 
+    src: "/audio/Cut-solid-solar panel.mp3" 
   },
   {
     id: 4,
@@ -764,7 +764,7 @@ export const SONGS = [
     bgAccent: "bg-[#F48FB1]",
     flavor: "LONELY PEACH PULP",
     bpm: 140,
-    src: "/audio/Im busy But Lonely.wav" 
+    src: "/audio/Im busy But Lonely.mp3" 
   },
   {
     id: 5,
@@ -797,7 +797,7 @@ export const SONGS = [
     bgAccent: "bg-[#A4D65E]",
     flavor: "FRESH SPLASH APPLE",
     bpm: 140,
-    src: "/audio/splash rush.wav" 
+    src: "/audio/splash rush.mp3" 
   }
 ]
 

@@ -10,7 +10,7 @@ const contents = [
     {
         id: 'pop-vector-player',
         title: 'デモトラック＠ドリンクバー',
-        description: 'デモトラックが聴けます。缶に入った炭酸ドリンクを楽しめます。※音が出ます',
+        description: 'エレクトロなデモトラックが聴けます。缶に入った炭酸ドリンクを楽しめます。※音が出ます',
         component: PopVectorPlayer,
     },
     // 将来的にここにコンテンツを追加
