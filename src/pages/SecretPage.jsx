@@ -22,7 +22,9 @@ const SecretPage = () => {
     const ORACLE_MESSAGES = isNumunumuMode ? [numuText] : [
         "2030年を迎えるまでに何ができるのか考えるんだけど、毎月の生活費の見通しさえできない自分にとってはパピコを買う事しか出来なかった。", "わたくしといふ現象は、仮定された有機交流電燈のひとつの青い照明です（あらゆる透明な幽霊の複合体）風景やみんなといつしよにせはしくせはしく明滅しながら、いかにもたしかにともりつづける因果交流電燈のひとつの青い照明です（ひかりはたもち　その電燈は失はれ）", "Error 404: 何故見たのですか？",
         "このページに特に深い意味はない。漂うだけ", "エンコード失敗", "I see you.", "適当な発言をするムーブをする奴が本質を突く発言を通せると思うな",
-        "バッファサイズを見誤る", "何故みているのですか？", "ごめんね"
+        "バッファサイズを見誤る", "ごめんね", { type: 'link', url: 'https://youtu.be/SyGYHXMDgSw', image: '/images/secret/omuset.jpg', text: '培養オムのライブセットです' }, { type: 'link', url: 'https://www.nicovideo.jp/watch/sm45857005', image: '/images/secret/timeset.png', text: 'ボカライフより、DJmix『TIME』です' }, { type: 'link', url: 'https://soundcloud.com/lb3uw4iphdxy', image: '/images/secret/jyonkoni.png', text: 'ジョンジョン小錦　～魅惑のシンフォニー～' }
+        // リンクを表示したい場合は以下のようにオブジェクトを追加してください
+        // { type: 'link', url: 'https://example.com', image: '/images/example.jpg', text: 'リンクの説明' }
     ];
 
     const generateId = () => Math.random().toString(36).substr(2, 9);
@@ -92,9 +94,13 @@ const SecretPage = () => {
     }, []);
 
     const consultOracle = () => {
-        if (Math.random() > 0.5) {
-            const text = ORACLE_MESSAGES[Math.floor(Math.random() * ORACLE_MESSAGES.length)];
-            createWindow(text, 'ORACLE_RESPONSE', 'text');
+        if (Math.random() > 0.43) {
+            const msg = ORACLE_MESSAGES[Math.floor(Math.random() * ORACLE_MESSAGES.length)];
+            if (typeof msg === 'string') {
+                createWindow(msg, 'ORACLE_RESPONSE', 'text');
+            } else if (msg && msg.type === 'link') {
+                createWindow(msg, 'LINK_ACCESS', 'link');
+            }
         } else {
             const faceSvg = generateRandomFace();
             createWindow(faceSvg, 'ENTITY_DETECTED', 'image');
@@ -375,6 +381,14 @@ const SecretPage = () => {
                                 <legend className="px-1 text-[8px] sm:text-[10px] font-mono" style={{ color: colors.text }}>preview</legend>
                                 {win.contentType === 'image' ? (
                                     <img src={win.content} alt="content" className="w-full h-auto border pointer-events-none bg-white/10" style={{ borderColor: colors.text }} />
+                                ) : win.contentType === 'link' ? (
+                                    <a href={win.content.url} target="_blank" rel="noreferrer" className="block group cursor-pointer">
+                                        <div className="relative overflow-hidden border" style={{ borderColor: colors.text }}>
+                                            <img src={win.content.image} alt="link thumbnail" className="w-full h-auto object-cover transition-transform group-hover:scale-110" />
+                                            <div className="absolute inset-0 bg-white/10 group-hover:bg-transparent transition-colors pointer-events-none" />
+                                        </div>
+                                        {win.content.text && <div className="mt-1 font-mono text-[10px] sm:text-xs break-words" style={{ color: colors.text }}>{`> ${win.content.text}`}</div>}
+                                    </a>
                                 ) : (
                                     <div className="font-mono text-[10px] sm:text-xs whitespace-pre-wrap h-32 overflow-y-auto scrollbar-hide" style={{ color: colors.text }}>
                                         {win.content}
