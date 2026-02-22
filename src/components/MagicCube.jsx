@@ -107,7 +107,7 @@ const MagicCube = ({ onSelect, isOpening }) => {
 
     return (
         <div ref={containerRef} className="relative z-20 flex items-center justify-center cursor-grab active:cursor-grabbing" style={{ width: '100%', height: '60vh', perspective: '1200px', touchAction: 'none' }} onPointerDown={handlePointerDown}>
-            <motion.div style={{ width: cubeSize, height: cubeSize, position: 'relative', transformStyle: 'preserve-3d', rotateX: springRotateX, rotateY: springRotateY, z: springZ, rotateZ: -5 }}>
+            <motion.div style={{ width: cubeSize, height: cubeSize, position: 'relative', transformStyle: 'preserve-3d', rotateX: springRotateX, rotateY: springRotateY, z: springZ, rotateZ: -5, willChange: 'transform' }}>
                 <CubeFace size={cubeSize} halfSize={HALF_SIZE} rotate="rotateY(0deg)" color="bg-brandGreen" borderColor="border-black" label="エンタメ" icon={<Gamepad2 className="text-white w-12 h-12 md:w-16 md:h-16" />} textColor="text-white" onClick={() => !hasDragged.current && onSelect('entame')} />
                 <CubeFace size={cubeSize} halfSize={HALF_SIZE} rotate="rotateY(90deg)" color="bg-accentGold" borderColor="border-black" label="楽しさ" icon={<Smile className="text-black w-12 h-12 md:w-16 md:h-16" />} textColor="text-black" onClick={() => !hasDragged.current && onSelect('fun')} />
                 <CubeFace size={cubeSize} halfSize={HALF_SIZE} rotate="rotateX(90deg)" color="bg-red-600" borderColor="border-black" label="音楽" icon={<Music className="text-white w-12 h-12 md:w-16 md:h-16" />} textColor="text-white" onClick={() => !hasDragged.current && onSelect('music')} />
@@ -138,7 +138,7 @@ const CubeFace = ({ size, halfSize, rotate, color, borderColor, label, icon, onC
     const numuIcon = <img src="/images/numunumu_icon.png" alt={numuText} className="w-12 h-12 md:w-16 md:h-16" />;
 
     return (
-        <motion.div className={`absolute inset-0 border-[6px] ${borderColor} ${color} flex items-center justify-center cursor-pointer overflow-hidden group select-none shadow-[inset_0_0_40px_rgba(0,0,0,0.2)]`} style={{ width: size, height: size, transform: `${rotate} translateZ(${halfSize}px)`, backfaceVisibility: 'visible' }} onClick={onClick}>
+        <motion.div className={`absolute inset-0 border-[6px] ${borderColor} ${color} flex items-center justify-center cursor-pointer overflow-hidden group select-none shadow-[inset_0_0_40px_rgba(0,0,0,0.2)]`} style={{ width: size, height: size, transform: `${rotate} translateZ(${halfSize}px)`, backfaceVisibility: 'visible', outline: '1px solid transparent' }} onClick={onClick}>
             {isNumunumuMode ? (
                 <div className={`absolute inset-0 flex flex-col items-center justify-center p-2 ${textColor}`}>{numuIcon}<h3 className="text-xl md:text-4xl font-black mt-4 font-sans tracking-tight">{numuText}</h3></div>
             ) : customContent ? (

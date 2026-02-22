@@ -843,4 +843,6 @@ export const SITE_META = {
     url: 'https://sanmenso.com', 
     image: 'https://sanmenso.com/images/sanmenso_icon.jpg', // ※SNSで表示させたい画像のパス（1200x630px推奨）
     twitterUsername: '@SANMENSOUdrop',
+    type: 'website',
+    favicon: '/favicon.ico',
 };

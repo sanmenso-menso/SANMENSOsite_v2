@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { THEME, FONTS } from './constants';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { THEME, FONTS, SITE_META } from './constants';
 import { NumunumuContext } from './NumunumuContext';
 // コンポーネントのインポート
 import LivingBackground from './components/LivingBackground';
@@ -139,9 +140,25 @@ function AppContent() {
 
 function App() {
     return (
-        <BrowserRouter>
-            <AppContent />
-        </BrowserRouter>
+        <HelmetProvider>
+            <BrowserRouter>
+                <Helmet>
+                    <title>{SITE_META.title}</title>
+                    <meta name="description" content={SITE_META.description} />
+                    <link rel="icon" href={SITE_META.favicon} />
+
+                    {/* OGP設定 */}
+                    <meta property="og:url" content={SITE_META.url} />
+                    <meta property="og:type" content={SITE_META.type} />
+                    <meta property="og:title" content={SITE_META.title} />
+                    <meta property="og:description" content={SITE_META.description} />
+                    <meta property="og:image" content={SITE_META.image} />
+                    <meta name="twitter:card" content="summary_large_image" />
+                    <meta name="twitter:site" content={SITE_META.twitterUsername} />
+                </Helmet>
+                <AppContent />
+            </BrowserRouter>
+        </HelmetProvider>
     );
 }
 
