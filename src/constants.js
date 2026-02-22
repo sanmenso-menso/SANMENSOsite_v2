@@ -838,10 +838,13 @@ export const SOCIAL_LINKS = [
 ];
 
 export const SITE_META = {
-    title: '三面相 - SANMENso',
+    title: '三面相のウェブサイト',
     description: '三面相のポートフォリオサイトです。楽曲制作、DJ、デザインなどの活動情報を掲載しています。',
     url: 'https://sanmenso.com', 
+    siteName: '三面相',
+    locale: 'ja_JP',
     image: 'https://sanmenso.com/images/sanmenso_icon.jpg', // ※SNSで表示させたい画像のパス（1200x630px推奨）
+    twitterCard: 'summary_large_image',
     twitterUsername: '@SANMENSOUdrop',
     type: 'website',
     favicon: '/favicon.ico',
