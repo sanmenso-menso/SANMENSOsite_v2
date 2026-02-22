@@ -119,7 +119,7 @@ function AppContent() {
                         <Route path="/" element={
                             <motion.div key="home" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="relative z-10 w-full h-screen flex flex-col items-center justify-center p-4">
                                 <div className="mb-16 sm:mb-20"><MagicCube onSelect={handleCubeSelect} isOpening={isOpening} /></div>
-                                <motion.div initial={{ opacity: 0 }} animate={{ opacity: isOpening ? 0 : 1 }} transition={{ delay: 2.5 }} className="absolute bottom-28 sm:bottom-32 pointer-events-none">
+                                <motion.div initial={{ opacity: 0 }} animate={{ opacity: isOpening ? 0 : 1 }} transition={{ delay: 2.5 }} className="absolute bottom-28 sm:bottom-32 pointer-events-none z-50">
                                     <p className="font-serif text-xs sm:text-sm md:text-lg bg-black text-[#FFD700] px-3 py-1 sm:px-4 md:px-6 md:py-2 transform -rotate-2 border-2 border-white shadow-[4px_4px_0px_rgba(0,0,0,0.3)] whitespace-nowrap">{isNumunumuMode ? 'ぬむぬむとんかつ' : 'ドラッグして CUBE を回せ'}</p>
                                 </motion.div>
                             </motion.div>
@@ -133,6 +133,9 @@ function AppContent() {
                         <Route path="*" element={<NotFoundPage />} />
                     </Routes>
                 </AnimatePresence>
+                <div className="absolute bottom-2 right-4 text-[13px] text-gray-400 font-sans pointer-events-none z-0">
+                    Copyright © 2026 SANMENso
+                </div>
             </div>
         </NumunumuContext.Provider>
     );

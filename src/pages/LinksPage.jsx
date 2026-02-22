@@ -276,7 +276,7 @@ const LinksPage = () => {
             <>
             <div className="flex flex-col items-center pt-24 pb-12 px-4 w-full">
                 <div className="w-full max-w-2xl">
-                    <div className="bg-white border-4 border-black p-6 md:p-8 shadow-[8px_8px_0px_#000]">
+                    <div className="bg-white border-4 border-black p-6 md:p-8 shadow-[8px_8px_0px_rgba(0,0,0,0.3)]">
                         <h2 className="text-2xl md:text-4xl font-black font-sans mb-6 text-center">{isNumunumuMode ? numuText : '三面相のリンクたち'}</h2>
 
                         <div className="flex flex-wrap justify-center gap-2 md:gap-4">
@@ -301,12 +301,12 @@ const LinksPage = () => {
                 @keyframes suck-in { 0% { transform: scale(1) rotate(0deg); filter: brightness(1); } 100% { transform: scale(15) rotate(1080deg); filter: brightness(0); } }
             `}</style>
 
-            <div className="text-center mb-6 md:mb-8 bg-white border-4 border-black p-4 shadow-[8px_8px_0px_#000] relative z-20 pointer-events-none">
+            <div className="text-center mb-6 md:mb-8 bg-white border-4 border-black p-4 shadow-[8px_8px_0px_rgba(0,0,0,0.3)] relative z-20 pointer-events-none">
                 <h1 className="text-3xl md:text-4xl font-black font-sans mb-2 text-black">{isNumunumuMode ? numuText : '相互リンク'}</h1>
                 <span className="font-serif text-sm bg-black text-[#FFD700] px-2 py-1 inline-block transform -rotate-1">{isNumunumuMode ? numuText : 'ページを削って相互リンクを掘り起こせ'}</span>
             </div>
 
-            <div ref={containerRef} className={`relative w-full max-w-4xl h-[60vh] sm:h-[70vh] bg-black border-4 border-black shadow-[8px_8px_0px_#000] ${isBroken ? 'overflow-visible z-50' : 'overflow-hidden z-10'} ${isSucking ? 'animate-[suck-in_1.5s_ease-in_forwards] pointer-events-none' : getShakeClass()}`}>
+            <div ref={containerRef} className={`relative w-full max-w-4xl h-[60vh] sm:h-[70vh] bg-black border-4 border-black shadow-[8px_8px_0px_rgba(0,0,0,0.3)] ${isBroken ? 'overflow-visible z-50' : 'overflow-hidden z-10'} ${isSucking ? 'animate-[suck-in_1.5s_ease-in_forwards] pointer-events-none' : getShakeClass()}`}>
                 <div className={`absolute inset-0 flex items-center justify-center ${isBroken || isNumunumuMode ? 'z-40' : 'z-0'}`} style={{ background: 'radial-gradient(circle at center, #300 0%, #000 90%)' }}>
                     <a href="/secret" data-secret="true" onClick={(e) => { e.preventDefault(); triggerSecretTransition(); }} className={`w-48 h-48 md:w-64 md:h-64 rounded-full border-2 border-red-500/50 flex flex-col items-center justify-center text-red-500 bg-black/90 rotate-12 hover:scale-105 hover:bg-red-900/20 transition-all cursor-pointer font-serif duration-1000 ${isBroken || isNumunumuMode ? 'opacity-100 pointer-events-auto delay-500' : 'opacity-0 pointer-events-none'}`}>
                         <span className="text-2xl md:text-3xl font-bold">{isNumunumuMode ? numuText : 'SECRET'}</span>
@@ -413,7 +413,7 @@ const LinksPage = () => {
 
             <div className="flex flex-col items-center pb-24 px-4 w-full">
                 <p className="font-bold font-sans mb-4 text-lg">{isNumunumuMode ? numuText : '三面相の相互リンクはこちら！'}</p>
-                <div className="border-4 border-black p-2 bg-white shadow-[4px_4px_0px_#000]">
+                <div className="border-4 border-black p-2 bg-white shadow-[4px_4px_0px_rgba(0,0,0,0.3)]">
                     <img src="/images/banner/sanmenso_banner.png" alt="三面相のバナー" className="max-w-full h-auto" />
                 </div>
             </div>

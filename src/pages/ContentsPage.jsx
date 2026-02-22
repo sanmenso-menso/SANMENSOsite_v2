@@ -105,7 +105,7 @@ const ContentsPage = () => {
                 {displayContents.map(content => (
                     <div 
                         key={content.id} 
-                        className="group relative bg-white border-4 border-black p-4 h-full flex flex-col transition-all duration-300 hover:-translate-y-2 hover:rotate-1 hover:shadow-[12px_12px_0px_#000] shadow-[6px_6px_0px_#000] cursor-pointer overflow-hidden"
+                        className="group relative bg-white border-4 border-black p-4 h-full flex flex-col transition-all duration-300 hover:-translate-y-2 hover:rotate-1 hover:shadow-[12px_12px_0px_rgba(0,0,0,0.3)] shadow-[6px_6px_0px_rgba(0,0,0,0.3)] cursor-pointer overflow-hidden"
                         onClick={() => handleSelectContent(content)}
                     >
                         <div className="flex-grow">

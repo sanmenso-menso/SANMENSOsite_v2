@@ -138,7 +138,7 @@ const CubeFace = ({ size, halfSize, rotate, color, borderColor, label, icon, onC
     const numuIcon = <img src="/images/numunumu_icon.png" alt={numuText} className="w-12 h-12 md:w-16 md:h-16" />;
 
     return (
-        <motion.div className={`absolute inset-0 border-[6px] ${borderColor} ${color} flex items-center justify-center cursor-pointer overflow-hidden group select-none shadow-[inset_0_0_40px_rgba(0,0,0,0.2)]`} style={{ width: size, height: size, transform: `${rotate} translateZ(${halfSize}px)`, backfaceVisibility: 'visible', outline: '1px solid transparent' }} onClick={onClick}>
+        <motion.div className={`absolute inset-0 border-[4px] ${borderColor} ${color} flex items-center justify-center cursor-pointer overflow-hidden group select-none shadow-[inset_0_0_40px_rgba(0,0,0,0.2)]`} style={{ width: size, height: size, transform: `${rotate} translateZ(${halfSize}px)`, backfaceVisibility: 'visible', outline: '1px solid transparent' }} onClick={onClick}>
             {isNumunumuMode ? (
                 <div className={`absolute inset-0 flex flex-col items-center justify-center p-2 ${textColor}`}>{numuIcon}<h3 className="text-xl md:text-4xl font-black mt-4 font-sans tracking-tight">{numuText}</h3></div>
             ) : customContent ? (

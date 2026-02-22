@@ -44,7 +44,7 @@ const ContactPage = () => {
                 }
                 `}
             </style>
-            <div className="bg-white border-4 border-black p-6 md:p-8 shadow-[8px_8px_0px_#000]">
+            <div className="bg-white border-4 border-black p-6 md:p-8 shadow-[8px_8px_0px_rgba(0,0,0,0.3)]">
                 <h2 className="text-4xl md:text-6xl font-black font-sans mb-6">{isNumunumuMode ? numuText : 'CONTACT'}</h2>
                 <p className="font-serif font-bold text-base md:text-lg mb-6">{isNumunumuMode ? numuText : 'お仕事のご依頼やお問い合わせは、'}<br/>{isNumunumuMode ? '' : '以下のメールアドレスまでご連絡ください。'}</p>
                 

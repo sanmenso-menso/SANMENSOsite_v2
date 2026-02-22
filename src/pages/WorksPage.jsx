@@ -76,19 +76,19 @@ const WorksPage = ({ initialFilter = 'all' }) => {
                 <button 
                     onClick={() => handlePageChange(Math.max(currentPage - 1, 1))} 
                     disabled={currentPage === 1}
-                    className="h-12 w-12 flex items-center justify-center border-2 border-black bg-white text-black font-bold shadow-[4px_4px_0px_#000] hover:bg-yellow-100 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white"
+                    className="h-12 w-12 flex items-center justify-center border-2 border-black bg-white text-black font-bold shadow-[4px_4px_0px_rgba(0,0,0,0.3)] hover:bg-yellow-100 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white"
                 >
                     &lt;
                 </button>
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-                    <button key={page} onClick={() => handlePageChange(page)} className={`h-12 w-12 flex items-center justify-center border-2 border-black font-bold shadow-[4px_4px_0px_#000] hover:-translate-y-1 hover:shadow-[6px_6px_0px_#000] transition-all ${currentPage === page ? 'bg-black text-[#FFD700]' : 'bg-white text-black hover:bg-yellow-100'}`}>
+                    <button key={page} onClick={() => handlePageChange(page)} className={`h-12 w-12 flex items-center justify-center border-2 border-black font-bold shadow-[4px_4px_0px_rgba(0,0,0,0.3)] hover:-translate-y-1 hover:shadow-[6px_6px_0px_rgba(0,0,0,0.3)] transition-all ${currentPage === page ? 'bg-black text-[#FFD700]' : 'bg-white text-black hover:bg-yellow-100'}`}>
                         {page}
                     </button>
                 ))}
                 <button 
                     onClick={() => handlePageChange(Math.min(currentPage + 1, totalPages))} 
                     disabled={currentPage === totalPages}
-                    className="h-12 w-12 flex items-center justify-center border-2 border-black bg-white text-black font-bold shadow-[4px_4px_0px_#000] hover:bg-yellow-100 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white"
+                    className="h-12 w-12 flex items-center justify-center border-2 border-black bg-white text-black font-bold shadow-[4px_4px_0px_rgba(0,0,0,0.3)] hover:bg-yellow-100 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white"
                 >
                     &gt;
                 </button>
@@ -107,14 +107,14 @@ const WorksPage = ({ initialFilter = 'all' }) => {
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 min-h-screen flex flex-col">
             <header className="mb-8 md:mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-4 md:gap-8 border-b-4 border-black pb-4 md:pb-6 border-double bg-white/80 backdrop-blur-sm p-2 md:p-4">
                 <div>
-                    <h2 className="text-5xl sm:text-6xl md:text-8xl font-black tracking-tighter leading-none mix-blend-hard-light text-[#FFD700] drop-shadow-[4px_4px_0px_rgba(0,0,0,1)] font-sans" style={{ WebkitTextStroke: '2px black' }}>{isNumunumuMode ? numuText : 'WORKS'}</h2>
+                    <h2 className="text-5xl sm:text-6xl md:text-8xl font-black tracking-tighter leading-none mix-blend-hard-light text-[#FFD700] drop-shadow-[4px_4px_0px_rgba(0,0,0,0.3)] font-sans" style={{ WebkitTextStroke: '2px black' }}>{isNumunumuMode ? numuText : 'WORKS'}</h2>
                     <p className="font-mono font-bold text-black text-base md:text-lg tracking-wide mt-2">
                         <span className="bg-black text-[#FFD700] px-2 py-1">{isNumunumuMode ? numuText : 'IMAMADENO ARCHIVE'}</span> {isNumunumuMode ? '' : '2022 - 2025'}
                     </p>
                 </div>
                 <div className="flex gap-2 flex-wrap justify-start md:justify-end">
                     {CATEGORIES.map(cat => (
-                        <button key={cat.id} onClick={() => handleFilterChange(cat.id)} className={`h-10 px-3 md:h-12 md:px-4 flex items-center justify-center gap-2 border-2 border-black transition-all shadow-[4px_4px_0px_#000] hover:-translate-y-1 hover:shadow-[6px_6px_0px_#000] active:translate-y-0 active:shadow-none font-bold font-sans text-sm md:text-base ${filter === cat.id ? 'bg-black text-[#FFD700]' : 'bg-white text-black hover:bg-yellow-100'}`}>
+                        <button key={cat.id} onClick={() => handleFilterChange(cat.id)} className={`h-10 px-3 md:h-12 md:px-4 flex items-center justify-center gap-2 border-2 border-black transition-all shadow-[4px_4px_0px_rgba(0,0,0,0.3)] hover:-translate-y-1 hover:shadow-[6px_6px_0px_rgba(0,0,0,0.3)] active:translate-y-0 active:shadow-none font-bold font-sans text-sm md:text-base ${filter === cat.id ? 'bg-black text-[#FFD700]' : 'bg-white text-black hover:bg-yellow-100'}`}>
                             {cat.icon && <cat.icon size={18} />}<span>{isNumunumuMode ? numuText : cat.label}</span>
                         </button>
                     ))}
@@ -126,7 +126,7 @@ const WorksPage = ({ initialFilter = 'all' }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 pb-16">
                 <AnimatePresence mode='popLayout'>
                     {currentWorks.map((work) => (
-                        <motion.div key={work.id} initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9 }} transition={{ duration: 0.3 }} onClick={() => setSelectedWork(work)} className="group relative bg-white border-4 border-black p-3 md:p-4 h-full flex flex-col transition-all duration-300 hover:-translate-y-2 hover:rotate-1 hover:shadow-[12px_12px_0px_#000] shadow-[6px_6px_0px_#000] cursor-pointer overflow-hidden">
+                        <motion.div key={work.id} initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9 }} transition={{ duration: 0.3 }} onClick={() => setSelectedWork(work)} className="group relative bg-white border-4 border-black p-3 md:p-4 h-full flex flex-col transition-all duration-300 hover:-translate-y-2 hover:rotate-1 hover:shadow-[12px_12px_0px_rgba(0,0,0,0.3)] shadow-[6px_6px_0px_rgba(0,0,0,0.3)] cursor-pointer overflow-hidden">
                             <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 w-20 h-5 bg-yellow-400/80 rotate-[-2deg] opacity-80 shadow-sm z-10"></div>
                             <div className="w-full aspect-video border-2 border-black mb-3 bg-gray-100 relative overflow-hidden flex items-center justify-center">
                                 <ImageWithFallback
@@ -167,7 +167,7 @@ const WorksPage = ({ initialFilter = 'all' }) => {
                 {selectedWork && (
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-8">
                         <div className="absolute inset-0 bg-black/75" onClick={() => setSelectedWork(null)}></div>
-                        <motion.div initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95, y: 20 }} className="relative w-full max-w-5xl h-[95vh] sm:h-[90vh] bg-[#f0f0f0] border-4 md:border-[6px] border-black shadow-[8px_8px_0px_#000] md:shadow-[16px_16px_0px_#000] flex flex-col md:flex-row overflow-hidden z-10">
+                        <motion.div initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95, y: 20 }} className="relative w-full max-w-5xl h-[95vh] sm:h-[90vh] bg-[#f0f0f0] border-4 md:border-[6px] border-black shadow-[8px_8px_0px_rgba(0,0,0,0.3)] md:shadow-[16px_16px_0px_rgba(0,0,0,0.3)] flex flex-col md:flex-row overflow-hidden z-10">
                             <button onClick={() => setSelectedWork(null)} className="absolute top-0 right-0 z-20 bg-black text-white p-3 hover:bg-[#FFD700] hover:text-black transition-colors"><X size={32} /></button>
                             <div className="w-full md:w-2/5 h-1/3 md:h-full bg-gray-200 border-b-4 md:border-b-0 md:border-r-4 border-black relative overflow-hidden group flex items-center justify-center">
                                 <ImageWithFallback
@@ -185,7 +185,7 @@ const WorksPage = ({ initialFilter = 'all' }) => {
                                         </>
                                     )}
                                 />
-                                <div className="absolute bottom-4 left-4 bg-white border-2 border-black px-3 py-1 font-mono text-sm shadow-[4px_4px_0px_#000]">{isNumunumuMode ? numuText : `ID: ${selectedWork.id.toString().padStart(3, '0')}`}</div>
+                                <div className="absolute bottom-4 left-4 bg-white border-2 border-black px-3 py-1 font-mono text-sm shadow-[4px_4px_0px_rgba(0,0,0,0.3)]">{isNumunumuMode ? numuText : `ID: ${selectedWork.id.toString().padStart(3, '0')}`}</div>
                             </div>
                             <div className="w-full md:w-3/5 overflow-y-auto bg-white p-6 md:p-8 lg:p-12 flex flex-col gap-6 md:gap-8">
                                 <div>
