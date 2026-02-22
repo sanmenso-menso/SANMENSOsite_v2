@@ -206,7 +206,7 @@ const WorksPage = ({ initialFilter = 'all' }) => {
                                 )}
                                 {selectedWork.url && (
                                     <div className="pt-8 mt-auto">
-                                        <a href={selectedWork.url} target="_blank" rel="noreferrer" className="w-full bg-black text-white font-bold py-4 text-xl flex items-center justify-center gap-2 border-2 border-black shadow-[8px_8px_0px_#FFD700] hover:translate-y-1 hover:shadow-none hover:bg-gray-900 transition-all font-sans">{isNumunumuMode ? numuText : 'LAUNCH PROJECT'} <ExternalLink size={20} /></a>
+                                        <a href={selectedWork.url} target="_blank" rel="noreferrer" className="w-full bg-black text-white font-bold py-4 text-xl flex items-center justify-center gap-2 border-2 border-black shadow-[8px_8px_0px_#FFD700] hover:translate-y-1 hover:shadow-none hover:bg-gray-900 transition-all font-sans">{isNumunumuMode ? numuText : 'VIEW MORE'} <ExternalLink size={20} /></a>
                                     </div>
                                 )}
                             </div>
