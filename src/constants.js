@@ -700,6 +700,18 @@ export const WORKS_DATA = [
         url:"https://youtu.be/XBIYO-n2pRg",
         image: "/images/vocachillconpi.png",
     },
+　  {   id: 54, 
+        title: "三面相 - SANMENso Official Site",
+        type: "fun", 
+        year: "2026", 
+        role: "Web design", 
+        desc: "三面相のポートフォリオサイトを制作しました", 
+        detailText: "自己紹介のできるウェブサイトを制作しました。\n\n三面相の活動を三つの面で表す、相互リンクをスクラッチのように見つける、隠しリンクを探せるなど、遊び心を盛り込んでいます。\n\n今後もコンテンツを追加していく予定です、ぜひ遊んでね。",
+        credits: ["Web design:三面相"],
+        color: "#FFD700",
+        url:"",
+        image: "/images/sanmensosite.png",
+    },
 ];
 
 export const EXCAVATION_LINKS = [
@@ -838,10 +850,10 @@ export const SOCIAL_LINKS = [
 ];
 
 export const SITE_META = {
-    title: '三面相のウェブサイト',
+    title: '三面相 - SANMENso Official Site',
     description: '三面相のポートフォリオサイトです。楽曲制作、DJ、デザインなどの活動情報を掲載しています。',
     url: 'https://sanmenso.com', 
-    siteName: '三面相',
+    siteName: 'SANMENso Official Site',
     locale: 'ja_JP',
     image: 'https://sanmenso.com/images/sanmenso_icon.jpg', // ※SNSで表示させたい画像のパス（1200x630px推奨）
     twitterCard: 'summary_large_image',
