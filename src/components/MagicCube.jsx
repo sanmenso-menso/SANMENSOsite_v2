@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, useSpring, useMotionValue } from 'framer-motion';
+import { motion, useSpring, useMotionValue, useAnimationFrame, animate } from 'framer-motion';
 import { Music, Gamepad2, Smile } from 'lucide-react';
+import * as THREE from 'three';
 import { useNumunumu } from '../NumunumuContext';
 import SecretProfileFace from './SecretProfileFace';
 
@@ -9,14 +10,27 @@ const MagicCube = ({ onSelect, isOpening }) => {
     const numuText = 'ぬむぬむとんかつ';
 
     const containerRef = useRef(null);
-    const rotateX = useMotionValue(-20); 
-    const rotateY = useMotionValue(-25);
+    
+    // Quaternion rotation state
+    const targetQ = useRef(new THREE.Quaternion());
+    const currentQ = useRef(new THREE.Quaternion());
+    const transformMV = useMotionValue('');
+    const introRotationY = useMotionValue(0);
+    const introRotationX = useMotionValue(0);
+    const rotationSpeed = useRef({ x: 0, y: 0 });
+
+    // Initialize rotation
+    useEffect(() => {
+        const qx = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), -20 * Math.PI / 180);
+        const qy = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), -25 * Math.PI / 180);
+        targetQ.current.multiplyQuaternions(qx, qy);
+        currentQ.current.copy(targetQ.current);
+    }, []);
+
     const z = useMotionValue(2000); 
 
     const springConfig = { stiffness: 30, damping: 18, mass: 1 };
     
-    const springRotateX = useSpring(rotateX, springConfig);
-    const springRotateY = useSpring(rotateY, springConfig);
     const springZ = useSpring(z, springConfig); 
 
     const isDragging = useRef(false);
@@ -32,6 +46,7 @@ const MagicCube = ({ onSelect, isOpening }) => {
         isDragging.current = true;
         hasDragged.current = false;
         isScrolling.current = false;
+        rotationSpeed.current = { x: 0, y: 0 };
         const pos = { x: e.clientX, y: e.clientY };
         prevPos.current = pos;
         downPos.current = pos;
@@ -53,19 +68,92 @@ const MagicCube = ({ onSelect, isOpening }) => {
     useEffect(() => {
         if (isOpening) {
             z.set(2000); 
-            rotateY.set(-25 + 720);
-            rotateX.set(-20 + 360); 
+            introRotationY.set(0);
+            introRotationX.set(0);
+            rotationSpeed.current = { x: 0, y: 0 };
         } else {
             z.set(0);
-            rotateY.set(rotateY.get() + 360);
 
-            const timer = setTimeout(() => {
-                rotateX.set(rotateX.get() + 360);
-            }, 1600);
-            return () => clearTimeout(timer);
+            // Reset rotation to initial state
+            const qx = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), -20 * Math.PI / 180);
+            const qy = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), -25 * Math.PI / 180);
+            targetQ.current.multiplyQuaternions(qx, qy);
+
+            // Intro animation sequence
+            const playIntro = async () => {
+                // 1. Horizontal rotation (2 turns)
+                introRotationY.set(Math.PI * 4);
+                await animate(introRotationY, 0, {
+                    type: "tween",
+                    duration: 1.6,
+                    ease: "easeInOut"
+                });
+
+                // 2. Vertical rotation (1 turn)
+                introRotationX.set(Math.PI * 2);
+                await animate(introRotationX, 0, {
+                    type: "tween",
+                    duration: 1.2,
+                    ease: "easeInOut"
+                });
+
+                // Add inertia after intro
+               //otationSpeed.current = { x: 0, y: -0.015 };
+            };
+            playIntro();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isOpening]);
+
+    useAnimationFrame((t, delta) => {
+        if (isOpening) {
+            // Spin effect during opening
+            const speed = 0.002 * delta;
+            const qSpin = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 1, 0).normalize(), speed);
+            targetQ.current.premultiply(qSpin);
+        } else if (!isDragging.current) {
+            // Apply inertia
+            if (Math.abs(rotationSpeed.current.x) > 0.0001 || Math.abs(rotationSpeed.current.y) > 0.0001) {
+                const qy = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), rotationSpeed.current.x);
+                const qx = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), rotationSpeed.current.y);
+                targetQ.current.premultiply(qy);
+                targetQ.current.premultiply(qx);
+                rotationSpeed.current.x *= 0.95;
+                rotationSpeed.current.y *= 0.95;
+            }
+        }
+
+        // Smoothly interpolate currentQ towards targetQ (Base orientation)
+        currentQ.current.slerp(targetQ.current, 0.1);
+
+        // Calculate render quaternion with intro animations applied
+        const renderQ = currentQ.current.clone();
+        
+        const valY = introRotationY.get();
+        if (valY > 0.001) {
+            const qY = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), valY);
+            renderQ.premultiply(qY);
+        }
+
+        const valX = introRotationX.get();
+        if (valX > 0.001) {
+            const qX = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(-1, 0, 0), valX);
+            renderQ.premultiply(qX);
+        }
+
+        // Build transformation matrix
+        const matrix = new THREE.Matrix4();
+        matrix.makeRotationFromQuaternion(renderQ);
+        
+        // Apply Z translation (Zoom)
+        matrix.setPosition(0, 0, springZ.get());
+
+        // Apply fixed Z rotation (-5deg)
+        const rotZ = new THREE.Matrix4().makeRotationZ(-5 * Math.PI / 180);
+        matrix.premultiply(rotZ);
+
+        transformMV.set(`matrix3d(${matrix.elements.join(',')})`);
+    });
 
     useEffect(() => {
         const handlePointerMove = (e) => {
@@ -85,11 +173,14 @@ const MagicCube = ({ onSelect, isOpening }) => {
             const deltaY = e.clientY - prevPos.current.y;
             prevPos.current = { x: e.clientX, y: e.clientY };
 
-            const xAngle = rotateX.get() * (Math.PI / 180);
-            const direction = Math.cos(xAngle);
+            const sensitivity = 0.005;
+            const qy = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), deltaX * sensitivity);
+            const qx = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), -deltaY * sensitivity);
+            
+            targetQ.current.premultiply(qy);
+            targetQ.current.premultiply(qx);
 
-            rotateY.set(rotateY.get() + deltaX * 0.5 * direction);
-            rotateX.set(rotateX.get() - deltaY * 0.5);
+            rotationSpeed.current = { x: deltaX * sensitivity, y: -deltaY * sensitivity };
         };
         const handlePointerUp = () => {
             isDragging.current = false;
@@ -101,13 +192,13 @@ const MagicCube = ({ onSelect, isOpening }) => {
             window.removeEventListener('pointermove', handlePointerMove);
             window.removeEventListener('pointerup', handlePointerUp);
         };
-    }, [rotateX, rotateY]);
+    }, []);
 
     const HALF_SIZE = cubeSize / 2;
 
     return (
         <div ref={containerRef} className="relative z-20 flex items-center justify-center cursor-grab active:cursor-grabbing" style={{ width: '100%', height: '60vh', perspective: '1200px', touchAction: 'none' }} onPointerDown={handlePointerDown}>
-            <motion.div style={{ width: cubeSize, height: cubeSize, position: 'relative', transformStyle: 'preserve-3d', rotateX: springRotateX, rotateY: springRotateY, z: springZ, rotateZ: -5, willChange: 'transform' }}>
+            <motion.div style={{ width: cubeSize, height: cubeSize, position: 'relative', transformStyle: 'preserve-3d', transform: transformMV, willChange: 'transform' }}>
                 <CubeFace size={cubeSize} halfSize={HALF_SIZE} rotate="rotateY(0deg)" color="bg-brandGreen" borderColor="border-black" label="エンタメ" icon={<Gamepad2 className="text-white w-12 h-12 md:w-16 md:h-16" />} textColor="text-white" onClick={() => !hasDragged.current && onSelect('entame')} />
                 <CubeFace size={cubeSize} halfSize={HALF_SIZE} rotate="rotateY(90deg)" color="bg-accentGold" borderColor="border-black" label="楽しさ" icon={<Smile className="text-black w-12 h-12 md:w-16 md:h-16" />} textColor="text-black" onClick={() => !hasDragged.current && onSelect('fun')} />
                 <CubeFace size={cubeSize} halfSize={HALF_SIZE} rotate="rotateX(90deg)" color="bg-red-600" borderColor="border-black" label="音楽" icon={<Music className="text-white w-12 h-12 md:w-16 md:h-16" />} textColor="text-white" onClick={() => !hasDragged.current && onSelect('music')} />

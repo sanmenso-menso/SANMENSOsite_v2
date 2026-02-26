@@ -170,7 +170,7 @@ const LinksPage = () => {
                         e.preventDefault();
                         triggerSecretTransition();
                     } else {
-                        window.open(link.href, '_blank');
+                        window.open(link.href, '_blank', 'noopener,noreferrer');
                     }
                 }
                 inputLayer.style.display = 'block';
