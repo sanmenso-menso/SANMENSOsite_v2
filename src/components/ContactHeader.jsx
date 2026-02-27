@@ -21,7 +21,7 @@ const ContactHeader = () => {
 
     const textLines = useMemo(() => isNumunumuMode 
         ? [numuText, numuText, numuText] 
-        : ["世の中に", "楽しいことを", "もっと"], [isNumunumuMode]);
+        : ["もっと", "面白いことが", "したいです"], [isNumunumuMode]);
 
     // Find the dimensions of our "character grid"
     const GRID_ROWS = textLines.length;
