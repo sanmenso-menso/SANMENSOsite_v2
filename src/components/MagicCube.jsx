@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, useSpring, useMotionValue, useAnimationFrame, animate } from 'framer-motion';
+import { motion, useSpring, useMotionValue, useAnimationFrame, animate, AnimatePresence } from 'framer-motion';
 import { Music, Gamepad2, Smile } from 'lucide-react';
 import * as THREE from 'three';
 import { useNumunumu } from '../NumunumuContext';
 import SecretProfileFace from './SecretProfileFace';
+import AboutPage from './AboutPage';
+import HistoryPage from './HistoryPage';
 
 const MagicCube = ({ onSelect, isOpening }) => { 
     const { isNumunumuMode } = useNumunumu();
@@ -40,9 +42,11 @@ const MagicCube = ({ onSelect, isOpening }) => {
     const hasDragged = useRef(false);
     const [cubeSize, setCubeSize] = useState(300);
     const [isProfileFlipped, setIsProfileFlipped] = useState(false);
+    const [showAbout, setShowAbout] = useState(false);
+    const [showHistory, setShowHistory] = useState(false);
 
     const handlePointerDown = (e) => {
-        if(isOpening) return;
+        if(isOpening || showAbout || showHistory) return;
         isDragging.current = true;
         hasDragged.current = false;
         isScrolling.current = false;
@@ -106,6 +110,8 @@ const MagicCube = ({ onSelect, isOpening }) => {
     }, [isOpening]);
 
     useAnimationFrame((t, delta) => {
+        if (showAbout || showHistory) return; // Stop animation if a page is open
+
         if (isOpening) {
             // Spin effect during opening
             const speed = 0.002 * delta;
@@ -203,22 +209,27 @@ const MagicCube = ({ onSelect, isOpening }) => {
                 <CubeFace size={cubeSize} halfSize={HALF_SIZE} rotate="rotateY(90deg)" color="bg-accentGold" borderColor="border-black" label="楽しさ" icon={<Smile className="text-black w-12 h-12 md:w-16 md:h-16" />} textColor="text-black" onClick={() => !hasDragged.current && onSelect('fun')} />
                 <CubeFace size={cubeSize} halfSize={HALF_SIZE} rotate="rotateX(90deg)" color="bg-red-600" borderColor="border-black" label="音楽" icon={<Music className="text-white w-12 h-12 md:w-16 md:h-16" />} textColor="text-white" onClick={() => !hasDragged.current && onSelect('music')} />
                 <CubeFace size={cubeSize} halfSize={HALF_SIZE} rotate="rotateY(-90deg)" color="bg-transparent" borderColor="border-black" customContent={<SecretProfileFace isFlipped={isProfileFlipped} />} onClick={() => !hasDragged.current && setIsProfileFlipped(prev => !prev)} />
-                <CubeFace size={cubeSize} halfSize={HALF_SIZE} rotate="rotateX(-90deg)" color="bg-black" borderColor="border-white" customContent={
+                <CubeFace size={cubeSize} halfSize={HALF_SIZE} rotate="rotateX(-90deg)" color="bg-black" borderColor="border-white" onClick={() => !hasDragged.current && setShowHistory(true)} customContent={
                     <div className="w-full h-full p-6 flex flex-col justify-center items-center text-white text-center select-none bg-black">
-                   <h4 className="font-black text-xl md:text-2xl mb-2 text-[#FFD700]">{isNumunumuMode ? numuText : 'HISTORY'}</h4>
+                        <h4 className="font-black text-xl md:text-2xl mb-2 text-[#FFD700]">{isNumunumuMode ? numuText : 'HISTORY'}</h4>
                         <p className="font-mono text-xs md:text-sm leading-tight mb-4 opacity-80">{isNumunumuMode ? numuText : '2022: 三日月タロウとして活動開始'}<br/>{isNumunumuMode ? '' : '↓'}<br/>{isNumunumuMode ? '' : '2024: 三面相に改名'}</p>
                         <h4 className="font-black text-xl md:text-2xl mb-2 text-[#FFD700]">{isNumunumuMode ? numuText : "I'm in the"}</h4>
                         <p className="font-mono text-xs md:text-sm leading-tight mb-4 opacity-80">{isNumunumuMode ? numuText : 'CDs'}</p>     
                     </div>
                 } />
-                <CubeFace size={cubeSize} halfSize={HALF_SIZE} rotate="rotateY(180deg)" color="bg-white" borderColor="border-black" customContent={
-                    <div className="w-full h-full p-3 md:p-6 flex flex-col justify-center text-center select-none bg-white">
-                        <h3 className="font-black text-xl md:text-3xl mb-3 md:mb-5 border-b-2 md:border-b-4 border-black inline-block self-center">{isNumunumuMode ? numuText : 'WHO?'}</h3>
-                        <p className="font-serif text-[10px] md:text-sm leading-snug md:leading-relaxed text-left font-bold">{isNumunumuMode ? numuText : '大阪在住。'}<br/>{isNumunumuMode ? '' : 'インターネットの片隅で、コラージュを軸に音楽やビジュアルなどのコンテンツを制作し活動している。'}<br/>{isNumunumuMode ? '' : '面白さで世界の境界線を破壊・再構築し、実験的かつ親しみのある作品世界を目指す。'}<br/>{isNumunumuMode ? '' : '制作デスクにはいつもスルメ'}</p>
+                <CubeFace size={cubeSize} halfSize={HALF_SIZE} rotate="rotateY(180deg)" color="bg-white" borderColor="border-black" onClick={() => !hasDragged.current && setShowAbout(true)} customContent={
+                    <div className="w-full h-full p-2 md:p-6 flex flex-col justify-center text-center select-none bg-white">
+                        <h3 className="font-black text-xl md:text-3xl mb-2 md:mb-5 border-b-2 md:border-b-4 border-black inline-block self-center">{isNumunumuMode ? numuText : 'WHO?'}</h3>
+                        <p className="font-sans text-[11px] md:text-sm leading-tight md:leading-relaxed text-left font-bold tracking-tight">{isNumunumuMode ? numuText : '大阪在住。'}<br/>{isNumunumuMode ? '' : 'インターネットの片隅で、コラージュを軸に音楽やビジュアルなどのコンテンツを制作し活動している。'}<br/>{isNumunumuMode ? '' : '面白さで世界の境界線を破壊・再構築し、実験的かつ親しみのある作品世界を目指す。'}<br/>{isNumunumuMode ? '' : '制作デスクにはいつもスルメ'}</p>
                     </div>
                 } />
                 <div className="absolute inset-0 m-auto bg-black animate-pulse pointer-events-none" style={{ width: cubeSize * 0.5, height: cubeSize * 0.5, transform: 'translateZ(0)' }} />
             </motion.div>
+
+            <AnimatePresence>
+                {showAbout && <AboutPage onClose={() => setShowAbout(false)} />}
+                {showHistory && <HistoryPage onClose={() => setShowHistory(false)} />}
+            </AnimatePresence>
         </div>
     );
 };
