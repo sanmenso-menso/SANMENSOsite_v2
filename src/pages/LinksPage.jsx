@@ -414,7 +414,11 @@ const LinksPage = () => {
             <div className="flex flex-col items-center pb-24 px-4 w-full">
                 <p className="font-bold font-sans mb-4 text-lg">{isNumunumuMode ? numuText : '三面相の相互リンクはこちら！'}</p>
                 <div className="border-4 border-black p-2 bg-white shadow-[4px_4px_0px_rgba(0,0,0,0.3)]">
-                    <img src="/images/banner/sanmenso_banner.png" alt="三面相のバナー" className="max-w-full h-auto" />
+                    <img
+                        src={isNumunumuMode ? '/images/numunumu_icon.png' : "/images/banner/sanmenso_banner.png"}
+                        alt={isNumunumuMode ? numuText : "三面相のバナー"}
+                        className={isNumunumuMode ? "w-48 h-auto" : "max-w-full h-auto"}
+                    />
                 </div>
             </div>
         </>
