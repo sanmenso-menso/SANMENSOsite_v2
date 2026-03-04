@@ -715,13 +715,13 @@ export const WORKS_DATA = [
 ];
 
 export const EXCAVATION_LINKS = [
-   // { 
-   //     id: 1,
-   //     type: 'banner',
-   //     url: "https://hozumi.site/",
-   //     image: "https://hozumi.site/cdn/shop/t/6/assets/S__74637854.jpg?v=97761660025223919291763945063",
-   //     alt: "あなたは青い部屋が好きですか？",
-   // },
+    { 
+        id: 1,
+        type: 'banner',
+       url: "https://hozumi.site/",
+        image: "https://hozumi.site/cdn/shop/t/6/assets/S__74637854.jpg?v=97761660025223919291763945063",
+        alt: "あなたは青い部屋が好きですか？",
+    },
     { 
         id: 2,
         type: 'banner',
