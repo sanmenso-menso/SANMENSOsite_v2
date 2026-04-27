@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useParams, useNavigate } from 'react-router-dom';
 import PopVectorPlayer from '../components/PopVectorPlayer';
+import KineticVisualizer from '../components/KineticVisualizer';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { useNumunumu } from '../NumunumuContext';
@@ -12,6 +13,12 @@ const contents = [
         title: 'デモトラック＠ドリンクバー',
         description: 'エレクトロなデモトラックが聴けます。缶に入った炭酸ドリンクを楽しめます。※音が出ます',
         component: PopVectorPlayer,
+    },
+    {
+        id: 'kinetic-visualizer',
+        title: 'デモトラック＠ポップスコーンマシーン',
+        description: 'ポップな歌モノのデモトラックが聴けます。曲に合わせてポップコーンが弾けます。※音が出ます',
+        component: KineticVisualizer,
     },
     // 将来的にここにコンテンツを追加
 ];

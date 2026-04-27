@@ -814,7 +814,7 @@ export const SONGS = [
     bgAccent: "bg-[#00FFDD]",
     flavor: "NEON GLITCH POP",
     bpm: 128,
-    src: "/audio/EPA EPA Txapeka.mp3" 
+    src: "/audio/Electronic/EPA EPA Txapeka.mp3" 
   },
   {
     id: 2,
@@ -825,7 +825,7 @@ export const SONGS = [
     bgAccent: "bg-[#D8E2E5]",
     flavor: "CRYSTAL CUBE SODA",
     bpm: 110,
-    src: "/audio/Early afternoon.mp3"
+    src: "/audio/Electronic/Early afternoon.mp3"
   },
    {
     id: 3,
@@ -836,7 +836,7 @@ export const SONGS = [
     bgAccent: "bg-[#FF4500]",
     flavor: "CHAOS TROPICAL",
     bpm: 140,
-    src: "/audio/Cut-solid-solar panel.mp3" 
+    src: "/audio/Electronic/Cut-solid-solar panel.mp3" 
   },
   {
     id: 4,
@@ -847,7 +847,7 @@ export const SONGS = [
     bgAccent: "bg-[#F48FB1]",
     flavor: "LONELY PEACH PULP",
     bpm: 140,
-    src: "/audio/Im busy But Lonely.mp3" 
+    src: "/audio/Electronic/Im busy But Lonely.mp3" 
   },
   {
     id: 5,
@@ -858,7 +858,7 @@ export const SONGS = [
     bgAccent: "bg-[#076D6D]",
     flavor: "MYSTIC FOREST SAP",
     bpm: 140,
-    src: "/audio/It started to Rein.mp3" 
+    src: "/audio/Electronic/It started to Rein.mp3" 
   },
   {
     id: 6,
@@ -869,7 +869,7 @@ export const SONGS = [
     bgAccent: "bg-[#F3BB7A]",
     flavor: "HEAVY BLACK COLE",
     bpm: 140,
-    src: "/audio/PouNtan tan.mp3" 
+    src: "/audio/Electronic/PouNtan tan.mp3" 
   },
   {
     id: 7,
@@ -880,7 +880,7 @@ export const SONGS = [
     bgAccent: "bg-[#A4D65E]",
     flavor: "FRESH SPLASH APPLE",
     bpm: 140,
-    src: "/audio/splash rush.mp3" 
+    src: "/audio/Electronic/splash rush.mp3" 
   }
 ]
 
@@ -905,3 +905,30 @@ export const SITE_META = {
     type: 'website',
     favicon: '/favicon.ico',
 };
+
+export const KINETIC_VISUALIZER_SONGS = [
+  {
+    id: 1,
+    title: "Maiduru",
+    genre: "Country-Pop",
+    flavor: "#4CAF50", // テーマカラー
+    text: "MAIDURU!",
+    src: "/audio/POPs/Country.mp3",
+  },
+  {
+    id: 2,
+    title: "ポンポンペイン止まらない！～腹の中がディスコ～",
+    genre: "Disco-Pop",
+    flavor: "#9C27B0", // テーマカラー
+    text: "PON!PAIN!",
+    src: "/audio/POPs/Disco.mp3",
+  },
+  {
+    id: 3,
+    title: "Midnight Motown",
+    genre: "Motown-Pop",
+    flavor: "#E67E22", // テーマカラー
+    text: "MOTOWN!!",
+    src: "/audio/POPs/Motown.mp3",
+  },
+];
