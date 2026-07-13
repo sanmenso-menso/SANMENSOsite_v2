@@ -763,9 +763,7 @@ export const EXCAVATION_LINKS = [
         id: 1,
         type: 'banner',
        url: "https://hozumi.site/",
-        // 外部画像を直接埋め込むと、リンクページを開くだけで訪問者情報が
-        // 第三者サイトへ送信されるため、テキストのフォールバックを表示する。
-        image: null,
+        image: "/images/banner/hozumi.avif",
         alt: "あなたは青い部屋が好きですか？",
     },
     { 
