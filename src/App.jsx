@@ -1,65 +1,153 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { Suspense, lazy, useEffect, useMemo, useState } from 'react';
+import { BrowserRouter, Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { AnimatePresence, MotionConfig, motion, useReducedMotion } from 'framer-motion';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
-import { THEME, FONTS, SITE_META } from './constants';
+import { FONTS, SITE_META, THEME } from './constants';
 import { NumunumuContext } from './NumunumuContext';
-// コンポーネントのインポート
-import LivingBackground from './components/LivingBackground';
+import AppErrorBoundary from './components/AppErrorBoundary';
 import Header from './components/Header';
 import NavigationDock from './components/NavigationDock';
-import MagicCube from './components/MagicCube';
+import { reportClientError } from './utils/reportClientError';
 
-// ページのインポート
+const MagicCube = lazy(() => import('./components/MagicCube'));
+const WorksPage = lazy(() => import('./pages/WorksPage'));
+const LinksPage = lazy(() => import('./pages/LinksPage'));
+const ContactPage = lazy(() => import('./pages/ContactPage'));
+const ContentsPage = lazy(() => import('./pages/ContentsPage'));
+const SecretPage = lazy(() => import('./pages/SecretPage'));
+const NotFoundPage = lazy(() => import('./pages/NotfoundPage'));
 
-import { BrutalistBreaker } from './components/BrutalistBreaker';
-import WorksPage from './pages/WorksPage';
-import LinksPage from './pages/LinksPage';
-import ContactPage from './pages/ContactPage';
-import ContentsPage from './pages/ContentsPage';
-import SecretPage from './pages/SecretPage';
-import NotFoundPage from './pages/NotfoundPage';
+const CONTENT_TITLES = {
+    'pop-vector-player': 'デモトラック＠ドリンクバー',
+    'kinetic-visualizer': 'デモトラック＠ポップスコーンマシーン',
+};
+
+const PAGE_TITLES = {
+    '/': 'ホーム',
+    '/works': '作品',
+    '/contents': 'インタラクティブコンテンツ',
+    '/links': 'リンク',
+    '/contact': 'お問い合わせ',
+    '/secret': 'SECRET',
+};
+
+const normalizePathname = (pathname) => {
+    if (pathname === '/') return '/';
+    return pathname.replace(/\/+$/, '') || '/';
+};
+
+const isKnownPath = (pathname) => {
+    if (PAGE_TITLES[pathname]) return true;
+    const contentMatch = pathname.match(/^\/contents\/([^/]+)$/);
+    return Boolean(contentMatch && CONTENT_TITLES[contentMatch[1]]);
+};
+
+const LoadingFallback = () => (
+    <div className="min-h-screen flex items-center justify-center px-4" role="status" aria-live="polite">
+        <span className="bg-black text-[#FFD700] border-2 border-white px-4 py-2 font-mono font-bold">
+            LOADING...
+        </span>
+    </div>
+);
 
 const PageWrapper = ({ children }) => (
-    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="w-full min-h-screen pt-20 pb-28 sm:pt-24 sm:pb-32">
+    <motion.main
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -20 }}
+        className="w-full min-h-screen pt-20 pb-28 sm:pt-24 sm:pb-32"
+    >
         {children}
-    </motion.div>
+    </motion.main>
 );
+
+const RouteMetadata = ({ pathname, isNotFound }) => {
+    const contentMatch = pathname.match(/^\/contents\/([^/]+)$/);
+    const pageTitle = isNotFound
+        ? 'ページが見つかりません'
+        : contentMatch
+            ? CONTENT_TITLES[contentMatch[1]]
+            : PAGE_TITLES[pathname];
+    const fullTitle = pageTitle ? `${pageTitle} | ${SITE_META.title}` : SITE_META.title;
+
+    return (
+        <Helmet>
+            <title>{fullTitle}</title>
+            <meta property="og:title" content={fullTitle} />
+        </Helmet>
+    );
+};
+
+const ContentRoute = () => {
+    const { id } = useParams();
+
+    if (!CONTENT_TITLES[id]) {
+        return <NotFoundPage />;
+    }
+
+    return (
+        <PageWrapper>
+            <ContentsPage />
+        </PageWrapper>
+    );
+};
+
+const GlobalErrorReporter = () => {
+    useEffect(() => {
+        const handleError = (event) => {
+            reportClientError(event.error || new Error(event.message || 'Unknown window error'), {
+                source: 'window.error',
+            });
+        };
+        const handleRejection = (event) => {
+            const error = event.reason instanceof Error
+                ? event.reason
+                : new Error(String(event.reason || 'Unhandled promise rejection'));
+            reportClientError(error, { source: 'unhandledrejection' });
+        };
+
+        window.addEventListener('error', handleError);
+        window.addEventListener('unhandledrejection', handleRejection);
+        return () => {
+            window.removeEventListener('error', handleError);
+            window.removeEventListener('unhandledrejection', handleRejection);
+        };
+    }, []);
+
+    return null;
+};
 
 function AppContent() {
     const location = useLocation();
     const navigate = useNavigate();
-
-    const getActivePage = () => {
-        const path = location.pathname;
-        if (path === '/') return 'home';
-        return path.substring(1);
-    };
-    const activePage = getActivePage();
-
-    // 定義済みのルート以外は404とみなす
-    const isNotFound = !(
-        location.pathname === '/' ||
-        ['/works', '/links', '/contact', '/secret'].includes(location.pathname) ||
-        location.pathname.startsWith('/contents')
-    );
+    const shouldReduceMotion = useReducedMotion();
+    const pathname = normalizePathname(location.pathname);
+    const isNotFound = !isKnownPath(pathname);
+    const firstSegment = pathname.split('/').filter(Boolean)[0];
+    const activePage = pathname === '/' ? 'home' : firstSegment;
 
     const [worksFilter, setWorksFilter] = useState('all');
     const [isOpening, setIsOpening] = useState(true);
-    const [showGame, setShowGame] = useState(false);
     const [isNumunumuMode, setIsNumunumuMode] = useState(false);
-    const [input, setInput] = useState('');
+    const [, setInput] = useState('');
     const target = 'numunumu';
 
     useEffect(() => {
-        const handler = (e) => {
-            if (e.key.length !== 1) return;
-            setInput(prevInput => {
-                const new_input = (prevInput + e.key.toLowerCase()).slice(-target.length);
-                if (new_input === target) {
-                    setIsNumunumuMode(true);
-                }
-                return new_input;
+        const handler = (event) => {
+            const targetElement = event.target;
+            if (
+                event.key.length !== 1
+                || targetElement instanceof HTMLInputElement
+                || targetElement instanceof HTMLTextAreaElement
+                || targetElement?.isContentEditable
+            ) {
+                return;
+            }
+
+            setInput((previousInput) => {
+                const nextInput = (previousInput + event.key.toLowerCase()).slice(-target.length);
+                if (nextInput === target) setIsNumunumuMode(true);
+                return nextInput;
             });
         };
         window.addEventListener('keydown', handler);
@@ -67,33 +155,35 @@ function AppContent() {
     }, []);
 
     useEffect(() => {
-        const timer = setTimeout(() => {
+        if (shouldReduceMotion) {
             setIsOpening(false);
-        }, 900); 
-        return () => {
-            clearTimeout(timer);
-        };
-    }, []);
+            return undefined;
+        }
+
+        const timer = window.setTimeout(() => setIsOpening(false), 900);
+        return () => window.clearTimeout(timer);
+    }, [shouldReduceMotion]);
 
     const handleCubeSelect = (key) => {
-        if (['music', 'entame', 'fun'].includes(key)) {
-            setWorksFilter(key);
-            navigate('/works');
-        } 
+        if (!['music', 'entame', 'fun'].includes(key)) return;
+        setWorksFilter(key);
+        navigate('/works');
     };
 
     const handleNavSelect = (page) => {
-        const path = page === 'home' ? '/' : `/${page}`;
-        navigate(path);
         if (page === 'works') setWorksFilter('all');
+        navigate(page === 'home' ? '/' : `/${page}`);
     };
 
+    const routeKey = pathname.startsWith('/contents/') ? 'contents' : pathname;
+    const contextValue = useMemo(() => ({ isNumunumuMode }), [isNumunumuMode]);
+
     return (
-        <NumunumuContext.Provider value={{ isNumunumuMode }}>
+        <NumunumuContext.Provider value={contextValue}>
+            <RouteMetadata pathname={pathname} isNotFound={isNotFound} />
             <div className="min-h-screen w-full relative overflow-x-hidden selection:bg-black selection:text-[#FFD700]">
-                {/* フォント等のスタイル定義 */}
                 <style>{`
-                    body { 
+                    body {
                         font-family: ${FONTS.sans};
                         background-color: ${THEME.bgBase};
                     }
@@ -103,37 +193,55 @@ function AppContent() {
                     .bg-accentGold { background-color: ${THEME.accentGold}; }
                 `}</style>
 
-                <AnimatePresence>
-                    {showGame && <BrutalistBreaker onClose={() => setShowGame(false)} />}
-                </AnimatePresence>
-
-                {activePage !== 'secret' && !isNotFound && (
+                {pathname !== '/secret' && !isNotFound && (
                     <>
                         <Header onNavigate={handleNavSelect} isOpening={isOpening} />
                         <NavigationDock activePage={activePage} onNavigate={handleNavSelect} isOpening={isOpening} />
                     </>
                 )}
 
-                <AnimatePresence mode='wait' onExitComplete={() => window.scrollTo(0, 0)}>
-                    <Routes location={location} key={location.pathname.startsWith('/contents') ? 'contents' : location.pathname}>
-                        <Route path="/" element={
-                            <motion.div key="home" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="relative z-10 w-full h-screen flex flex-col items-center justify-center p-4">
-                                <div className="mb-16 sm:mb-20"><MagicCube onSelect={handleCubeSelect} isOpening={isOpening} /></div>
-                                <motion.div initial={{ opacity: 0 }} animate={{ opacity: isOpening ? 0 : 1 }} transition={{ delay: 2.5 }} className="absolute bottom-28 sm:bottom-32 pointer-events-none z-50">
-                                    <p className="font-serif text-xs sm:text-sm md:text-lg bg-black text-[#FFD700] px-3 py-1 sm:px-4 md:px-6 md:py-2 transform -rotate-2 border-2 border-white shadow-[4px_4px_0px_rgba(0,0,0,0.3)] whitespace-nowrap">{isNumunumuMode ? 'ぬむぬむとんかつ' : 'ドラッグして CUBE を回せ'}</p>
-                                </motion.div>
-                            </motion.div>
-                        } />
-                        <Route path="/works" element={<PageWrapper><WorksPage initialFilter={worksFilter} /></PageWrapper>} />
-                        <Route path="/contents" element={<PageWrapper><ContentsPage /></PageWrapper>} />
-                        <Route path="/contents/:id" element={<PageWrapper><ContentsPage /></PageWrapper>} />
-                        <Route path="/links" element={<PageWrapper><LinksPage /></PageWrapper>} />
-                        <Route path="/contact" element={<PageWrapper><ContactPage /></PageWrapper>} />
-                        <Route path="/secret" element={<SecretPage />} />
-                        <Route path="*" element={<NotFoundPage />} />
-                    </Routes>
-                </AnimatePresence>
-                <div className="absolute bottom-2 right-4 text-[13px] text-gray-400 font-sans pointer-events-none z-0">
+                <Suspense fallback={<LoadingFallback />}>
+                    <AnimatePresence mode="wait" onExitComplete={() => window.scrollTo(0, 0)}>
+                        <Routes location={location} key={routeKey}>
+                            <Route path="/" element={(
+                                <motion.main
+                                    key="home"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    className="relative z-10 w-full h-screen flex flex-col items-center justify-center p-4"
+                                >
+                                    <div className="mb-16 sm:mb-20">
+                                        <MagicCube onSelect={handleCubeSelect} isOpening={isOpening} />
+                                    </div>
+                                    <motion.div
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: isOpening ? 0 : 1 }}
+                                        transition={{ delay: shouldReduceMotion ? 0 : 2.5 }}
+                                        className="absolute bottom-28 sm:bottom-32 pointer-events-none z-50"
+                                    >
+                                        <p className="font-serif text-xs sm:text-sm md:text-lg bg-black text-[#FFD700] px-3 py-1 sm:px-4 md:px-6 md:py-2 transform -rotate-2 border-2 border-white shadow-[4px_4px_0px_rgba(0,0,0,0.3)] whitespace-nowrap">
+                                            {isNumunumuMode ? 'ぬむぬむとんかつ' : 'ドラッグして CUBE を回せ。Tabキーでも各面を選べます'}
+                                        </p>
+                                    </motion.div>
+                                </motion.main>
+                            )} />
+                            <Route path="/works" element={(
+                                <PageWrapper>
+                                    <WorksPage filter={worksFilter} onFilterChange={setWorksFilter} />
+                                </PageWrapper>
+                            )} />
+                            <Route path="/contents" element={<PageWrapper><ContentsPage /></PageWrapper>} />
+                            <Route path="/contents/:id" element={<ContentRoute />} />
+                            <Route path="/links" element={<PageWrapper><LinksPage /></PageWrapper>} />
+                            <Route path="/contact" element={<PageWrapper><ContactPage /></PageWrapper>} />
+                            <Route path="/secret" element={<SecretPage />} />
+                            <Route path="*" element={<NotFoundPage />} />
+                        </Routes>
+                    </AnimatePresence>
+                </Suspense>
+
+                <div className="absolute bottom-2 right-4 text-[13px] text-gray-500 font-sans pointer-events-none z-0">
                     Copyright © 2026 {isNumunumuMode ? 'ぬむぬむとんかつ' : 'SANMENso'}
                 </div>
             </div>
@@ -144,23 +252,24 @@ function AppContent() {
 function App() {
     return (
         <HelmetProvider>
-            <BrowserRouter>
-                <Helmet>
-                    <title>{SITE_META.title}</title>
-                    <meta name="description" content={SITE_META.description} />
-                    <link rel="icon" href={SITE_META.favicon} />
-
-                    {/* OGP設定 */}
-                    <meta property="og:url" content={SITE_META.url} />
-                    <meta property="og:type" content={SITE_META.type} />
-                    <meta property="og:title" content={SITE_META.title} />
-                    <meta property="og:description" content={SITE_META.description} />
-                    <meta property="og:image" content={SITE_META.image} />
-                    <meta name="twitter:card" content="summary_large_image" />
-                    <meta name="twitter:site" content={SITE_META.twitterUsername} />
-                </Helmet>
-                <AppContent />
-            </BrowserRouter>
+            <MotionConfig reducedMotion="user">
+                <AppErrorBoundary>
+                    <BrowserRouter>
+                        <Helmet>
+                            <meta name="description" content={SITE_META.description} />
+                            <link rel="icon" href={SITE_META.favicon} />
+                            <meta property="og:url" content={SITE_META.url} />
+                            <meta property="og:type" content={SITE_META.type} />
+                            <meta property="og:description" content={SITE_META.description} />
+                            <meta property="og:image" content={SITE_META.image} />
+                            <meta name="twitter:card" content="summary_large_image" />
+                            <meta name="twitter:site" content={SITE_META.twitterUsername} />
+                        </Helmet>
+                        <GlobalErrorReporter />
+                        <AppContent />
+                    </BrowserRouter>
+                </AppErrorBoundary>
+            </MotionConfig>
         </HelmetProvider>
     );
 }

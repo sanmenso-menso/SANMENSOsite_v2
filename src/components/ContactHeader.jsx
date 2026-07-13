@@ -127,7 +127,7 @@ const ContactHeader = () => {
                             <motion.div
                                 key={charIndex}
                                 className="text-4xl sm:text-5xl md:text-7xl font-black text-black leading-tight tracking-tighter"
-                                style={{ fontFamily: "'Recursive', sans-serif" }}
+                                style={{ fontFamily: "'Arial Black', 'Yu Gothic', sans-serif" }}
                                 variants={charBoxVariants}
                                 custom={charData.custom}
                             >

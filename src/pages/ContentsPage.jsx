@@ -1,11 +1,12 @@
-import React, { useEffect } from 'react';
-import { createPortal } from 'react-dom';
+import React, { Suspense, lazy } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import PopVectorPlayer from '../components/PopVectorPlayer';
-import KineticVisualizer from '../components/KineticVisualizer';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { useNumunumu } from '../NumunumuContext';
+import AccessibleDialog from '../components/AccessibleDialog';
+
+const PopVectorPlayer = lazy(() => import('../components/PopVectorPlayer'));
+const KineticVisualizer = lazy(() => import('../components/KineticVisualizer'));
 
 const contents = [
     {
@@ -37,18 +38,6 @@ const ContentsPage = () => {
 
     const selectedContent = displayContents.find(c => c.id === id);
 
-    // 詳細モーダルが開いている間はスクロールを無効化
-    useEffect(() => {
-        if (selectedContent) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = '';
-        }
-        return () => {
-            document.body.style.overflow = '';
-        };
-    }, [selectedContent]);
-
     const handleSelectContent = (content) => {
         navigate(`/contents/${content.id}`);
     };
@@ -59,6 +48,7 @@ const ContentsPage = () => {
 
     const title = isNumunumuMode ? numuText : "Interactive Contents";
     const titleChars = title.split("");
+    const SelectedComponent = selectedContent?.component;
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -110,9 +100,11 @@ const ContentsPage = () => {
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-32">
                 {displayContents.map(content => (
-                    <div 
+                    <button
+                        type="button"
                         key={content.id} 
-                        className="group relative bg-white border-4 border-black p-4 h-full flex flex-col transition-all duration-300 hover:-translate-y-2 hover:rotate-1 hover:shadow-[12px_12px_0px_rgba(0,0,0,0.3)] shadow-[6px_6px_0px_rgba(0,0,0,0.3)] cursor-pointer overflow-hidden"
+                        aria-label={`${content.title}を開く。音声が再生されます`}
+                        className="group relative bg-white border-4 border-black p-4 h-full flex flex-col text-left transition-all duration-300 hover:-translate-y-2 hover:rotate-1 hover:shadow-[12px_12px_0px_rgba(0,0,0,0.3)] shadow-[6px_6px_0px_rgba(0,0,0,0.3)] cursor-pointer overflow-hidden"
                         onClick={() => handleSelectContent(content)}
                     >
                         <div className="flex-grow">
@@ -124,18 +116,28 @@ const ContentsPage = () => {
                                 {isNumunumuMode ? numuText : 'PLAY NOW'} <ArrowUpRight size={16} />
                             </div>
                         </div>
-                    </div>
+                    </button>
                 ))}
             </div>
 
-            {createPortal(
-                <AnimatePresence>
-                    {selectedContent && (
-                        <selectedContent.component onClose={handleBack} />
-                    )}
-                </AnimatePresence>,
-                document.body
-            )}
+            <AnimatePresence>
+                {selectedContent && SelectedComponent && (
+                    <AccessibleDialog
+                        onClose={handleBack}
+                        ariaLabel={selectedContent.title}
+                        closeOnBackdrop={false}
+                        className="fixed inset-0 z-[59]"
+                    >
+                        <Suspense fallback={(
+                            <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 text-white" role="status">
+                                コンテンツを読み込んでいます…
+                            </div>
+                        )}>
+                            <SelectedComponent onClose={handleBack} />
+                        </Suspense>
+                    </AccessibleDialog>
+                )}
+            </AnimatePresence>
         </div>
     );
 };

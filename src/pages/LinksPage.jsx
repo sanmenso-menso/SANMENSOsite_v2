@@ -1,11 +1,17 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+import { useReducedMotion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { EXCAVATION_LINKS, SOCIAL_LINKS } from '../constants';
 import { useNumunumu } from '../NumunumuContext';
 import ImageWithFallback from '../components/ImageWithFallback';
-import { ExternalLink, Mail } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
+
+const MOBILE_MAX_HP = 12000;
+const DESKTOP_MAX_HP = 45000;
+const SCRATCH_DAMAGE = 150;
 
 const LinksPage = () => {
+    const shouldReduceMotion = useReducedMotion();
     const navigate = useNavigate();
     const { isNumunumuMode } = useNumunumu();
     const numuText = 'ぬむぬむとんかつ';
@@ -19,23 +25,35 @@ const LinksPage = () => {
     const canvasRef = useRef(null);
     const inputLayerRef = useRef(null);
     const containerRef = useRef(null);
+    const secretTransitionTimerRef = useRef(null);
     const touchStartPos = useRef({ x: 0, y: 0 });
     const isScrolling = useRef(null);
     const [isBroken, setIsBroken] = useState(false);
-    const [isWallLocked, setIsWallLocked] = useState(false);
     const [shakeLevel, setShakeLevel] = useState(0);
     const isMobile = useMemo(() => typeof window !== 'undefined' && 'ontouchstart' in window, []);
-    const maxHp = isMobile ? 500000 : 1100000;
+    const maxHp = isMobile ? MOBILE_MAX_HP : DESKTOP_MAX_HP;
     const currentHpRef = useRef(maxHp);
     const [randomPositions, setRandomPositions] = useState([]);
     const [isSucking, setIsSucking] = useState(false);
 
     const triggerSecretTransition = useCallback(() => {
+        if (secretTransitionTimerRef.current) return;
+        if (shouldReduceMotion) {
+            navigate('/secret');
+            return;
+        }
         setIsSucking(true);
-        setTimeout(() => {
+        secretTransitionTimerRef.current = window.setTimeout(() => {
+            secretTransitionTimerRef.current = null;
             navigate('/secret');
         }, 1500);
-    }, [navigate]);
+    }, [navigate, shouldReduceMotion]);
+
+    useEffect(() => () => {
+        if (secretTransitionTimerRef.current) {
+            window.clearTimeout(secretTransitionTimerRef.current);
+        }
+    }, []);
 
     const finalLinks = useMemo(() => {
         if (isNumunumuMode) {
@@ -174,13 +192,11 @@ const LinksPage = () => {
                     }
                 }
                 inputLayer.style.display = 'block';
-            } else if (isMobile && !isWallLocked) {
-                setIsWallLocked(true);
             }
         };
 
         const scratch = (e) => {
-            if (isBroken || (isMobile && isWallLocked)) return;
+            if (isBroken) return;
 
             // タッチ操作の場合、スクロールか削る操作かを判定
             if (e.touches) {
@@ -215,7 +231,7 @@ const LinksPage = () => {
                 ctx.arc(x + Math.cos(angle) * r, y + Math.sin(angle) * r, size, 0, Math.PI * 2);
                 ctx.fill();
             }
-            takeDamage(150);
+            takeDamage(SCRATCH_DAMAGE);
         };
 
         const takeDamage = (amount) => {
@@ -248,27 +264,19 @@ const LinksPage = () => {
                 inputLayer.removeEventListener('click', handleClick);
             }
         };
-    }, [isBroken, navigate, isMobile, isWallLocked, triggerSecretTransition]);
+    }, [isBroken, isMobile, maxHp, triggerSecretTransition]);
 
     const getShakeClass = () => {
-        if (isNumunumuMode) return '';
+        if (isNumunumuMode || shouldReduceMotion) return '';
         if (shakeLevel === 1) return 'animate-shake-light';
         if (shakeLevel === 2) return 'animate-shake-heavy';
         if (shakeLevel === 3) return 'animate-shake-extreme';
         return '';
     };
 
-    // Show a message when the wall is locked
-    const WallLockIndicator = () => (
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 bg-black text-white text-xs font-mono px-2 py-1 rounded-full pointer-events-none animate-pulse">
-            WALL LOCKED
-        </div>
-    );
-
     const restoreWall = () => {
         setIsBroken(false);
         setShakeLevel(0);
-        setIsWallLocked(false);
         currentHpRef.current = maxHp;
     };
 
@@ -306,7 +314,7 @@ const LinksPage = () => {
                 <span className="font-serif text-sm bg-black text-[#FFD700] px-2 py-1 inline-block transform -rotate-1">{isNumunumuMode ? numuText : 'ページを削って相互リンクを掘り起こせ'}</span>
             </div>
 
-            <div ref={containerRef} className={`relative w-full max-w-4xl h-[60vh] sm:h-[70vh] bg-black border-4 border-black shadow-[8px_8px_0px_rgba(0,0,0,0.3)] ${isBroken ? 'overflow-visible z-50' : 'overflow-hidden z-10'} ${isSucking ? 'animate-[suck-in_1.5s_ease-in_forwards] pointer-events-none' : getShakeClass()}`}>
+            <div ref={containerRef} className={`relative w-full max-w-4xl h-[60vh] sm:h-[70vh] bg-black border-4 border-black shadow-[8px_8px_0px_rgba(0,0,0,0.3)] ${isBroken ? 'overflow-visible z-50' : 'overflow-hidden z-10'} ${isSucking && !shouldReduceMotion ? 'animate-[suck-in_1.5s_ease-in_forwards] pointer-events-none' : getShakeClass()}`}>
                 <div className={`absolute inset-0 flex items-center justify-center ${isBroken || isNumunumuMode ? 'z-40' : 'z-0'}`} style={{ background: 'radial-gradient(circle at center, #300 0%, #000 90%)' }}>
                     <a href="/secret" data-secret="true" onClick={(e) => { e.preventDefault(); triggerSecretTransition(); }} className={`w-48 h-48 md:w-64 md:h-64 rounded-full border-2 border-red-500/50 flex flex-col items-center justify-center text-red-500 bg-black/90 rotate-12 hover:scale-105 hover:bg-red-900/20 transition-all cursor-pointer font-serif duration-1000 ${isBroken || isNumunumuMode ? 'opacity-100 pointer-events-auto delay-500' : 'opacity-0 pointer-events-none'}`}>
                         <span className="text-2xl md:text-3xl font-bold">{isNumunumuMode ? numuText : 'SECRET'}</span>
@@ -328,7 +336,7 @@ const LinksPage = () => {
                                 href={link.url} 
                                 target="_blank" 
                                 rel="noreferrer"
-                                className={`absolute block hover:scale-110 hover:z-50 transition-transform cursor-pointer pointer-events-auto w-32 h-8 sm:w-48 sm:h-12 md:w-64 md:h-16 overflow-hidden ${isBroken ? 'animate-[fly-away_1.0s_ease-in_forwards]' : ''}`}
+                                className={`absolute block hover:scale-110 hover:z-50 transition-transform cursor-pointer pointer-events-auto w-32 h-8 sm:w-48 sm:h-12 md:w-64 md:h-16 overflow-hidden ${isBroken && !shouldReduceMotion ? 'animate-[fly-away_1.0s_ease-in_forwards]' : ''}`}
                                 style={{ 
                                     top: randomPositions[i]?.top || '50%', 
                                     left: randomPositions[i]?.left || '50%', 
@@ -340,16 +348,22 @@ const LinksPage = () => {
                                     animationDelay: randomPositions[i]?.delay 
                                 }}
                             >
-                                <ImageWithFallback
-                                    src={link.image}
-                                    alt={link.alt}
-                                    className="w-full h-full object-contain"
-                                    fallback={(
-                                        <div className="w-full h-full flex items-center justify-center bg-gray-100 p-2 text-center text-xs text-gray-600">
-                                            {link.alt}
-                                        </div>
-                                    )}
-                                />
+                                {link.image?.startsWith('/images/') ? (
+                                    <ImageWithFallback
+                                        src={link.image}
+                                        alt={link.alt}
+                                        className="w-full h-full object-contain"
+                                        fallback={(
+                                            <div className="w-full h-full flex items-center justify-center bg-gray-100 p-2 text-center text-xs text-gray-600">
+                                                {link.alt}
+                                            </div>
+                                        )}
+                                    />
+                                ) : (
+                                    <div className="w-full h-full flex items-center justify-center bg-gray-100 p-2 text-center text-xs text-gray-600">
+                                        {link.alt}
+                                    </div>
+                                )}
                             </a>
                         ) : (
                             <a 
@@ -357,7 +371,7 @@ const LinksPage = () => {
                                 href={link.url} 
                                 target="_blank" 
                                 rel="noreferrer"
-                                className={`absolute bg-white border-2 border-black p-1 sm:p-2 md:p-4 flex flex-col items-center justify-center text-center shadow-[4px_4px_0px_rgba(0,0,0,0.3)] hover:scale-110 hover:z-50 transition-transform cursor-pointer pointer-events-auto w-28 h-20 sm:w-40 sm:h-24 md:w-48 ${isBroken ? 'animate-[fly-away_1.0s_ease-in_forwards]' : ''}`}
+                                className={`absolute bg-white border-2 border-black p-1 sm:p-2 md:p-4 flex flex-col items-center justify-center text-center shadow-[4px_4px_0px_rgba(0,0,0,0.3)] hover:scale-110 hover:z-50 transition-transform cursor-pointer pointer-events-auto w-28 h-20 sm:w-40 sm:h-24 md:w-48 ${isBroken && !shouldReduceMotion ? 'animate-[fly-away_1.0s_ease-in_forwards]' : ''}`}
                                 style={{ 
                                     top: randomPositions[i]?.top || '50%', 
                                     left: randomPositions[i]?.left || '50%', 
@@ -377,7 +391,7 @@ const LinksPage = () => {
                     ))}
                 </div>
                 <canvas ref={canvasRef} className={`absolute inset-0 w-full h-full z-20 cursor-crosshair pointer-events-none ${isBroken || isNumunumuMode ? 'opacity-0' : 'opacity-100'}`} />
-                <div ref={inputLayerRef} className={`absolute inset-0 w-full h-full z-30 ${isBroken || isNumunumuMode ? 'hidden' : 'block'} ${isMobile && isWallLocked ? 'cursor-default' : 'cursor-crosshair'}`}></div>
+                <div ref={inputLayerRef} className={`absolute inset-0 w-full h-full z-30 ${isBroken || isNumunumuMode ? 'hidden' : 'block'} cursor-crosshair`}></div>
                 {(isBroken || isNumunumuMode) && (
                     <div className="absolute inset-0 pointer-events-none z-50">
                         {isNumunumuMode ? null : (
@@ -385,7 +399,7 @@ const LinksPage = () => {
                                 {shardsData.concrete.map((s, i) => (
                                     <div 
                                         key={`concrete-${i}`}
-                                        className="absolute animate-[fly-away_1.5s_ease-out_forwards]"
+                                        className={`absolute ${shouldReduceMotion ? '' : 'animate-[fly-away_1.5s_ease-out_forwards]'}`}
                                         style={{
                                             backgroundColor: CONCRETE_COLOR,
                                             top: s.top,
@@ -404,7 +418,6 @@ const LinksPage = () => {
                         )}
                     </div>
                 )}
-                {isMobile && isWallLocked && !isBroken && <WallLockIndicator />}
                 {(isBroken || isNumunumuMode) && (
                     <button onClick={restoreWall} className="absolute bottom-4 right-4 z-50 text-white font-mono text-xs opacity-50 hover:opacity-100 pointer-events-auto">{isNumunumuMode ? numuText : '[ RESTORE REALITY ]'}</button>
                 )}

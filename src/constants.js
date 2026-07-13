@@ -8,8 +8,8 @@ export const THEME = {
 };
 
 export const FONTS = {
-    sans: '"Zen Kaku Gothic New", sans-serif',
-    serif: '"Shippori Mincho", serif',
+    sans: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans JP", "Yu Gothic UI", "Yu Gothic", Meiryo, sans-serif',
+    serif: '"Yu Mincho", "Hiragino Mincho ProN", "Noto Serif JP", serif',
     mono: '"Courier New", Courier, monospace',
 };
 
@@ -658,7 +658,7 @@ export const WORKS_DATA = [
         detailText: "どうしても寝れない日、でも何もやる気がない日をイメージして制作した楽曲です。歌詞はゆるくて曲調は渋いというギャップを意識して制作しました。\n\nMVでAfteEffectのエクスプレッションを利用し、一つのオーディオスペクトラムで複数のパートの音を表現できるように試してみました。",
         credits: ["Composition,Movie:三面相", "STEM Mastering:Rei (studio JEN)"],
         color: "#FF6B6B",
-        url:"https://www.nicovideo.jp/watch/sm45629216",
+        url:"https://www.nicovideo.jp/watch/sm45639345",
         image: "/images/vitaliganai.png",
     },
     { 
@@ -763,7 +763,9 @@ export const EXCAVATION_LINKS = [
         id: 1,
         type: 'banner',
        url: "https://hozumi.site/",
-        image: "https://hozumi.site/cdn/shop/t/6/assets/S__74637854.jpg?v=97761660025223919291763945063",
+        // 外部画像を直接埋め込むと、リンクページを開くだけで訪問者情報が
+        // 第三者サイトへ送信されるため、テキストのフォールバックを表示する。
+        image: null,
         alt: "あなたは青い部屋が好きですか？",
     },
     { 
@@ -783,22 +785,22 @@ export const EXCAVATION_LINKS = [
     { 
         id: 4,
         type: 'banner',
-        url: "http://tmpra.jp",
-        image:"images/banner/tmpra_banner.png",
+        url: "https://tmpra.jp",
+        image:"/images/banner/tmpra_banner.png",
         alt: "TMPらのホームページ",
     },
     { 
         id: 5,
         type: 'banner',
         url: "https://sites.google.com/view/0-u2bo/home",
-        image:"images/banner/U2bo_banner.png",
+        image:"/images/banner/U2bo_banner.png",
         alt: "Rei Utsuboのホームページ",
     },
     { 
         id: 6,
         type: 'banner',
         url: "https://www.awara-hasegawa.com/",
-        image:"images/banner/hasegawa_banner.png",
+        image:"/images/banner/hasegawa_banner.png",
         alt: "長谷川旅館のホームページ",
     },
     

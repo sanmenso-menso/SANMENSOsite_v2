@@ -29,11 +29,18 @@ const NavigationDock = ({ activePage, onNavigate, isOpening }) => {
             style={openingStyle}
             className="fixed bottom-4 md:bottom-8 left-0 z-50 w-full flex justify-center pointer-events-none"
         >
-            <div className="bg-[#121212]/90 backdrop-blur-md text-white rounded-full px-2 py-1 md:px-4 md:py-2 flex items-center shadow-[0_8px_30px_rgba(0,0,0,0.3)] border border-white/10 pointer-events-auto">
+            <nav aria-label="メインナビゲーション" className="bg-[#121212]/90 backdrop-blur-md text-white rounded-full px-2 py-1 md:px-4 md:py-2 flex items-center shadow-[0_8px_30px_rgba(0,0,0,0.3)] border border-white/10 pointer-events-auto">
                 {items.map((item) => {
                     const isActive = activePage === item.id;
                     return (
-                        <button key={item.id} onClick={() => onNavigate(item.id)} className="relative w-14 md:w-28 px-2 py-2 md:px-6 md:py-3 group flex flex-col items-center justify-center">
+                        <button
+                            type="button"
+                            key={item.id}
+                            onClick={() => onNavigate(item.id)}
+                            aria-label={isNumunumuMode ? `${numuText}（${item.label}）` : item.label}
+                            aria-current={isActive ? 'page' : undefined}
+                            className="relative w-14 md:w-28 px-2 py-2 md:px-6 md:py-3 group flex flex-col items-center justify-center"
+                        >
                             {isActive && <div className="absolute inset-0 bg-white/10 rounded-full" />}
                             <span className={`relative z-10 transition-colors duration-300 ${isActive ? 'text-[#FFD700]' : 'text-white group-hover:text-[#FFD700]'}`}>
                                 <span className="hidden md:inline text-xs font-bold tracking-widest">{isNumunumuMode ? numuText : item.label}</span>
@@ -43,7 +50,7 @@ const NavigationDock = ({ activePage, onNavigate, isOpening }) => {
                         </button>
                     );
                 })}
-            </div>
+            </nav>
         </div>
     );
 };

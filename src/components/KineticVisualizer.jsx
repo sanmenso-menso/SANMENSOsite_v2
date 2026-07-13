@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { X } from 'lucide-react';
 import './KineticVisualizer.css';
 import { KINETIC_VISUALIZER_SONGS } from '../constants';
@@ -11,12 +11,14 @@ const friction = 0.98; // 空気抵抗・摩擦
 const floorBounce = 0.6; // 床に落ちたときの弾み具合
 
 const KineticVisualizer = ({ onClose }) => {
+  const shouldReduceMotion = useReducedMotion();
   // 再生する曲の状態管理
   const [song, setSong] = useState(KINETIC_VISUALIZER_SONGS.find(s => s.id === 1) || KINETIC_VISUALIZER_SONGS[0]);
   const [statusText, setStatusText] = useState('Initializing...');
   const [isAudioActive, setIsAudioActive] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const initialSongRef = useRef(song);
   // isPlaying の最新値を requestAnimationFrame ループ内で参照するための ref
   const isPlayingRef = useRef(isPlaying);
   useEffect(() => {
@@ -34,7 +36,14 @@ const KineticVisualizer = ({ onClose }) => {
   const sourceRef = useRef(null);
   const particlesRef = useRef([]);
   const animationFrameIdRef = useRef(null);
+  const renderFrameRef = useRef(null);
   const isRunningRef = useRef(false);
+  const frequencyDataRef = useRef(new Uint8Array(0));
+  const abortControllerRef = useRef(null);
+  const loadTimeoutRef = useRef(null);
+  const loadRequestIdRef = useRef(0);
+  const mountedRef = useRef(false);
+  const popTimeoutsRef = useRef(new Set());
 
   // Make charRadius responsive to window size
   const getCharRadius = useCallback(() => (window.innerWidth < 768 ? 30 : 50), []);
@@ -64,7 +73,11 @@ const KineticVisualizer = ({ onClose }) => {
           p.vx = (Math.random() - 0.5) * 25;
           p.vr = (Math.random() - 0.5) * 20;
           p.isPopping = true;
-          setTimeout(() => { p.isPopping = false; }, 300);
+          const timeoutId = window.setTimeout(() => {
+            p.isPopping = false;
+            popTimeoutsRef.current.delete(timeoutId);
+          }, 300);
+          popTimeoutsRef.current.add(timeoutId);
         }
       }
 
@@ -183,28 +196,36 @@ const KineticVisualizer = ({ onClose }) => {
   // オーディオ処理と描画ループ
   const renderFrame = useCallback(() => {
     if (!isRunningRef.current) return;
-    animationFrameIdRef.current = requestAnimationFrame(renderFrame);
+    animationFrameIdRef.current = null;
+    if (!shouldReduceMotion) {
+      animationFrameIdRef.current = requestAnimationFrame(() => renderFrameRef.current?.());
+    }
 
     let bassVal = 0, midVal = 0, trebleVal = 0;
 
     if (isPlayingRef.current) { // isPlaying state の代わりに ref を参照する
       const analyser = analyserRef.current;
-      const dataArray = new Uint8Array(analyser.frequencyBinCount);
-      analyser.getByteFrequencyData(dataArray);
+      if (analyser) {
+        if (frequencyDataRef.current.length !== analyser.frequencyBinCount) {
+          frequencyDataRef.current = new Uint8Array(analyser.frequencyBinCount);
+        }
+        const dataArray = frequencyDataRef.current;
+        analyser.getByteFrequencyData(dataArray);
 
-      const getAverageVolume = (array, startIndex, endIndex) => {
-        let sum = 0;
-        for (let i = startIndex; i < endIndex; i++) sum += array[i];
-        return sum / (endIndex - startIndex);
-      };
+        const getAverageVolume = (array, startIndex, endIndex) => {
+          let sum = 0;
+          for (let i = startIndex; i < endIndex; i++) sum += array[i];
+          return sum / (endIndex - startIndex);
+        };
 
-      const bassAvg = getAverageVolume(dataArray, 0, 5) / 255;
-      const midAvg = getAverageVolume(dataArray, 5, 40) / 255;
-      const trebleAvg = getAverageVolume(dataArray, 40, 100) / 255;
+        const bassAvg = getAverageVolume(dataArray, 0, 5) / 255;
+        const midAvg = getAverageVolume(dataArray, 5, 40) / 255;
+        const trebleAvg = getAverageVolume(dataArray, 40, 100) / 255;
 
-      bassVal = Math.pow(bassAvg, 2.0);
-      midVal = Math.pow(midAvg, 1.2);
-      trebleVal = Math.pow(trebleAvg, 2.0);
+        bassVal = Math.pow(bassAvg, 2.0);
+        midVal = Math.pow(midAvg, 1.2);
+        trebleVal = Math.pow(trebleAvg, 2.0);
+      }
     }
 
     if (rootRef.current) {
@@ -217,101 +238,195 @@ const KineticVisualizer = ({ onClose }) => {
     if (meterTrebleRef.current) meterTrebleRef.current.style.height = `${trebleVal * 100}%`;
 
     // 物理演算は常に実行し、ポーズ中は bassVal が 0 になる
-    updatePhysics(bassVal);
-  }, [updatePhysics]);
+    if (!shouldReduceMotion) updatePhysics(bassVal);
+  }, [shouldReduceMotion, updatePhysics]);
+  renderFrameRef.current = renderFrame;
+
+  const releaseAudioResources = useCallback(() => {
+    abortControllerRef.current?.abort();
+    abortControllerRef.current = null;
+    if (loadTimeoutRef.current) {
+      window.clearTimeout(loadTimeoutRef.current);
+      loadTimeoutRef.current = null;
+    }
+
+    isRunningRef.current = false;
+    if (animationFrameIdRef.current) {
+      cancelAnimationFrame(animationFrameIdRef.current);
+      animationFrameIdRef.current = null;
+    }
+
+    if (sourceRef.current) {
+      try {
+        sourceRef.current.stop();
+      } catch {
+        // AudioBufferSourceNode.stop() は一度しか呼べない。
+      }
+      sourceRef.current.disconnect();
+      sourceRef.current = null;
+    }
+    analyserRef.current?.disconnect();
+    analyserRef.current = null;
+
+    const audioContext = audioContextRef.current;
+    audioContextRef.current = null;
+    if (audioContext && audioContext.state !== 'closed') {
+      void audioContext.close().catch(() => {});
+    }
+  }, []);
 
   // オーディオの初期化と再生
-  const loadAudio = async (songToLoad) => {
-    if (isLoading) return;
+  const loadAudio = useCallback(async (songToLoad) => {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContext) {
+      setStatusText('Audio Unsupported');
+      return;
+    }
+
+    const requestId = ++loadRequestIdRef.current;
+    releaseAudioResources();
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+    let timedOut = false;
+    loadTimeoutRef.current = window.setTimeout(() => {
+      timedOut = true;
+      controller.abort();
+    }, 15000);
 
     setIsLoading(true);
+    setIsPlaying(false);
+    setIsAudioActive(false);
     setStatusText('Loading audio...');
 
+    let audioContext = null;
     try {
-      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      audioContext = new AudioContext();
       const analyser = audioContext.createAnalyser();
       analyser.fftSize = 512;
 
-      const response = await fetch(songToLoad.src);
+      const response = await fetch(songToLoad.src, { signal: controller.signal });
+      if (!response.ok) {
+        throw new Error(`Audio request failed: ${response.status}`);
+      }
       const arrayBuffer = await response.arrayBuffer();
       const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+
+      if (!mountedRef.current || controller.signal.aborted || requestId !== loadRequestIdRef.current) {
+        return;
+      }
 
       const source = audioContext.createBufferSource();
       source.buffer = audioBuffer;
       source.loop = true;
-
       source.connect(analyser);
       analyser.connect(audioContext.destination);
 
+      await audioContext.suspend();
+      if (!mountedRef.current || controller.signal.aborted || requestId !== loadRequestIdRef.current) {
+        return;
+      }
       source.start(0);
-      // 初期状態は一時停止
-      audioContext.suspend();
 
       audioContextRef.current = audioContext;
       analyserRef.current = analyser;
       sourceRef.current = source;
+      frequencyDataRef.current = new Uint8Array(analyser.frequencyBinCount);
+      audioContext = null;
 
       isRunningRef.current = true;
-      setIsLoading(false);
-      setIsAudioActive(true); // オーディオは準備完了
-      setStatusText('Ready to POP!'); // ステータス変更
-
-      renderFrame();
+      setIsAudioActive(true);
+      setStatusText('Ready to POP!');
+      renderFrameRef.current?.();
     } catch (err) {
-      console.error('Error loading or playing audio:', err);
-      setStatusText('Audio Error');
-      setIsLoading(false);
+      if (requestId === loadRequestIdRef.current && mountedRef.current) {
+        if (timedOut) {
+          setStatusText('Audio Timeout');
+        } else if (!controller.signal.aborted) {
+          console.error('Error loading or playing audio:', err);
+          setStatusText('Audio Error');
+        }
+      }
+    } finally {
+      if (audioContext && audioContext.state !== 'closed') {
+        void audioContext.close().catch(() => {});
+      }
+      if (requestId === loadRequestIdRef.current) {
+        if (loadTimeoutRef.current) {
+          window.clearTimeout(loadTimeoutRef.current);
+          loadTimeoutRef.current = null;
+        }
+        abortControllerRef.current = null;
+        if (mountedRef.current) setIsLoading(false);
+      }
     }
-  };
+  }, [releaseAudioResources]);
 
   // 再生/一時停止のトグル関数
-  const togglePlayPause = () => {
+  const togglePlayPause = async () => {
     const audioContext = audioContextRef.current;
-    if (!audioContext) return;
-
-    if (isPlaying) {
-      audioContext.suspend();
-      setStatusText('Paused');
-    } else {
-      audioContext.resume();
-      setStatusText('Popping!');
+    if (!audioContext || audioContext.state === 'closed') {
+      setIsPlaying(false);
+      setIsAudioActive(false);
+      setStatusText('Audio Error');
+      return;
     }
-    setIsPlaying(!isPlaying);
+
+    try {
+      if (isPlaying) {
+        await audioContext.suspend();
+        setIsPlaying(false);
+        setStatusText('Paused');
+      } else {
+        await audioContext.resume();
+        setIsPlaying(true);
+        setStatusText('Popping!');
+      }
+    } catch (err) {
+      console.error('Audio playback state change failed:', err);
+      setIsPlaying(false);
+      setStatusText('Audio Error');
+    }
   };
 
   // 曲を変更するハンドラ
   const handleSongChange = (newSong) => {
     if (newSong.id === song.id || isLoading) return;
 
-    // 現在のオーディオを停止・クリーンアップ
-    if (sourceRef.current) {
-        try {
-          sourceRef.current.stop();
-        } catch (e) { /* Can only be called once */ }
-    }
-    if (audioContextRef.current && audioContextRef.current.state !== 'closed') {
-        audioContextRef.current.close();
-    }
-    isRunningRef.current = false;
-    if (animationFrameIdRef.current) {
-        cancelAnimationFrame(animationFrameIdRef.current);
-    }
-
     // 状態をリセットして新しい曲を設定
-    setIsAudioActive(false);
-    setIsPlaying(false);
     setSong(newSong);
+    void loadAudio(newSong);
+  };
 
-    // 新しい曲を自動的にロード
-    loadAudio(newSong);
+  const handleClose = () => {
+    loadRequestIdRef.current += 1;
+    releaseAudioResources();
+    setIsLoading(false);
+    setIsPlaying(false);
+    setIsAudioActive(false);
+    onClose();
   };
 
   // イベントリスナーとクリーンアップ
   useEffect(() => {
+    mountedRef.current = true;
+    const popTimeouts = popTimeoutsRef.current;
     // 初回マウント時にデフォルトの曲をロード
-    loadAudio(song);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    void loadAudio(initialSongRef.current);
+
+    return () => {
+      mountedRef.current = false;
+      loadRequestIdRef.current += 1;
+      releaseAudioResources();
+      popTimeouts.forEach(timeoutId => window.clearTimeout(timeoutId));
+      popTimeouts.clear();
+    };
+  }, [loadAudio, releaseAudioResources]);
+
+  useEffect(() => {
+    if (!shouldReduceMotion && isAudioActive && isRunningRef.current && animationFrameIdRef.current === null) {
+      renderFrameRef.current?.();
+    }
+  }, [isAudioActive, shouldReduceMotion]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -331,20 +446,6 @@ const KineticVisualizer = ({ onClose }) => {
 
     return () => {
       window.removeEventListener('resize', handleResize);
-      isRunningRef.current = false;
-      if (animationFrameIdRef.current) {
-        cancelAnimationFrame(animationFrameIdRef.current);
-      }
-      if (sourceRef.current) {
-        try {
-          sourceRef.current.stop();
-        } catch (e) {
-          // AudioBufferSourceNode.stop() can only be called once.
-        }
-      }
-      if (audioContextRef.current && audioContextRef.current.state !== 'closed') {
-        audioContextRef.current.close();
-      }
     };
   }, [updatePhysics, getCharRadius]);
 
@@ -357,13 +458,14 @@ const KineticVisualizer = ({ onClose }) => {
 
   return (
     <motion.div
-      initial={{ opacity: 0 }}
+      initial={shouldReduceMotion ? false : { opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
+      transition={{ duration: shouldReduceMotion ? 0 : 0.2 }}
       className="visualizer-container fixed inset-0 z-[60]"
       ref={rootRef}
     >
-      <button onClick={onClose} className="absolute top-4 right-4 z-[200] p-2 text-white bg-black/50 rounded-full hover:bg-white hover:text-black transition-colors">
+      <button type="button" data-dialog-close aria-label="ポップコーンマシーンを閉じる" onClick={handleClose} className="absolute top-4 right-4 z-[200] p-2 text-white bg-black/50 rounded-full hover:bg-white hover:text-black transition-colors">
           <X size={32} />
       </button>
 

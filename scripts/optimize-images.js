@@ -1,68 +1,92 @@
-const sharp = require('sharp');
-const glob = require('glob');
-const fs = require('fs');
-const path = require('path');
+// @ts-check
+import { access, mkdir } from 'node:fs/promises';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { glob } from 'glob';
+import sharp from 'sharp';
 
-// --- 設定 ---
-// 元画像が保存されているディレクトリ
-const SOURCE_DIR = 'src/assets/images_original';
-// 最適化後の画像を出力するディレクトリ
-const OUTPUT_DIR = 'public/images';
-// 生成する画像の幅のリスト（ピクセル単位）
-const SIZES = [800, 1280];
-// 生成する画像の品質設定
-const WEBP_QUALITY = 80;
-const JPEG_QUALITY = 80;
-// ---
+import {
+  assertUniqueOutputTargets,
+  buildOutputPlan,
+  parseOptimizeOptions,
+} from './image-optimization.js';
 
-async function optimizeImages() {
-    console.log('🖼️  Starting image optimization...');
+async function optimizeImage(sourceFile, target, width, format) {
+  await mkdir(path.dirname(target), { recursive: true });
 
-    // 出力ディレクトリが存在しない場合は作成
-    if (!fs.existsSync(OUTPUT_DIR)) {
-        fs.mkdirSync(OUTPUT_DIR, { recursive: true });
-        console.log(`✅ Created output directory: ${OUTPUT_DIR}`);
-    }
+  const pipeline = sharp(sourceFile).resize({
+    width,
+    fit: 'inside',
+    withoutEnlargement: true,
+  });
 
-    // SOURCE_DIRから画像ファイル（jpg, jpeg, png）を検索
-    const files = glob.sync(`${SOURCE_DIR}/**/*.{jpg,jpeg,png}`);
+  if (format === 'webp') {
+    await pipeline.webp({ quality: 80 }).toFile(target);
+    return;
+  }
 
-    if (files.length === 0) {
-        console.log('⚠️ No images found to optimize.');
-        return;
-    }
+  if (format === 'png') {
+    await pipeline.png({ compressionLevel: 9 }).toFile(target);
+    return;
+  }
 
-    console.log(`Found ${files.length} images to process.`);
-
-    // 各ファイルに対して最適化処理を実行
-    for (const file of files) {
-        const basename = path.basename(file, path.extname(file));
-        const extension = path.extname(file).toLowerCase();
-        console.log(`\nProcessing: ${path.basename(file)}`);
-
-        const image = sharp(file);
-
-        for (const size of SIZES) {
-            const resizedImage = image.resize({ width: size });
-
-            // WebP版を保存
-            const webpPath = path.join(OUTPUT_DIR, `${basename}-${size}w.webp`);
-            await resizedImage.webp({ quality: WEBP_QUALITY }).toFile(webpPath);
-            console.log(`  -> Created ${path.basename(webpPath)}`);
-
-            // 元のフォーマット（JPEG/PNG）のリサイズ版を保存
-            if (extension === '.png') {
-                const pngPath = path.join(OUTPUT_DIR, `${basename}-${size}w.png`);
-                await resizedImage.png().toFile(pngPath);
-                console.log(`  -> Created ${path.basename(pngPath)}`);
-            } else {
-                const jpegPath = path.join(OUTPUT_DIR, `${basename}-${size}w.jpg`);
-                await resizedImage.jpeg({ quality: JPEG_QUALITY }).toFile(jpegPath);
-                console.log(`  -> Created ${path.basename(jpegPath)}`);
-            }
-        }
-    }
-    console.log('\n✨ Image optimization complete! ✨');
+  await pipeline.jpeg({ quality: 80, mozjpeg: true }).toFile(target);
 }
 
-optimizeImages().catch(console.error);
+export async function optimizeImages(argv = process.argv.slice(2), env = process.env) {
+  const options = parseOptimizeOptions(argv, env, process.cwd());
+
+  try {
+    await access(options.sourceDir);
+  } catch {
+    throw new Error(
+      `Input directory does not exist: ${options.sourceDir}. ` +
+        'Create it or pass --source <directory>.',
+    );
+  }
+
+  const sourceFiles = await glob('**/*.{jpg,jpeg,png}', {
+    absolute: true,
+    cwd: options.sourceDir,
+    nodir: true,
+  });
+
+  if (sourceFiles.length === 0) {
+    const message = `No source images found in ${options.sourceDir}.`;
+    if (options.requireInput) throw new Error(message);
+    console.log(message);
+    return { processed: 0, generated: 0 };
+  }
+
+  const plans = sourceFiles.sort().map((sourceFile) => ({
+    sourceFile,
+    outputs: buildOutputPlan(sourceFile, options),
+  }));
+  assertUniqueOutputTargets(plans);
+
+  let generated = 0;
+  for (const { sourceFile, outputs } of plans) {
+    console.log(`Optimizing ${path.relative(options.sourceDir, sourceFile)}...`);
+
+    for (const output of outputs) {
+      if (!options.dryRun) {
+        await optimizeImage(sourceFile, output.target, output.width, output.format);
+      }
+      generated += 1;
+      console.log(`  -> ${options.dryRun ? '[dry-run] ' : ''}${output.target}`);
+    }
+  }
+
+  return { processed: sourceFiles.length, generated };
+}
+
+const isDirectExecution = process.argv[1]
+  ? fileURLToPath(import.meta.url) === path.resolve(process.argv[1])
+  : false;
+
+if (isDirectExecution) {
+  optimizeImages().catch((error) => {
+    console.error(error instanceof Error ? error.message : error);
+    process.exitCode = 1;
+  });
+}

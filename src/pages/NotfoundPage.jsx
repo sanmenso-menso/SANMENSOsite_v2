@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Zap, Sparkles, HelpCircle, X } from 'lucide-react';
+import { ArrowLeft, Zap, HelpCircle, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useNumunumu } from '../NumunumuContext';
 import { THEME } from '../constants';
@@ -126,10 +126,8 @@ const NotFoundPage = () => {
     >
       {/* Font & Styles */}
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@700;800&display=swap');
-        
-        .font-syne { font-family: 'Syne', sans-serif; }
-        .font-mono { font-family: 'Space Mono', monospace; }
+        .font-syne { font-family: Impact, 'Arial Black', sans-serif; }
+        .font-mono { font-family: 'Courier New', Consolas, monospace; }
         
         .pattern-dot {
           background-image: radial-gradient(#000 1.5px, transparent 1.5px);
@@ -274,6 +272,8 @@ const NotFoundPage = () => {
             <div className="relative bg-[#00E0FF] border-4 border-black p-4 hard-shadow">
               {/* Close Button */}
               <button 
+                type="button"
+                aria-label="ヒントを閉じる"
                 onClick={() => setShowTips(false)}
                 className="absolute -top-3 -right-3 bg-white border-2 border-black w-8 h-8 flex items-center justify-center hover:bg-red-500 hover:text-white transition-colors hard-shadow-sm rounded-full"
               >

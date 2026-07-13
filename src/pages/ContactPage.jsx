@@ -17,7 +17,6 @@ const ContactPage = () => {
             <div className="max-w-5xl mx-auto px-4 md:px-6 py-16 md:py-24 flex flex-col items-center justify-center text-center overflow-hidden">
             <style>
                 {`
-                @import url('https://fonts.googleapis.com/css2?family=Recursive:slnt,wght,CASL,CRSV,MONO@-15..0,300..1000,0..1,0..1,0..1&display=swap');
                 @keyframes spin {
                     from { transform: rotate(0deg); }
                     to { transform: rotate(360deg); }
@@ -125,7 +124,7 @@ const SpinningCircle = ({ initialRadius, finalRadius, animationClass, text, dela
                     <span /* Animation target */
                         className="inline-block text-xl font-bold"
                         style={{
-                            fontFamily: "'Recursive', sans-serif",
+                            fontFamily: "'Arial Black', 'Yu Gothic', sans-serif",
                             animation: `wobble-and-slide 2.5s ease-in-out infinite`,
                             animationDelay: `${(text.length - 1 - i) * 0.06}s`,
                             transformOrigin: 'left center'

@@ -1,7 +1,7 @@
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import * as THREE from 'three';
-import { Play, Pause, SkipBack, SkipForward, Music, X } from 'lucide-react';
+import { Play, Pause, SkipBack, SkipForward, X } from 'lucide-react';
 import { SONGS } from '../constants';
 import { useNumunumu } from '../NumunumuContext';
 
@@ -21,6 +21,7 @@ const formatTime = (seconds) => {
 // -----------------------------------------------------------------------------
 
 const VectorSodaCan = ({ isPlaying, currentSong, audioAnalyser }) => {
+  const shouldReduceMotion = useReducedMotion();
   const mountRef = useRef(null);
   const sceneRef = useRef(null);
   const canRef = useRef(null);
@@ -28,6 +29,16 @@ const VectorSodaCan = ({ isPlaying, currentSong, audioAnalyser }) => {
   const bubblesRef = useRef(null);
   const frameIdRef = useRef(null);
   const dataArrayRef = useRef(new Uint8Array(0));
+  const isPlayingRef = useRef(isPlaying);
+  const analyserRef = useRef(audioAnalyser);
+
+  useEffect(() => {
+    isPlayingRef.current = isPlaying;
+    analyserRef.current = audioAnalyser;
+    if (audioAnalyser && dataArrayRef.current.length !== audioAnalyser.frequencyBinCount) {
+      dataArrayRef.current = new Uint8Array(audioAnalyser.frequencyBinCount);
+    }
+  }, [isPlaying, audioAnalyser]);
 
   // Helper to create outlines
   const createOutline = (geometry, color = 0x000000, thresholdAngle = 15) => {
@@ -40,10 +51,11 @@ const VectorSodaCan = ({ isPlaying, currentSong, audioAnalyser }) => {
   };
 
   useEffect(() => {
-    if (!mountRef.current) return;
+    const mountNode = mountRef.current;
+    if (!mountNode) return;
 
-    const width = mountRef.current.clientWidth;
-    const height = mountRef.current.clientHeight;
+    const width = mountNode.clientWidth;
+    const height = mountNode.clientHeight;
 
     // --- SETUP ---
     const scene = new THREE.Scene();
@@ -55,7 +67,7 @@ const VectorSodaCan = ({ isPlaying, currentSong, audioAnalyser }) => {
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    mountRef.current.appendChild(renderer.domElement);
+    mountNode.appendChild(renderer.domElement);
 
     sceneRef.current = { scene, camera, renderer };
 
@@ -193,8 +205,8 @@ const VectorSodaCan = ({ isPlaying, currentSong, audioAnalyser }) => {
     canGroup.add(bubbles);
     bubblesRef.current = bubbles;
 
-    if (audioAnalyser) {
-        dataArrayRef.current = new Uint8Array(audioAnalyser.frequencyBinCount);
+    if (analyserRef.current) {
+        dataArrayRef.current = new Uint8Array(analyserRef.current.frequencyBinCount);
     }
 
     // --- ANIMATION LOOP ---
@@ -204,8 +216,9 @@ const VectorSodaCan = ({ isPlaying, currentSong, audioAnalyser }) => {
 
       // Audio Data
       let kick = 0;
-      if (isPlaying && audioAnalyser) {
-          audioAnalyser.getByteFrequencyData(dataArrayRef.current);
+      const activeAnalyser = analyserRef.current;
+      if (isPlayingRef.current && activeAnalyser) {
+          activeAnalyser.getByteFrequencyData(dataArrayRef.current);
           let bassSum = 0;
           for (let i = 0; i < 10; i++) bassSum += dataArrayRef.current[i];
           kick = (bassSum / 10) / 255;
@@ -224,7 +237,7 @@ const VectorSodaCan = ({ isPlaying, currentSong, audioAnalyser }) => {
       
       for(let i = 0; i < particlesCount; i++) {
           let y = positions[i * 3 + 1];
-          y += speeds[i] * (isPlaying ? 2.0 : 1.0) + (effectiveKick * 0.1);
+          y += speeds[i] * (isPlayingRef.current ? 2.0 : 1.0) + (effectiveKick * 0.1);
           
           if (y > 1.2) {
               y = -1.4;
@@ -244,22 +257,62 @@ const VectorSodaCan = ({ isPlaying, currentSong, audioAnalyser }) => {
       canGroup.position.y = Math.sin(time * 1.5) * 0.1;
 
       renderer.render(scene, camera);
-      frameIdRef.current = requestAnimationFrame(animate);
+      frameIdRef.current = shouldReduceMotion ? null : requestAnimationFrame(animate);
     };
 
     animate();
 
+    const handleResize = () => {
+      if (!mountRef.current) return;
+      const nextWidth = mountRef.current.clientWidth;
+      const nextHeight = mountRef.current.clientHeight;
+      if (!nextWidth || !nextHeight) return;
+      camera.aspect = nextWidth / nextHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(nextWidth, nextHeight, false);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    };
+    const resizeObserver = typeof ResizeObserver !== 'undefined'
+      ? new ResizeObserver(handleResize)
+      : null;
+    resizeObserver?.observe(mountNode);
+    if (!resizeObserver) window.addEventListener('resize', handleResize);
+
     return () => {
       cancelAnimationFrame(frameIdRef.current);
-      if (mountRef.current && renderer.domElement) {
-        mountRef.current.removeChild(renderer.domElement);
+      resizeObserver?.disconnect();
+      if (!resizeObserver) window.removeEventListener('resize', handleResize);
+      if (mountNode.contains(renderer.domElement)) {
+        mountNode.removeChild(renderer.domElement);
       }
-      liquidGeo.dispose(); liquidMat.dispose();
-      shellGeo.dispose(); shellMat.dispose();
-      topRimGeo.dispose(); bottomRimGeo.dispose();
-      particlesGeo.dispose(); particlesMat.dispose();
+      const disposedGeometries = new Set();
+      const disposedMaterials = new Set();
+      scene.traverse(object => {
+        if (object.geometry && !disposedGeometries.has(object.geometry)) {
+          disposedGeometries.add(object.geometry);
+          object.geometry.dispose();
+        }
+        const materials = Array.isArray(object.material) ? object.material : [object.material];
+        materials.filter(Boolean).forEach(material => {
+          if (disposedMaterials.has(material)) return;
+          disposedMaterials.add(material);
+          Object.values(material).forEach(value => {
+            if (value?.isTexture) value.dispose();
+          });
+          material.dispose();
+        });
+      });
+      dotTexture.dispose();
+      renderer.renderLists.dispose();
+      renderer.dispose();
+      renderer.forceContextLoss();
+      scene.clear();
+      sceneRef.current = null;
+      canRef.current = null;
+      liquidRef.current = null;
+      bubblesRef.current = null;
     };
-  }, [currentSong, isPlaying, audioAnalyser]);
+  }, [currentSong, shouldReduceMotion]);
 
   return <div ref={mountRef} className="w-full h-full" />;
 };
@@ -270,6 +323,7 @@ const VectorSodaCan = ({ isPlaying, currentSong, audioAnalyser }) => {
 // -----------------------------------------------------------------------------
 
 const PopVectorPlayer = ({ onClose }) => {
+  const shouldReduceMotion = useReducedMotion();
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -280,6 +334,7 @@ const PopVectorPlayer = ({ onClose }) => {
   const audioRef = useRef(null);
   const audioContextRef = useRef(null);
   const analyserRef = useRef(null);
+  const mediaSourceRef = useRef(null);
   const [analyser, setAnalyser] = useState(null);
 
   const rawSong = SONGS[currentSongIndex];
@@ -290,55 +345,98 @@ const PopVectorPlayer = ({ onClose }) => {
       flavor: numuText
   } : rawSong, [isNumunumuMode, rawSong]);
 
-  const initAudio = () => {
+  const initAudio = async () => {
     if (!audioContextRef.current) {
         const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) throw new Error('Web Audio API is not supported');
         const ctx = new AudioContext();
-        audioContextRef.current = ctx;
-
-        const analyserNode = ctx.createAnalyser();
-        analyserNode.fftSize = 256;
-        analyserRef.current = analyserNode;
-
-        const source = ctx.createMediaElementSource(audioRef.current);
-        source.connect(analyserNode);
-        analyserNode.connect(ctx.destination);
-        setAnalyser(analyserNode);
-    } else if (audioContextRef.current.state === 'suspended') {
-        audioContextRef.current.resume();
+        try {
+          const analyserNode = ctx.createAnalyser();
+          analyserNode.fftSize = 256;
+          const source = ctx.createMediaElementSource(audioRef.current);
+          source.connect(analyserNode);
+          analyserNode.connect(ctx.destination);
+          audioContextRef.current = ctx;
+          analyserRef.current = analyserNode;
+          mediaSourceRef.current = source;
+          setAnalyser(analyserNode);
+        } catch (error) {
+          void ctx.close().catch(() => {});
+          throw error;
+        }
+    }
+    if (audioContextRef.current.state === 'suspended') {
+        await audioContextRef.current.resume();
+    }
+    if (audioContextRef.current.state === 'closed') {
+        throw new Error('AudioContext is closed');
     }
   };
 
-  const togglePlay = () => {
+  const togglePlay = async () => {
     if (!audioRef.current) return;
     if (isPlaying) {
         audioRef.current.pause();
+        setIsPlaying(false);
     } else {
-        initAudio();
-        audioRef.current.play().catch(e => console.error(e));
+        try {
+          await initAudio();
+          await audioRef.current.play();
+          setIsPlaying(true);
+        } catch (error) {
+          console.error('Audio playback failed:', error);
+          setIsPlaying(false);
+        }
     }
-    setIsPlaying(!isPlaying);
   };
 
   const handleNext = () => {
+    audioRef.current?.pause();
     setIsPlaying(false);
     setCurrentSongIndex((prev) => (prev + 1) % SONGS.length);
   };
 
   const handlePrev = () => {
+    audioRef.current?.pause();
     setIsPlaying(false);
     setCurrentSongIndex((prev) => (prev - 1 + SONGS.length) % SONGS.length);
   };
 
+  const handleClose = () => {
+    audioRef.current?.pause();
+    setIsPlaying(false);
+    onClose();
+  };
+
   useEffect(() => {
-    if (isPlaying && audioRef.current) audioRef.current.play();
+    setCurrentTime(0);
+    setDuration(0);
   }, [currentSongIndex]);
 
+  useEffect(() => () => {
+    const audio = audioRef.current;
+    if (audio) {
+      audio.pause();
+      audio.removeAttribute('src');
+      audio.load();
+    }
+    mediaSourceRef.current?.disconnect();
+    analyserRef.current?.disconnect();
+    mediaSourceRef.current = null;
+    analyserRef.current = null;
+    const audioContext = audioContextRef.current;
+    audioContextRef.current = null;
+    if (audioContext && audioContext.state !== 'closed') {
+      void audioContext.close().catch(() => {});
+    }
+  }, []);
+
   return (
-    <motion.div 
-        initial={{ opacity: 0 }}
+      <motion.div
+        initial={shouldReduceMotion ? false : { opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
+        transition={{ duration: shouldReduceMotion ? 0 : 0.2 }}
         className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/30 backdrop-blur-sm"
     >
       <audio 
@@ -346,16 +444,19 @@ const PopVectorPlayer = ({ onClose }) => {
           src={currentSong.src} 
           onTimeUpdate={() => setCurrentTime(audioRef.current.currentTime)}
           onLoadedMetadata={() => setDuration(audioRef.current.duration)}
+          onPlay={() => setIsPlaying(true)}
+          onPause={() => setIsPlaying(false)}
           onEnded={() => setIsPlaying(false)}
       />
 
       {/* MAIN CONTAINER: Brutalist / Neo-Pop Style */}
       <motion.div 
-        initial={{ scale: 0.9, opacity: 0 }}
+        initial={shouldReduceMotion ? false : { scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
+        transition={{ duration: shouldReduceMotion ? 0 : 0.2 }}
         className="relative z-10 w-full max-w-4xl bg-white border-4 border-black shadow-[8px_8px_0px_rgba(0,0,0,0.3)] md:shadow-[16px_16px_0px_rgba(0,0,0,0.3)] rounded-2xl md:rounded-3xl p-4 sm:p-6 md:p-12 flex flex-col md:flex-row gap-6 md:gap-12 items-center">
-        <button onClick={onClose} className="absolute top-2 right-2 z-20 p-2 text-black bg-white/50 rounded-full hover:bg-black hover:text-white transition-colors">
+        <button type="button" data-dialog-close aria-label="ドリンクバーを閉じる" onClick={handleClose} className="absolute top-2 right-2 z-20 p-2 text-black bg-white/50 rounded-full hover:bg-black hover:text-white transition-colors">
             <X size={24} />
         </button>
         
@@ -397,19 +498,27 @@ const PopVectorPlayer = ({ onClose }) => {
             </div>
 
             {/* PROGRESS BAR (Rectangular, Thick Borders) */}
-            <div 
-                className="w-full h-8 border-4 border-black bg-gray-100 relative cursor-pointer group"
-                onClick={(e) => {
-                    const rect = e.currentTarget.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const newTime = (x / rect.width) * duration;
-                    audioRef.current.currentTime = newTime;
-                    setCurrentTime(newTime);
-                }}
-            >
+            <div className="w-full h-8 border-4 border-black bg-gray-100 relative cursor-pointer group">
+                <input
+                    type="range"
+                    min="0"
+                    max={duration || 0}
+                    step="0.1"
+                    value={Math.min(currentTime, duration || 0)}
+                    disabled={!duration}
+                    aria-label="再生位置"
+                    aria-valuetext={`${formatTime(currentTime)} / ${formatTime(duration)}`}
+                    onChange={(event) => {
+                        const newTime = Number(event.target.value);
+                        if (!audioRef.current) return;
+                        audioRef.current.currentTime = newTime;
+                        setCurrentTime(newTime);
+                    }}
+                    className="absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0 disabled:cursor-not-allowed"
+                />
                 <div 
                     className="h-full bg-black relative transition-all duration-100 ease-linear"
-                    style={{ width: `${(currentTime / duration) * 100}%` }}
+                    style={{ width: `${duration > 0 ? Math.min(100, (currentTime / duration) * 100) : 0}%` }}
                 >
                     {/* Stripes in progress */}
                     <div className="absolute inset-0 w-full h-full" style={{ backgroundImage: 'linear-gradient(45deg, rgba(255,255,255,0.2) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.2) 75%, transparent 75%, transparent)', backgroundSize: '10px 10px' }}></div>
@@ -423,11 +532,12 @@ const PopVectorPlayer = ({ onClose }) => {
 
             {/* BUTTONS */}
             <div className="flex items-center justify-center md:justify-start gap-3 sm:gap-4 pt-2 sm:pt-4">
-                <button onClick={handlePrev} className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 border-4 border-black bg-white flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] sm:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all rounded-lg">
+                <button type="button" aria-label="前の曲" onClick={handlePrev} className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 border-4 border-black bg-white flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] sm:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all rounded-lg">
                     <SkipBack className="w-5 h-5 sm:w-6 sm:h-6" strokeWidth={3} />
                 </button>
 
                 <button 
+                    type="button"
                     onClick={togglePlay} 
                     className={`flex-1 h-12 sm:h-16 md:h-20 border-4 border-black ${currentSong.bgAccent} flex items-center justify-center gap-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] sm:shadow-[8px_8px_0px_0px_rgba(0,0,0,0.3)] hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] active:translate-x-[8px] active:translate-y-[8px] active:shadow-none transition-all rounded-xl text-black`}
                 >
@@ -435,7 +545,7 @@ const PopVectorPlayer = ({ onClose }) => {
                     <span className="font-black text-lg sm:text-xl md:text-2xl tracking-widest italic">{isPlaying ? "PAUSE" : "PLAY"}</span>
                 </button>
 
-                <button onClick={handleNext} className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 border-4 border-black bg-white flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] sm:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all rounded-lg">
+                <button type="button" aria-label="次の曲" onClick={handleNext} className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 border-4 border-black bg-white flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] sm:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all rounded-lg">
                     <SkipForward className="w-5 h-5 sm:w-6 sm:h-6" strokeWidth={3} />
                 </button>
             </div>

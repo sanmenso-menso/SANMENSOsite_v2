@@ -3,30 +3,52 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0",
+    "npm": ">=10.0.0"
+  },
   "scripts": {
     "dev": "vite",
+    "prebuild": "node scripts/clean-dist.js",
     "build": "vite build",
     "preview": "vite preview",
-    "optimize": "node scripts/optimize-images.js"
+    "optimize": "node scripts/optimize-images.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit -p jsconfig.json",
+    "format": "prettier --write package.json vite.config.js eslint.config.js prettier.config.js vitest.config.js jsconfig.json scripts/*.js tests/*.js README.md ASSETS.md LICENSE.md .github/workflows/*.yml",
+    "format:check": "prettier --check package.json vite.config.js eslint.config.js prettier.config.js vitest.config.js jsconfig.json scripts/*.js tests/*.js README.md ASSETS.md LICENSE.md .github/workflows/*.yml",
+    "check": "npm run format:check && npm run lint && npm run typecheck && npm test && npm run build"
   },
   "dependencies": {
-    "@react-three/drei": "^9.92.7",
-    "@react-three/fiber": "^8.15.16",
-    "@use-gesture/react": "^10.3.1",
-    "framer-motion": "^10.16.4",
+    "framer-motion": "^10.18.0",
     "lucide-react": "^0.292.0",
-    "quaternion": "^2.2.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-helmet-async": "^2.0.5",
-    "react-router-dom": "^7.11.0",
+    "react-router-dom": "^7.18.1",
     "three": "^0.158.0"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^4.2.0",
-    "autoprefixer": "^10.4.16",
-    "postcss": "^8.4.31",
-    "tailwindcss": "^3.3.5",
-    "vite": "^5.0.0"
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^20.19.0",
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
+    "@vitejs/plugin-react": "^6.0.3",
+    "autoprefixer": "^10.5.2",
+    "eslint": "^10.7.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.3",
+    "glob": "^13.0.6",
+    "globals": "^17.7.0",
+    "jsdom": "^29.1.1",
+    "postcss": "^8.5.19",
+    "prettier": "^3.9.5",
+    "sharp": "0.34.5",
+    "tailwindcss": "^3.4.19",
+    "typescript": "^7.0.2",
+    "vite": "^8.1.4",
+    "vitest": "^4.1.10"
   }
 }

@@ -1,9 +1,14 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { motion } from 'framer-motion';
+import { useReducedMotion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useNumunumu } from '../NumunumuContext';
 
+const CHAOS_BATCH_SIZE = 12;
+const MAX_CHAOS_ITEMS = 60;
+const MAX_WINDOWS = 12;
+
 const SecretPage = () => {
+    const shouldReduceMotion = useReducedMotion();
     const navigate = useNavigate();
     const { isNumunumuMode } = useNumunumu();
     const numuText = 'ぬむぬむとんかつ';
@@ -18,6 +23,7 @@ const SecretPage = () => {
     const reqRef = useRef(null);
     const itemsRef = useRef([]);
     const mousePosRef = useRef({ x: 0, y: 0 });
+    const dragCleanupRef = useRef(null);
 
     const ORACLE_MESSAGES = isNumunumuMode ? [numuText] : [
         "2030年を迎えるまでに何ができるのか考えるんだけど、毎月の生活費の見通しさえできない自分にとってはパピコを買う事しか出来なかった。", "わたくしといふ現象は、仮定された有機交流電燈のひとつの青い照明です（あらゆる透明な幽霊の複合体）風景やみんなといつしよにせはしくせはしく明滅しながら、いかにもたしかにともりつづける因果交流電燈のひとつの青い照明です（ひかりはたもち　その電燈は失はれ）", "Error 404: 何故見たのですか？",
@@ -30,7 +36,6 @@ const SecretPage = () => {
     const generateId = () => Math.random().toString(36).substr(2, 9);
 
     const generateRandomFace = () => {
-        const size = 200;
         const color = '#FF00FF'; 
         
         const eyeSize = Math.random() * 15 + 5;
@@ -89,8 +94,7 @@ const SecretPage = () => {
             }
         };
         
-        setWindows(prev => [...prev, newItem]);
-        itemsRef.current.push(newItem);
+        setWindows(prev => [...prev, newItem].slice(-MAX_WINDOWS));
     }, []);
 
     const consultOracle = () => {
@@ -107,9 +111,9 @@ const SecretPage = () => {
         }
     };
 
-    const injectChaos = () => {
+    const injectChaos = useCallback(() => {
         const newChaos = [];
-        for(let i=0; i<20; i++) {
+        for(let i=0; i<CHAOS_BATCH_SIZE; i++) {
             const id = generateId();
             const winW = window.innerWidth;
             const winH = window.innerHeight;
@@ -136,7 +140,6 @@ const SecretPage = () => {
                     }
                 };
                 newChaos.push(item);
-                itemsRef.current.push(item);
             } else {
                 const item = {
                     id,
@@ -156,11 +159,14 @@ const SecretPage = () => {
                     }
                 };
                 newChaos.push(item);
-                itemsRef.current.push(item);
             }
         }
-        setChaosItems(prev => [...prev, ...newChaos]);
-    };
+        setChaosItems(prev => [...prev, ...newChaos].slice(-MAX_CHAOS_ITEMS));
+    }, [isNumunumuMode]);
+
+    useEffect(() => {
+        itemsRef.current = [...windows, ...chaosItems];
+    }, [windows, chaosItems]);
 
     const randomizeColors = () => {
         const rc = () => '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
@@ -194,9 +200,12 @@ const SecretPage = () => {
         
         itemsRef.current = [];
         setWindows([]);
+        setChaosItems([]);
         
         works.forEach(w => createWindow(w.src || w.content, w.title, w.type));
         injectChaos();
+
+        if (shouldReduceMotion) return undefined;
 
         const REPULSION_RADIUS = 200;
         const REPULSION_STRENGTH = 15;
@@ -204,7 +213,12 @@ const SecretPage = () => {
         const DAMPING = 0.9;
         const FOLLOW_RADIUS = 400;
 
+        let disposed = false;
         const loop = () => {
+            if (disposed || document.hidden) {
+                reqRef.current = null;
+                return;
+            }
             timeRef.current += 0.02;
             const t = timeRef.current;
             const mouseX = mousePosRef.current.x;
@@ -266,50 +280,93 @@ const SecretPage = () => {
             });
             reqRef.current = requestAnimationFrame(loop);
         };
-        
-        reqRef.current = requestAnimationFrame(loop);
-        return () => cancelAnimationFrame(reqRef.current);
-    }, [createWindow, isNumunumuMode]);
+
+        const startLoop = () => {
+            if (!disposed && !document.hidden && reqRef.current === null) {
+                reqRef.current = requestAnimationFrame(loop);
+            }
+        };
+        const stopLoop = () => {
+            if (reqRef.current !== null) {
+                cancelAnimationFrame(reqRef.current);
+                reqRef.current = null;
+            }
+        };
+        const handleVisibilityChange = () => {
+            if (document.hidden) stopLoop();
+            else startLoop();
+        };
+
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        startLoop();
+        return () => {
+            disposed = true;
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+            stopLoop();
+        };
+    }, [createWindow, injectChaos, isNumunumuMode, shouldReduceMotion]);
 
     const handleDragStart = (e, id) => {
+        dragCleanupRef.current?.();
         const item = itemsRef.current.find(i => i.id === id);
         if(!item) return;
         if (e.type === 'mousedown') e.preventDefault();
 
         item.params.isDragging = true;
         const el = document.getElementById(id);
+        if (!el) {
+            item.params.isDragging = false;
+            return;
+        }
         maxZRef.current++;
         el.style.zIndex = maxZRef.current;
         el.style.borderColor = '#FFFFFF';
         el.style.boxShadow = '10px 10px 0px #FF00FF';
         
-        const clientX = e.clientX || e.touches?.[0].clientX;
-        const clientY = e.clientY || e.touches?.[0].clientY;
+        const clientX = e.clientX ?? e.touches?.[0]?.clientX;
+        const clientY = e.clientY ?? e.touches?.[0]?.clientY;
+        if (clientX === undefined || clientY === undefined) {
+            item.params.isDragging = false;
+            return;
+        }
         const offsetX = clientX - item.x;
         const offsetY = clientY - item.y;
 
         const handleMove = (ev) => {
-            const cx = ev.clientX || ev.touches?.[0].clientX;
-            const cy = ev.clientY || ev.touches?.[0].clientY;
+            const cx = ev.clientX ?? ev.touches?.[0]?.clientX;
+            const cy = ev.clientY ?? ev.touches?.[0]?.clientY;
+            if (cx === undefined || cy === undefined) return;
             item.x = cx - offsetX;
             item.y = cy - offsetY;
+            el.style.transform = `translate3d(${item.x}px, ${item.y}px, 0)`;
         };
 
-        const handleUp = () => {
-            item.params.isDragging = false;
-            el.style.borderColor = colors.border;
-            el.style.boxShadow = '5px 5px 0px rgba(255,255,255,0.2)';
+        const removeDragListeners = () => {
             window.removeEventListener('mousemove', handleMove);
             window.removeEventListener('mouseup', handleUp);
             window.removeEventListener('touchmove', handleMove);
             window.removeEventListener('touchend', handleUp);
+            window.removeEventListener('touchcancel', handleUp);
+            dragCleanupRef.current = null;
+        };
+        const handleUp = () => {
+            item.params.isDragging = false;
+            if (el.isConnected) {
+                el.style.borderColor = colors.border;
+                el.style.boxShadow = '5px 5px 0px rgba(255,255,255,0.2)';
+            }
+            removeDragListeners();
         };
 
         window.addEventListener('mousemove', handleMove);
         window.addEventListener('mouseup', handleUp);
         window.addEventListener('touchmove', handleMove, { passive: false });
         window.addEventListener('touchend', handleUp);
+        window.addEventListener('touchcancel', handleUp);
+        dragCleanupRef.current = removeDragListeners;
     };
+
+    useEffect(() => () => dragCleanupRef.current?.(), []);
 
     return (
         <div 
@@ -369,12 +426,20 @@ const SecretPage = () => {
                         style={{ 
                             borderColor: colors.border, 
                             top: 0, left: 0, 
+                            transform: shouldReduceMotion ? `translate3d(${win.x}px, ${win.y}px, 0)` : undefined,
                             transformStyle: 'preserve-3d' 
                         }}
                     >
                         <div className="flex justify-between items-center px-2 py-0.5 text-[10px] sm:text-xs text-black bg-white cursor-move font-bold font-mono">
                             <span>{win.title}</span>
-                            <span className="cursor-pointer hover:text-red-500" onClick={() => { setWindows(w => w.filter(x => x.id !== win.id)); itemsRef.current = itemsRef.current.filter(x => x.id !== win.id); }}>[x]</span>
+                            <button
+                                type="button"
+                                aria-label={`${win.title}を閉じる`}
+                                className="cursor-pointer hover:text-red-500"
+                                onClick={() => setWindows(w => w.filter(x => x.id !== win.id))}
+                            >
+                                [x]
+                            </button>
                         </div>
                         <div className="p-2 flex flex-col gap-2 bg-black">
                             <fieldset className="border p-2 m-0" style={{ borderColor: colors.text }}>
@@ -409,6 +474,7 @@ const SecretPage = () => {
                             color: item.color || '#00FF00', 
                             fontSize: item.fontSize, 
                             top: 0, left: 0,
+                            transform: shouldReduceMotion ? `translate3d(${item.x}px, ${item.y}px, 0)` : undefined,
                             width: item.width 
                         }}
                     >

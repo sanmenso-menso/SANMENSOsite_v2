@@ -1,0 +1,16 @@
+/works       /index.html  200
+/works/      /index.html  200
+/links       /index.html  200
+/links/      /index.html  200
+/contact     /index.html  200
+/contact/    /index.html  200
+/secret      /index.html  200
+/secret/     /index.html  200
+/contents    /index.html  200
+/contents/   /index.html  200
+/contents/pop-vector-player       /index.html  200
+/contents/pop-vector-player/      /index.html  200
+/contents/kinetic-visualizer      /index.html  200
+/contents/kinetic-visualizer/     /index.html  200
+/contents/*                       /404.html    404
+/*           /404.html    404
