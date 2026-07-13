@@ -8,6 +8,7 @@ import AppErrorBoundary from './components/AppErrorBoundary';
 import Header from './components/Header';
 import NavigationDock from './components/NavigationDock';
 import { reportClientError } from './utils/reportClientError';
+import { CONTENT_TITLES, getPageTitle, isKnownPath, normalizePathname } from './utils/routes';
 
 const MagicCube = lazy(() => import('./components/MagicCube'));
 const WorksPage = lazy(() => import('./pages/WorksPage'));
@@ -16,31 +17,6 @@ const ContactPage = lazy(() => import('./pages/ContactPage'));
 const ContentsPage = lazy(() => import('./pages/ContentsPage'));
 const SecretPage = lazy(() => import('./pages/SecretPage'));
 const NotFoundPage = lazy(() => import('./pages/NotfoundPage'));
-
-const CONTENT_TITLES = {
-    'pop-vector-player': 'デモトラック＠ドリンクバー',
-    'kinetic-visualizer': 'デモトラック＠ポップスコーンマシーン',
-};
-
-const PAGE_TITLES = {
-    '/': 'ホーム',
-    '/works': '作品',
-    '/contents': 'インタラクティブコンテンツ',
-    '/links': 'リンク',
-    '/contact': 'お問い合わせ',
-    '/secret': 'SECRET',
-};
-
-const normalizePathname = (pathname) => {
-    if (pathname === '/') return '/';
-    return pathname.replace(/\/+$/, '') || '/';
-};
-
-const isKnownPath = (pathname) => {
-    if (PAGE_TITLES[pathname]) return true;
-    const contentMatch = pathname.match(/^\/contents\/([^/]+)$/);
-    return Boolean(contentMatch && CONTENT_TITLES[contentMatch[1]]);
-};
 
 const LoadingFallback = () => (
     <div className="min-h-screen flex items-center justify-center px-4" role="status" aria-live="polite">
@@ -62,12 +38,7 @@ const PageWrapper = ({ children }) => (
 );
 
 const RouteMetadata = ({ pathname, isNotFound }) => {
-    const contentMatch = pathname.match(/^\/contents\/([^/]+)$/);
-    const pageTitle = isNotFound
-        ? 'ページが見つかりません'
-        : contentMatch
-            ? CONTENT_TITLES[contentMatch[1]]
-            : PAGE_TITLES[pathname];
+    const pageTitle = getPageTitle(pathname, isNotFound);
     const fullTitle = pageTitle ? `${pageTitle} | ${SITE_META.title}` : SITE_META.title;
 
     return (
