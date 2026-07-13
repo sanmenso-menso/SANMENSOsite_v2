@@ -192,7 +192,7 @@ function AppContent() {
                                         className="absolute bottom-28 sm:bottom-32 pointer-events-none z-50"
                                     >
                                         <p className="font-serif text-xs sm:text-sm md:text-lg bg-black text-[#FFD700] px-3 py-1 sm:px-4 md:px-6 md:py-2 transform -rotate-2 border-2 border-white shadow-[4px_4px_0px_rgba(0,0,0,0.3)] whitespace-nowrap">
-                                            {isNumunumuMode ? 'ぬむぬむとんかつ' : 'ドラッグして CUBE を回せ。Tabキーでも各面を選べます'}
+                                            {isNumunumuMode ? 'ぬむぬむとんかつ' : 'ドラッグして CUBE を回せ。'}
                                         </p>
                                     </motion.div>
                                 </motion.main>
