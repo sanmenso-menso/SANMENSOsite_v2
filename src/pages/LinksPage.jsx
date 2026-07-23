@@ -6,8 +6,8 @@ import { useNumunumu } from '../NumunumuContext';
 import ImageWithFallback from '../components/ImageWithFallback';
 import { ExternalLink } from 'lucide-react';
 
-const MOBILE_MAX_HP = 12000;
-const DESKTOP_MAX_HP = 45000;
+const MOBILE_MAX_HP = 80000;
+const DESKTOP_MAX_HP = 520000;
 const SCRATCH_DAMAGE = 150;
 
 const LinksPage = () => {

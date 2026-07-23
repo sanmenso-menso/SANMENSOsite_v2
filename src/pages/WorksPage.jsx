@@ -10,7 +10,6 @@ const WorksPage = ({ filter = 'all', onFilterChange = (_newFilter) => {} }) => {
     const { isNumunumuMode } = useNumunumu();
     const shouldReduceMotion = useReducedMotion();
     const numuText = 'ぬむぬむとんかつ';
-
     const [selectedWork, setSelectedWork] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const ITEMS_PER_PAGE = 9; // 1ページあたりの表示件数
@@ -106,7 +105,7 @@ const WorksPage = ({ filter = 'all', onFilterChange = (_newFilter) => {} }) => {
                 <div>
                     <h2 className="text-5xl sm:text-6xl md:text-8xl font-black tracking-tighter leading-none mix-blend-hard-light text-[#FFD700] drop-shadow-[4px_4px_0px_rgba(0,0,0,0.3)] font-sans" style={{ WebkitTextStroke: '2px black' }}>{isNumunumuMode ? numuText : 'WORKS'}</h2>
                     <p className="font-mono font-bold text-black text-base md:text-lg tracking-wide mt-2">
-                        <span className="bg-black text-[#FFD700] px-2 py-1">{isNumunumuMode ? numuText : 'SANMENso`s ARCHIVE'}</span> {isNumunumuMode ? '' : '2022 - 2026'}
+                        <span className="bg-black text-[#FFD700] px-2 py-1">{isNumunumuMode ? numuText : 'SANMENso`s ARCHIVE'}</span> {isNumunumuMode ? '' : ''}
                     </p>
                 </div>
                 <div className="flex gap-2 flex-wrap justify-start md:justify-end">
