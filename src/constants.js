@@ -756,6 +756,39 @@ export const WORKS_DATA = [
         credits: ["DJ:シナガワ,mayo,CRすぴか.zip,temura,三面相,sentimental hardware,SH2MI2,YONEDA,sanmal,N4G1t,linterconnect", "VJ:sachia,R!QKN"],
         image: "/images/smile.png",
     },
+   {
+        id: 59,
+        title: "VIRAL with In_da_DnB",
+        type: "entame",
+        year: "2026",
+        role: "DJ",
+        desc: "イベントにDJとして出演しました",
+        detailText: "ドラムンベースを中心としたイベント『VIRAL with In_da_DnB』にDJとして出演しました。\n\nドラムンベースを中心に、エレクトロやハードコアなどのジャンルを織り交ぜたDJを行いました。",
+        credits: [
+            "DJ:Appy,d.j.ァネイロ,Gyr0,monof,Mused,Stellar,おおつく,てらいと,三面相,風祭瑛紀,あたたかい水族館,イヌザキ,エハラミオリ,奏,長谷川迷子,前髪ぱっつん少年,Fuwatoro,Plan2+,9W3R7Y",
+            "VJ:Aya-num,BigBaBy",
+        ],
+        color: "#4ECDC4",
+        url: "https://x.com/VIRAL_ZEROTOKYO/status/2054834174994038907",
+        image: "/images/viral-in-da-dnb-1280w.webp",
+    },
+    {
+        id: 60,
+        title: "Flow vol.11",
+        type: "entame",
+        year: "2026",
+        role: "DJ",
+        desc: "ライブパフォーマンスを行いました",
+        detailText: "Flow vol.11でライブパフォーマンスを行いました。\n\nギターとベースシンセ、VJと協力して様々なサウンドを織り交ぜてトラックを制作し、本番ではドラムパッドを使用しました。",
+        credits: [
+            "Act:li phanes,IRIGINO × SELDO,Pergraphics,タチマナユ・KAFKA,kusumu + 三面相 + MIDy + 四度寝",
+            "Flyer design:ゆゆ煙る",
+            "Organizer:Fellow",
+        ],
+        color: "#4ECDC4",
+        url: "https://x.com/flow_fellow/status/2058149190602244138",
+        image: "/images/flow-vol11-800w.webp",
+    },
 ];
 
 export const EXCAVATION_LINKS = [
