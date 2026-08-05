@@ -25,7 +25,7 @@ export const WORKS_DATA = [
         credits: ["Composition:三面相", "Illustration:らふぁえるsk"],
         color: "#FF6B6B" ,
         url: "https://youtu.be/TYKBm1GsSmA",
-        image: "/images/butteerflyeffectCity.jpg",
+        image: "/images/butteerflyeffectCity.webp",
     },
     { 
         id: 2, 
@@ -38,7 +38,7 @@ export const WORKS_DATA = [
         credits: ["Composition:三面相", "Illustration:櫛米"],
         color: "#FF6B6B" ,
         url: "https://youtu.be/yupa62YiQFg",
-        image: "/images/nightamore.jpg",
+        image: "/images/nightamore.webp",
     },
     { 
         id: 3, 
@@ -51,7 +51,7 @@ export const WORKS_DATA = [
         credits: ["Composition:三面相"],
         color: "#FF6B6B" ,
         url: "https://youtu.be/UOYN5jK454U",
-        image: "/images/ubugoe.jpg",
+        image: "/images/ubugoe.webp",
     },
     { 
         id: 4, 
@@ -64,7 +64,7 @@ export const WORKS_DATA = [
         credits: ["Composition:三面相", "Movie:月華"],
         color: "#FF6B6B",
         url:"https://youtu.be/d4iwXL_yZNc",
-        image: "/images/rantyou.jpg",
+        image: "/images/rantyou.webp",
     },
     { 
         id: 5, 
@@ -77,7 +77,7 @@ export const WORKS_DATA = [
         credits: ["Composition:三面相", "VocalEdit:風祭瑛紀", "GuiterAssistant:花嶋"],
         color: "#FF6B6B",
         url:"https://youtu.be/-tQC2JsnOwc",
-        image: "/images/denwasen3banhome.jpg",
+        image: "/images/denwasen3banhome.webp",
     },
     { 
         id: 6, 
@@ -90,7 +90,7 @@ export const WORKS_DATA = [
         credits: ["Composition:三面相", "Illustration:黒岩秀太!!"],
         color: "#FF6B6B",
         url:"https://www.nicovideo.jp/watch/sm41743994",
-        image: "/images/novocaloidmoney.jpg",
+        image: "/images/novocaloidmoney.webp",
     },
     { 
         id: 7, 
@@ -103,7 +103,7 @@ export const WORKS_DATA = [
         credits: ["Composition:三面相", "Illustration,Movie:櫛米","Vocal:Fusb"],
         color: "#FF6B6B",
         url:"https://youtu.be/KSlT4hv3QKw",
-        image: "/images/babel.jpg",
+        image: "/images/babel.webp",
     },
     { 
         id: 8, 
@@ -116,7 +116,7 @@ export const WORKS_DATA = [
         credits: ["Composition:三面相"],
         color: "#FF6B6B",
         url:"https://youtu.be/Nu3TOOYh6-4",
-        image: "/images/reborusion.jpg",
+        image: "/images/reborusion.webp",
     },
     { 
         id: 9, 
@@ -129,7 +129,7 @@ export const WORKS_DATA = [
         credits: ["Remixe:	Aa, cottown, lyqjw, mikage, nahi, Taguchi Hideo, だいす, レラー, 荒井　暁, 三面相, 澄石亜卵, 長谷川迷子, 夢見川るい, 鼬炉ヒソ", "Illustration: 桶猫, 残響室, 森永謹製, 米村ソウマ"],
         color: "#FF6B6B",
         url:"https://www.nicovideo.jp/watch/sm42576695",
-        image: "/images/dancerobotRemix.jpg",
+        image: "/images/dancerobotRemix.webp",
     },
     { 
         id: 10, 
@@ -142,7 +142,7 @@ export const WORKS_DATA = [
         credits: ["Composition:三面相"],
         color: "#FF6B6B",
         url:"https://youtu.be/n_s7wbispd4",
-        image: "/images/endrolebox.jpg",
+        image: "/images/endrolebox.webp",
     },
     { 
         id: 11, 
@@ -155,7 +155,7 @@ export const WORKS_DATA = [
         credits: ["Composition:三面相", "Movie:三面相"],
         color: "#FF6B6B",
         url:"https://youtu.be/egZJaL9Lq3I",
-        image: "/images/kittodarekabokura.jpg",
+        image: "/images/kittodarekabokura.webp",
     },
     { 
         id: 12, 
@@ -168,7 +168,7 @@ export const WORKS_DATA = [
         credits: ["Composition:稲むり", "Arrangement:三面相", "Illustration:uotak", "Movie:木葉はづく"],
         color: "#FF6B6B",
         url:"https://www.nicovideo.jp/watch/sm43683720",
-        image: "/images/yoku.jpg",
+        image: "/images/yoku.webp",
     },
     { 
         id: 13, 
@@ -181,7 +181,7 @@ export const WORKS_DATA = [
         credits: ["Composition:稲むり", "Arrangement:三面相", "Illustration:並木道", "Movie:稲むり"],
         color: "#FF6B6B",
         url:"https://youtu.be/15z0vwS77u0",
-        image: "/images/soretoonaji.jpg",
+        image: "/images/soretoonaji.webp",
     },
     { 
         id: 14, 
@@ -194,7 +194,7 @@ export const WORKS_DATA = [
         credits: ["DJ:三面相,芥田レンリ,Right,ざき,Uyamichi,Uyamichi", "VJ:扉,Zect", "Staff:アライグマ,観測者48", "Organizer:風祭瑛紀"],
         color: "#4ECDC4",
         url:"https://x.com/enantiomer_eve/status/1790714101284676068",
-        image: "/images/kyoudouiseitaiVol1.jpg",
+        image: "/images/kyoudouiseitaiVol1.webp",
     },
     { 
         id: 15, 
@@ -207,7 +207,7 @@ export const WORKS_DATA = [
         credits: ["Composition:ijimi,trekk,ハヤトムラカミ,10-U,crash909☆ 啊痾誒都哇嗚哇咦,糸魚川 鼎,M9RVEN,Legend of 阪口,Eyhz & Violet Delta,dj patriot,Kaichirock,Ide_Co,LieDeeDonk,ドンツカチェィッフォー,WⱯꓥƎ,ゴローニャ雨宮,三面相","Special Thanks:村上苺","Illustration:HUKRiTAX","Design:Occupied Territories","Organizer:Lost Frog Productions"],
         color: "#FF6B6B",
         url:"https://lostfrog.bandcamp.com/album/super-murakami-best-hits",
-        image: "/images/murakamibest.jpg",
+        image: "/images/murakamibest.webp",
     },
     { 
         id: 16, 
@@ -220,7 +220,7 @@ export const WORKS_DATA = [
         credits: ["Composition:三面相,夜丹れにや", "Lyric:uotak,三面相,夜丹れにや", "Illustration:ももま", "Logo:ALNiCo", "Movie:さかもとさかし", "Shooting processing:Hatty.G", "Narration:三面相,空穂れい", "Planning and concept:uotak"],
         color: "#FF6B6B",
         url:"https://www.nicovideo.jp/watch/sm44021435",
-        image: "/images/soumenbu.jpg",
+        image: "/images/soumenbu.webp",
     },
     { 
         id: 17, 
@@ -233,7 +233,7 @@ export const WORKS_DATA = [
         credits: ["DJ:TMPら,三面相,d.j.ァネイロ,Molluscholar", "VJ:SELDO,木葉はづく,HB", "Flyer:艾 / moxa,SEDO Sounder", "Organizer:ゆーいぢ"],
         color: "#4ECDC4",
         url:"https://www.nicovideo.jp/watch/sm44153767",
-        image: "/images/zatuboka.jpg",
+        image: "/images/zatuboka.webp",
     },
     { 
         id: 18, 
@@ -246,7 +246,7 @@ export const WORKS_DATA = [
         credits: ["Performers(Remix):原口沙輔,おし怪,フロクロ,三面相,長谷川迷子", "Performers(Movie):木葉はづく","Performers:いよわ"],
         color: "#4ECDC4",
         url:"https://x.com/GALLERIA_GM/status/1839878767990452463",
-        image: "/images/gareriremixCds.jpg",
+        image: "/images/gareriremixCds.webp",
     },
     { 
         id: 19, 
@@ -259,7 +259,7 @@ export const WORKS_DATA = [
         credits: ["DJ,VJ,ライブペイント:出演者が多いため省略"],
         color: "#4ECDC4",
         url:"https://x.com/DJVocaSpot/status/1840387427934024051",
-        image: "/images/DJ24.jpg",
+        image: "/images/DJ24.webp",
     },
     { 
         id: 20, 
@@ -272,7 +272,7 @@ export const WORKS_DATA = [
         credits: ["Composition:新日本開発機構,Mi7s3,オヨイダキビス,MIDy,三面相,Mealerrand,四度寝,おし怪,Wa!ter,あずきねこp,微円,異星鐘,橘しとら,二錠,是", "Mastering:SOZEN OTSUBO", "Artwork:稲むり", "Movie,Logo design:木葉はづく"],
         color: "#FF6B6B",
         url:"https://www.nicovideo.jp/watch/sm44518881",
-        image: "/images/seki.jpg",
+        image: "/images/seki.webp",
     },
     { 
         id: 21, 
@@ -285,7 +285,7 @@ export const WORKS_DATA = [
         credits: ["Composition:三面相", "Movie:さかもとさかし"],
         color: "#FF6B6B",
         url:"https://youtu.be/lLUPKj_wgyM",
-        image: "/images/akogareboot.png",
+        image: "/images/akogareboot.webp",
     },
     { 
         id: 22, 
@@ -298,7 +298,7 @@ export const WORKS_DATA = [
         credits: ["Remixer:送電球,mucell,色元,島村卯月,lyqjw,ひるりゅー,ねも三ヶ原小造山武夫,mikage,三面相,とるかや,コットタウン,漣音,Fanu,微円,かにパ,トキノヤッマ,フロクロ,夜丹れにや,火ノｒ祈,夢見川るい", "Movie:コソアド,空穂れい,澄石亜卵,空島ばんし,ウサクラジュワコ,シキ式,ぬかくぎ,虚無沢まるり", "Mix,Mastering:夢見川るい"],
         color: "#FF6B6B",
         url:"https://www.nicovideo.jp/watch/sm44562404",
-        image: "/images/otyameRemix.jpg",
+        image: "/images/otyameRemix.webp",
     },
     { 
         id: 23, 
@@ -311,7 +311,7 @@ export const WORKS_DATA = [
         credits: ["Remixer:sober bear,Saku,higma,なみぐる,Namitape,すずめのめ,factal,三面相,マサラダ,長谷川迷子,MIDy,原口沙輔", "Movie:melonade,木葉はづく,HIRO,おし怪,Bivi,mintoll,マサラダ", "Animation:えいりな刃物", "Sound textuer:factal", "Jacket,Thumbnail:木葉はづく", "Mix,Mastering:原口沙輔"],
         color: "#FF6B6B",
         url:"https://youtu.be/Y_MLRgQZRig",
-        image: "/images/HelloJacket.jpg",
+        image: "/images/HelloJacket.webp",
     },
     { 
         id: 24, 
@@ -324,7 +324,7 @@ export const WORKS_DATA = [
         credits: ["Remixe:d.j.ァネイロ,三面相", "Logo:三面相", "Movie:LitMus"],
         color: "#FF6B6B",
         url:"https://www.nicovideo.jp/watch/sm44677545",
-        image: "/images/igakuremix.jpg",
+        image: "/images/igakuremix.webp",
     },
     { 
         id: 25, 
@@ -337,7 +337,7 @@ export const WORKS_DATA = [
         credits: ["Composition:Saku,原口沙輔,MIDy,すずめのめ,三面相,factal,ァネイロ,長谷川迷子,norimaro", "Jacket illust:握り拳"],
         color: "#FF6B6B",
         url:"https://booth.pm/ja/items/6986076",
-        image: "/images/litetoflac.jpg",
+        image: "/images/litetoflac.webp",
     },
     { 
         id: 26, 
@@ -350,7 +350,7 @@ export const WORKS_DATA = [
         credits: ["DJ:音無あふ,とうか,梔,https,fluspicious,M4ss0,shi_ra,つくにだ,猫咲さくら,緋築,るつ,Right,星花ゆめ,はくるり", "VJ:電池芋,Zect,Hakururi"],
         color: "#4ECDC4",
         url:"https://x.com/Try04_/status/1896162495460757727",
-        image: "/images/try3.jpg",
+        image: "/images/try3.webp",
     },
     { 
         id: 27, 
@@ -363,7 +363,7 @@ export const WORKS_DATA = [
         credits: ["Composition:かかこ,kuma,三面相,厚寝巻"],
         color: "#FFD700",
         url:"https://x.com/kakothk/status/1902477682149093578",
-        image: "/images/soundtrap.png",
+        image: "/images/soundtrap.webp",
     },
     { 
         id: 28, 
@@ -376,7 +376,7 @@ export const WORKS_DATA = [
         credits: ["Radio personality:森田康太郎(三面相),井上暖之"],
         color: "#FFD700",
         url:"https://creators.spotify.com/pod/profile/gbo3oabestg/episodes/0-e30b26n",
-        image: "/images/kuriraji.png",
+        image: "/images/kuriraji.webp",
     },
     { 
         id: 29, 
@@ -389,7 +389,7 @@ export const WORKS_DATA = [
         credits: ["Composition:風祭瑛紀×三面相,Gojikan,神無月ルミカ,不響和音,Stellar,Gyr0,風祭瑛紀,トキノヤッマ", "Jacket art:トキノヤッマ"],
         color: "#FF6B6B",
         url:"https://www.nicovideo.jp/watch/sm44883627",
-        image: "/images/おいかける.png",
+        image: "/images/おいかける.webp",
     },
     { 
         id: 30, 
@@ -402,7 +402,7 @@ export const WORKS_DATA = [
         credits: ["Composition,design:三面相", "STEM Mastering:Rei (studio JEN)"],
         color: "#FF6B6B",
         url:"https://www.nicovideo.jp/watch/sm44904337",
-        image: "/images/おはよう.png",
+        image: "/images/おはよう.webp",
     },
     { 
         id: 31, 
@@ -415,7 +415,7 @@ export const WORKS_DATA = [
         credits: ["Composition,Jacket design:三面相"],
         color: "#FF6B6B",
         url:"https://sanmenso.bandcamp.com/track/splash-rush",
-        image: "/images/splashrush.png",
+        image: "/images/splashrush.webp",
     },
     { 
         id: 32, 
@@ -428,7 +428,7 @@ export const WORKS_DATA = [
         credits: ["Composition,Jacket design:三面相"],
         color: "#FFD700",
         url:"https://soundcloud.com/lb3uw4iphdxy/css_cutsolidsolar-panel",
-        image: "/images/CSSfun.png",
+        image: "/images/CSSfun.webp",
     },
     { 
         id: 33, 
@@ -441,7 +441,7 @@ export const WORKS_DATA = [
         credits: ["Composition,Movie:三面相", "Filming assistant:蜘蛛海月", "STEM Mastering:Rei (studio JEN)"],
         color: "#FF6B6B",
         url:"https://www.nicovideo.jp/watch/sm45058224",
-        image: "/images/Coffeebreak.png",
+        image: "/images/Coffeebreak.webp",
     },
     { 
         id: 34, 
@@ -454,7 +454,7 @@ export const WORKS_DATA = [
         credits: ["DJ:三面相,appy,有部遼,ИASU,ざき,right,風祭瑛紀", "VJ:zact,Hakururi", "Organizer:風祭瑛紀"],
         color: "#4ECDC4",
         url:"https://x.com/enantiomer_eve/status/1911381350579339547",
-        image: "/images/kyoudouiseitaivol2.jpg",
+        image: "/images/kyoudouiseitaivol2.webp",
     },
     { 
         id: 35, 
@@ -467,7 +467,7 @@ export const WORKS_DATA = [
         credits: ["DJ:大人数により省略"],
         color: "#FFD700",
         url:"https://x.com/CDs_inter/status/1936250376598307004",
-        image: "/images/DJs1.jpg",
+        image: "/images/DJs1.webp",
     },
     { 
         id: 36, 
@@ -480,7 +480,7 @@ export const WORKS_DATA = [
         credits: ["DJ:d.j.ァネイロ,三面相,𝗡𝟰𝗚𝟭𝘁,んべべ商会,電池芋,", "VJ:らぎ汰,しろのん", "Staff:白鮭,おおつく", "Flyer illust:たれっさー", "Flyer design:白鮭"],
         color: "#4ECDC4",
         url:"https://x.com/Quartz_Tea/status/1937118483202162899",
-        image: "/images/Lololo3.jpg",
+        image: "/images/Lololo3.webp",
     },
     { 
         id: 37, 
@@ -493,7 +493,7 @@ export const WORKS_DATA = [
         credits: ["Composition:三面相"],
         color: "#FF6B6B",
         url:"https://www.nicovideo.jp/watch/sm45161376",
-        image: "/images/きえちゃう.jpg",
+        image: "/images/きえちゃう.webp",
     },
     { 
         id: 38, 
@@ -505,7 +505,7 @@ export const WORKS_DATA = [
         detailText: "自分の制作に使うロゴをデザインしました。\nアイコンと三つの△、sとoから成り立つポップなロゴです。",
         credits: ["Logo design:三面相"],
         color: "#4ECDC4",
-        image: "/images/SANMENlogoworks.jpg",
+        image: "/images/SANMENlogoworks.webp",
     },
     { 
         id: 39, 
@@ -518,7 +518,7 @@ export const WORKS_DATA = [
         credits: ["Composition:三面相, Aa, 米教タルタル, 夜丹れにや, ETE, おおつく, .+, MIDy, Mealerrand, 安藤なれど, おし怪", "Mastering:駱駝法師", "Illustration:のぞみ"],
         color: "#FF6B6B",
         url:"https://x.com/Quartz_Tea/status/1945453379670720820",
-        image: "/images/amidakuji.jpg",
+        image: "/images/amidakuji.webp",
     },
     { 
         id: 40, 
@@ -531,7 +531,7 @@ export const WORKS_DATA = [
         credits: ["Remixer:三面相"],
         color: "#FF6B6B",
         url:"https://soundcloud.com/sanmenso/sanmenso-remix",
-        image: "/images/トマト　SAMUNE.jpg",
+        image: "/images/トマト　SAMUNE.webp",
     },
     { 
         id: 41, 
@@ -544,7 +544,7 @@ export const WORKS_DATA = [
         credits: ["Performer:CDs crew"],
         color: "#4ECDC4",
         url:"https://zerotokyo.zaiko.io/e/gold-disc-0816",
-        image: "/images/GoldDiscCds.jpg",
+        image: "/images/GoldDiscCds.webp",
     },
     { 
         id: 42, 
@@ -557,7 +557,7 @@ export const WORKS_DATA = [
         credits: ["Performer:CDs"],
         color: "#4ECDC4",
         url:"https://youtu.be/ci4NOQnobyc",
-        image: "/images/CDsYMW2025.jpg",
+        image: "/images/CDsYMW2025.webp",
     },
     { 
         id: 43, 
@@ -570,7 +570,7 @@ export const WORKS_DATA = [
         credits: ["DJ:おおつく,d.j.ァネイロ,三面相,namitape,POPFACES", "VJ:あたたかい水族館,.+"],
         color: "#4ECDC4",
         url:"https://x.com/Quartz_Tea/status/1963542562209218923",
-        image: "/images/basschill.jpg",
+        image: "/images/basschill.webp",
     },
     { 
         id: 44, 
@@ -583,7 +583,7 @@ export const WORKS_DATA = [
         credits: ["DJ:三面相,稲むり,長谷川迷子,Steller,おおつく,空穂れい,ゆーいぢ,TMPら", "VJ:Philtz（オオウチアラタ, uotak）,melonade,培養オム,交互,のぞみ", "Organizer:TMPら"],
         color: "#4ECDC4",
         url:"https://youtu.be/SyGYHXMDgSw",
-        image: "/images/Tunagari.jpg",
+        image: "/images/Tunagari.webp",
     },
     { 
         id: 45, 
@@ -595,7 +595,7 @@ export const WORKS_DATA = [
         detailText: "イベント『合成音声のうたげ東名阪ツアー「FOR UNREAL TO REAL」』の大阪公演にDJとして出演しました。\n片方ギタリスト、片方サウンドデザイナーという事でイントロクイズやギターカバーをするなどの演出を行いました。",
         credits: ["DJ:GESO,MIDy,simotaka B2B U/会長,r-906,sober bear,おおつく,三面相 B2B 四度寝 B2B おし怪,ニシ B2B たかっきー,駱駝法師", "VJ:Mano.hsmt,SELDO", "Organizer:駱駝法師"],
         color: "#4ECDC4",
-        image: "/images/UtageOsaka.png",
+        image: "/images/UtageOsaka.webp",
     },
     { 
         id: 46, 
@@ -607,7 +607,7 @@ export const WORKS_DATA = [
         detailText: "イベント『VIRAL』にDJとして出演しました。長谷川迷子さんとのB2Bです。",
         credits: ["DJ,VJ:出演者多数のため省略"],
         color: "#4ECDC4",
-        image: "/images/VIRAL.jpg",
+        image: "/images/VIRAL.webp",
     },
     { 
         id: 47, 
@@ -620,7 +620,7 @@ export const WORKS_DATA = [
         credits: ["Composition:三面相, Movie:【匿名】"],
         color: "#FFD700",
         url:"https://x.com/biomu_/status/1979857862479552865",
-        image: "/images/biomu.png",
+        image: "/images/biomu.webp",
     },
     { 
         id: 48, 
@@ -633,7 +633,7 @@ export const WORKS_DATA = [
         credits: ["Act:三面相,零進法,d.j.ァネイロ"],
         color: "#FFD700",
         url:"https://www.youtube.com/live/fDZq0DSR3aY",
-        image: "/images/CDssesionhard.jpg",
+        image: "/images/CDssesionhard.webp",
     }, 
     { 
         id: 49, 
@@ -646,7 +646,7 @@ export const WORKS_DATA = [
         credits: ["Composition:あなざ〜せかい,イントナル森,鬱桑型,オヨイダキビス,OLDUCT,コットタウン,三面相,しゃいと,Aa,ハサキトオル,パルチーノ,ほいっぷ,mikage,Mi7s3,mucell,モエソデ,ヤヅキ", "Jacket illustration:ひとさじ", "Illustration:ハサキトオル,コットタウン,ほいっぷ", "Mastering:かごめP"],
         color: "#FF6B6B",
         url:"https://www.nicovideo.jp/watch/sm45629216",
-        image: "/images/endkikou.jpg",
+        image: "/images/endkikou.webp",
     },   
     { 
         id: 50, 
@@ -659,7 +659,7 @@ export const WORKS_DATA = [
         credits: ["Composition,Movie:三面相", "STEM Mastering:Rei (studio JEN)"],
         color: "#FF6B6B",
         url:"https://www.nicovideo.jp/watch/sm45639345",
-        image: "/images/vitaliganai.png",
+        image: "/images/vitaliganai.webp",
     },
     { 
         id: 51, 
@@ -672,7 +672,7 @@ export const WORKS_DATA = [
         credits: ["DJ＆performance:三面相,感状線,駱駝法師,FAIO,苔氏,kashi", "Open call DJ:Mangan,サル", "VJ:えいやん,みおに", "organizer:もなかさなか"],
         color: "#4ECDC4",
         url:"https://x.com/mimi0heart/status/2012774449011949640",
-        image: "/images/vocalife.png",
+        image: "/images/vocalife.webp",
     },
     { 
         id: 52, 
@@ -685,7 +685,7 @@ export const WORKS_DATA = [
         credits: ["Composition,Movie:三面相", "STEM Mastering:Rei (studio JEN)"],
         color: "#FF6B6B",
         url:"https://www.nicovideo.jp/watch/sm45975101",
-        image: "/images/CHOCOLATE.png",
+        image: "/images/CHOCOLATE.webp",
     },
     { 
         id: 53, 
@@ -698,7 +698,7 @@ export const WORKS_DATA = [
         credits: ["Composition:三面相,あたたかい水族館,あなざ～せかい.,鮎川ぱて@しゅわしゅわP,稲むり,米教タルタル,桶屋-Okeya,オオウチアラタ,荻凪裕作,d.j.ァネイロ,ETE,ｋｏｎｄｏ,namitape,POPFACES,Rulmry.,uotak", "Mastering:SOZEN OTSUBO", "jacket design:のぞみ,おおつく(あなざ～せかい.)", "logo design:オオウチアラタ (Philtz),石川ひびき (Philtz)", "disc design:オオウチアラタ (Philtz)", "3D model:uotak(Philtz)", "Special Thanks,雨漏りP"],
         color: "#FF6B6B",
         url:"https://youtu.be/XBIYO-n2pRg",
-        image: "/images/vocachillconpi.png",
+        image: "/images/vocachillconpi.webp",
     },
 　  {   id: 54, 
         title: "三面相 - SANMENso Official Site",
@@ -710,7 +710,7 @@ export const WORKS_DATA = [
         credits: ["Web design:三面相"],
         color: "#FFD700",
         url:"",
-        image: "/images/sanmensosite.png",
+        image: "/images/sanmensosite.webp",
     },
     {   id: 55, 
         title: "足立って俺のダチ！？",
@@ -722,7 +722,7 @@ export const WORKS_DATA = [
         credits: ["Composition:三面相,春川はしっこ,Aa,ナムササコ,砂糖の缶詰,空待澄人,にとろ,NNN,コットタウン,TENBIN,irukanotane,Mealerrand", "Jacket illust:夜風見", "Mastering:Saku"],
         color: "#FF6B6B",
         url:"https://youtu.be/Irqtj3njWSM",
-        image: "/images/adatidati.png",
+        image: "/images/adatidati.webp",
     },
     {   id: 56, 
         title: "『共創の測地線』アフターDJパーティ",
@@ -733,7 +733,7 @@ export const WORKS_DATA = [
         detailText: "”共創の測地線” アフターパーティにDJとして参加しました。",
         credits: ["DJ:三面相,風祭瑛紀,ぶき,cytokine,おた,Spam鍋"],
         url:"https://twipla.jp/events/720452",
-        image: "/images/kyousoukansoku.png",
+        image: "/images/kyousoukansoku.webp",
     },
     {   id: 57, 
         title: "ボカ脈in関西 Vol.2",
@@ -744,7 +744,7 @@ export const WORKS_DATA = [
         detailText: "『VOCALOID CONTEXT』ボカ脈in関西 Vol.2にDJとして参加しました。\n\n選曲に対する文脈を表現するという特殊なテーマのイベントでした。今回は【Vテレ】と題し、架空の教育テレビジョンを披露するようなパフォーマンスを行いました。",
         credits: ["DJ:三面相,あまのじゃく,毳蟲,とってい～,おおつく,chia*,RitA,ぴち", "VJ:めもる,梨音"],
         url:"https://twipla.jp/events/711380",
-        image: "/images/vocamyaku.jpg",
+        image: "/images/vocamyaku.webp",
     },
     {   id: 58, 
         title: "SMILEVIDEO in Osaka",
@@ -754,7 +754,7 @@ export const WORKS_DATA = [
         desc: "イベントにDJで出演しました", 
         detailText: "ニコニコ動画を主としたイベントSMILEVIDEOにDJとして参加しました。\n",
         credits: ["DJ:シナガワ,mayo,CRすぴか.zip,temura,三面相,sentimental hardware,SH2MI2,YONEDA,sanmal,N4G1t,linterconnect", "VJ:sachia,R!QKN"],
-        image: "/images/smile.png",
+        image: "/images/smile.webp",
     },
    {
         id: 59,
@@ -796,42 +796,42 @@ export const EXCAVATION_LINKS = [
         id: 1,
         type: 'banner',
        url: "https://hozumi.site/",
-        image: "/images/banner/hozumi.avif",
+        image: "/images/banner/hozumi.webp",
         alt: "あなたは青い部屋が好きですか？",
     },
     { 
         id: 2,
         type: 'banner',
         url: "https://ideoaves.github.io",
-        image:"/images/banner/ideoaves_banner.png",
+        image:"/images/banner/ideoaves_banner.webp",
         alt: "ideoavesのホームページ",
     },
         { 
         id: 3,
         type: 'banner',
         url: "https://www.namigroove.com",
-        image:"/images/banner/namigroove_banner01.png",
+        image:"/images/banner/namigroove_banner01.webp",
         alt: "なみぐるオフィシャルWEB バナー",
     },
     { 
         id: 4,
         type: 'banner',
         url: "https://tmpra.jp",
-        image:"/images/banner/tmpra_banner.png",
+        image:"/images/banner/tmpra_banner.webp",
         alt: "TMPらのホームページ",
     },
     { 
         id: 5,
         type: 'banner',
         url: "https://sites.google.com/view/0-u2bo/home",
-        image:"/images/banner/U2bo_banner.png",
+        image:"/images/banner/U2bo_banner.webp",
         alt: "Rei Utsuboのホームページ",
     },
     { 
         id: 6,
         type: 'banner',
         url: "https://www.awara-hasegawa.com/",
-        image:"/images/banner/hasegawa_banner.png",
+        image:"/images/banner/hasegawa_banner.webp",
         alt: "長谷川旅館のホームページ",
     },
     
@@ -932,7 +932,7 @@ export const SITE_META = {
     url: 'https://sanmenso.com', 
     siteName: 'SANMENso Official Site',
     locale: 'ja_JP',
-    image: 'https://sanmenso.com/images/sanmenso_icon.jpg', // ※SNSで表示させたい画像のパス（1200x630px推奨）
+    image: 'https://sanmenso.com/images/sanmenso_icon.webp', // ※SNSで表示させたい画像のパス（1200x630px推奨）
     twitterCard: 'summary_large_image',
     twitterUsername: '@SANMENSOUdrop',
     type: 'website',

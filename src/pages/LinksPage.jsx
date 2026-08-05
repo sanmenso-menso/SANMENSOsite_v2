@@ -58,7 +58,7 @@ const LinksPage = () => {
     const finalLinks = useMemo(() => {
         if (isNumunumuMode) {
             return EXCAVATION_LINKS.map(link => (link.type === 'banner' 
-                ? {...link, alt: numuText, image: '/images/numunumu_icon.png'} 
+                ? {...link, alt: numuText, image: '/images/numunumu_icon.webp'} 
                 : {...link, title: numuText, desc: numuText}
             ));
         }
@@ -428,7 +428,7 @@ const LinksPage = () => {
                 <p className="font-bold font-sans mb-4 text-lg">{isNumunumuMode ? numuText : '三面相の相互リンクはこちら！'}</p>
                 <div className="border-4 border-black p-2 bg-white shadow-[4px_4px_0px_rgba(0,0,0,0.3)]">
                     <img
-                        src={isNumunumuMode ? '/images/numunumu_icon.png' : "/images/banner/sanmenso_banner.png"}
+                        src={isNumunumuMode ? '/images/numunumu_icon.webp' : "/images/banner/sanmenso_banner.webp"}
                         alt={isNumunumuMode ? numuText : "三面相のバナー"}
                         className={isNumunumuMode ? "w-48 h-auto" : "max-w-full h-auto"}
                     />

@@ -43,7 +43,7 @@ const WorksPage = ({ filter = 'all', onFilterChange = (_newFilter) => {} }) => {
                 credits: [numuText],
                 year: ' ',
                 type: 'fun',
-                image: '/images/numunumu_icon.png',
+                image: '/images/numunumu_icon.webp',
             }));
         }
 

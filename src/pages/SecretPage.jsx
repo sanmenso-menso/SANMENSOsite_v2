@@ -28,9 +28,9 @@ const SecretPage = () => {
     const ORACLE_MESSAGES = isNumunumuMode ? [numuText] : [
         "2030年を迎えるまでに何ができるのか考えるんだけど、毎月の生活費の見通しさえできない自分にとってはパピコを買う事しか出来なかった。", "わたくしといふ現象は、仮定された有機交流電燈のひとつの青い照明です（あらゆる透明な幽霊の複合体）風景やみんなといつしよにせはしくせはしく明滅しながら、いかにもたしかにともりつづける因果交流電燈のひとつの青い照明です（ひかりはたもち　その電燈は失はれ）", "Error 404: 何故見たのですか？",
         "このページに特に深い意味はない。漂うだけ", "エンコード失敗", "I see you.", "適当な発言をするムーブをする奴が本質を突く発言を通せると思うな",
-        "バッファサイズを見誤る", "ごめんね", { type: 'link', url: 'https://youtu.be/SyGYHXMDgSw', image: '/images/secret/omuset.jpg', text: '培養オムのライブセットです' }, { type: 'link', url: 'https://www.nicovideo.jp/watch/sm45857005', image: '/images/secret/timeset.png', text: 'ボカライフより、DJmix『TIME』です' }, { type: 'link', url: 'https://soundcloud.com/lb3uw4iphdxy', image: '/images/secret/jyonkoni.png', text: 'ジョンジョン小錦　～魅惑のシンフォニー～' }
+        "バッファサイズを見誤る", "ごめんね", { type: 'link', url: 'https://youtu.be/SyGYHXMDgSw', image: '/images/secret/omuset.webp', text: '培養オムのライブセットです' }, { type: 'link', url: 'https://www.nicovideo.jp/watch/sm45857005', image: '/images/secret/timeset.webp', text: 'ボカライフより、DJmix『TIME』です' }, { type: 'link', url: 'https://soundcloud.com/lb3uw4iphdxy', image: '/images/secret/jyonkoni.webp', text: 'ジョンジョン小錦　～魅惑のシンフォニー～' }
         // リンクを表示したい場合は以下のようにオブジェクトを追加してください
-        // { type: 'link', url: 'https://example.com', image: '/images/example.jpg', text: 'リンクの説明' }
+        // { type: 'link', url: 'https://example.com', image: '/images/example.webp', text: 'リンクの説明' }
     ];
 
     const generateId = () => Math.random().toString(36).substr(2, 9);
@@ -192,8 +192,8 @@ const SecretPage = () => {
             { type: 'text', title: numuText, content: numuText, caption: numuText },
             { type: 'text', title: numuText, content: numuText, caption: numuText }
         ] : [
-            { type: 'image', title: 'IMG_2023.PMG', src: '/images/before_icon.png', caption: 'fig.01: かつての姿' },
-            { type: 'image', title: 'SCAN_Collage.PNG', src: '/images/colage1.jpg', caption: 'fig.02: Face or prototype' },
+            { type: 'image', title: 'IMG_2023.PMG', src: '/images/before_icon.webp', caption: 'fig.01: かつての姿' },
+            { type: 'image', title: 'SCAN_Collage.PNG', src: '/images/colage1.webp', caption: 'fig.02: Face or prototype' },
             { type: 'text', title: 'NOTE.TXT', content: 'ここはシークレットページです。特に何かがあるわけじゃないけど。まあ見てってよ。', caption: 'memo' },
             { type: 'image', title: 'UNKNOWN_ENTITY.SVG', src: generateRandomFace(), caption: 'detected_entity' }
         ];

@@ -264,7 +264,7 @@ const CubeFace = ({
 }) => {
     const { isNumunumuMode } = useNumunumu();
     const numuText = 'ぬむぬむとんかつ';
-    const numuIcon = <img src="/images/numunumu_icon.png" alt={numuText} className="w-12 h-12 md:w-16 md:h-16" />;
+    const numuIcon = <img src="/images/numunumu_icon.webp" alt={numuText} className="w-12 h-12 md:w-16 md:h-16" />;
 
     return (
         <motion.button
