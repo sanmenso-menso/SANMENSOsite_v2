@@ -17,8 +17,8 @@
     "test:watch": "vitest",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit -p jsconfig.json",
-    "format": "prettier --write package.json vite.config.js eslint.config.js prettier.config.js vitest.config.js jsconfig.json scripts/*.js tests/*.js README.md ASSETS.md LICENSE.md .github/workflows/*.yml",
-    "format:check": "prettier --check package.json vite.config.js eslint.config.js prettier.config.js vitest.config.js jsconfig.json scripts/*.js tests/*.js README.md ASSETS.md LICENSE.md .github/workflows/*.yml",
+    "format": "prettier --write package.json vite.config.js eslint.config.js prettier.config.js vitest.config.js jsconfig.json scripts/*.js tests/*.js ASSETS.md LICENSE.md .github/workflows/*.yml",
+    "format:check": "prettier --check package.json vite.config.js eslint.config.js prettier.config.js vitest.config.js jsconfig.json scripts/*.js tests/*.js ASSETS.md LICENSE.md .github/workflows/*.yml",
     "check": "npm run format:check && npm run lint && npm run typecheck && npm test && npm run build"
   },
   "dependencies": {
@@ -27,7 +27,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-helmet-async": "^2.0.5",
-    "react-router-dom": "^7.18.1",
+    "react-router-dom": "^7.18.2",
     "three": "^0.158.0"
   },
   "devDependencies": {
@@ -43,9 +43,9 @@
     "glob": "^13.0.6",
     "globals": "^17.7.0",
     "jsdom": "^29.1.1",
-    "postcss": "^8.5.19",
+    "postcss": "^8.5.25",
     "prettier": "^3.9.5",
-    "sharp": "0.34.5",
+    "sharp": "0.35.3",
     "tailwindcss": "^3.4.19",
     "typescript": "^7.0.2",
     "vite": "^8.1.4",
