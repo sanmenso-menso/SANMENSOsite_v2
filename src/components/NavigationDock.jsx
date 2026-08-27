@@ -2,7 +2,7 @@ import React from 'react';
 import { Home, Tag, Globe, Send, Gamepad2 } from 'lucide-react';
 import { useNumunumu } from '../NumunumuContext';
 
-const NavigationDock = ({ activePage, onNavigate, isOpening }) => {
+const NavigationDock = ({ activePage, onNavigate, isOpening, disabled = false }) => {
     const { isNumunumuMode } = useNumunumu();
     const numuText = 'ぬむぬむとんかつ';
 
@@ -37,9 +37,10 @@ const NavigationDock = ({ activePage, onNavigate, isOpening }) => {
                             type="button"
                             key={item.id}
                             onClick={() => onNavigate(item.id)}
+                            disabled={disabled}
                             aria-label={isNumunumuMode ? `${numuText}（${item.label}）` : item.label}
                             aria-current={isActive ? 'page' : undefined}
-                            className="relative w-14 md:w-28 px-2 py-2 md:px-6 md:py-3 group flex flex-col items-center justify-center"
+                            className="relative w-14 md:w-28 px-2 py-2 md:px-6 md:py-3 group flex flex-col items-center justify-center disabled:cursor-wait disabled:opacity-60"
                         >
                             {isActive && <div className="absolute inset-0 bg-white/10 rounded-full" />}
                             <span className={`relative z-10 transition-colors duration-300 ${isActive ? 'text-[#FFD700]' : 'text-white group-hover:text-[#FFD700]'}`}>

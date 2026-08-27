@@ -1,0 +1,128 @@
+.home-artist-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  color: #050505;
+  user-select: none;
+}
+
+.home-artist-backdrop__services {
+  position: absolute;
+  top: 50%;
+  left: clamp(1rem, 4vw, 5rem);
+  display: flex;
+  width: clamp(18rem, 42vw, 38rem);
+  flex-direction: column;
+  align-items: flex-start;
+  transform: translateY(-50%);
+}
+
+.home-artist-backdrop__service {
+  display: flex;
+  width: fit-content;
+  max-width: 100%;
+  box-sizing: border-box;
+  min-height: clamp(5.5rem, 10.8vw, 10rem);
+  align-items: center;
+  justify-content: flex-start;
+  border: clamp(3px, 0.3vw, 5px) solid currentColor;
+  border-radius: 999px;
+  background: transparent;
+  padding: 0.1em clamp(1rem, 2.2vw, 2rem);
+  padding-block: 0;
+  font-family:
+    'A-OTF Futo Go B101 Pr6N', 'FutoGoB101 Pr6N', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans',
+    'Yu Gothic', 'Noto Sans JP', sans-serif;
+  font-size: clamp(2.35rem, 6.2vw, 5.8rem);
+  font-weight: 700;
+  letter-spacing: 0.025em;
+  line-height: 1;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.home-artist-backdrop__service + .home-artist-backdrop__service {
+  margin-top: clamp(-1.3rem, -1.4vw, -0.7rem);
+}
+
+.home-artist-backdrop__artist {
+  position: absolute;
+  top: 50%;
+  right: clamp(1rem, 5vw, 6rem);
+  display: flex;
+  width: clamp(6.5rem, 11vw, 10rem);
+  height: clamp(17.5rem, 47vh, 29rem);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.55rem, 1.8vh, 1rem);
+  border: clamp(3px, 0.3vw, 5px) solid currentColor;
+  border-radius: 999px;
+  background: transparent;
+  padding-block: 1.25rem;
+  transform: translateY(-50%);
+  font-family:
+    'A-OTF Futo Go B101 Pr6N', 'FutoGoB101 Pr6N', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans',
+    'Yu Gothic', 'Noto Sans JP', sans-serif;
+  font-size: clamp(3.5rem, 7vw, 7rem);
+  font-weight: 700;
+  line-height: 1;
+}
+
+@media (max-width: 700px) {
+  .home-artist-backdrop__services {
+    top: 50%;
+    left: clamp(0.5rem, 2.5vw, 1rem);
+    width: 64vw;
+    transform: translateY(-50%);
+  }
+
+  .home-artist-backdrop__service {
+    min-height: 3.25rem;
+    border-width: 3px;
+    padding-inline: clamp(0.65rem, 3.2vw, 1rem);
+    padding-block: 0;
+    font-size: clamp(1.4rem, 7.2vw, 2.8rem);
+  }
+
+  .home-artist-backdrop__service + .home-artist-backdrop__service {
+    margin-top: -0.45rem;
+  }
+
+  .home-artist-backdrop__artist {
+    right: clamp(0.5rem, 2.5vw, 1rem);
+    width: 20vw;
+    min-width: 4rem;
+    max-width: 5.5rem;
+    height: clamp(13rem, 36vh, 17.5rem);
+    border-width: 3px;
+    gap: clamp(0.4rem, 1.4vh, 0.7rem);
+    font-size: clamp(2.4rem, 10vw, 4.2rem);
+  }
+}
+
+@media (max-height: 620px) {
+  .home-artist-backdrop__service {
+    min-height: clamp(3rem, 12vh, 4.8rem);
+    font-size: clamp(1.75rem, 9vh, 3.8rem);
+  }
+
+  .home-artist-backdrop__artist {
+    height: 44vh;
+    font-size: clamp(2.4rem, 12vh, 4.8rem);
+  }
+}
+
+@media (max-width: 700px) and (max-height: 620px) {
+  .home-artist-backdrop__service {
+    min-height: 2.75rem;
+    font-size: 1.35rem;
+  }
+
+  .home-artist-backdrop__artist {
+    height: 41vh;
+    font-size: clamp(2rem, 10vh, 3.5rem);
+  }
+}

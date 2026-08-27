@@ -1,13 +1,20 @@
-import React, { Suspense, lazy, useEffect, useMemo, useState } from 'react';
+import React, { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { BrowserRouter, Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom';
-import { AnimatePresence, MotionConfig, motion, useReducedMotion } from 'framer-motion';
+import { AnimatePresence, LayoutGroup, MotionConfig, motion, useIsPresent, useReducedMotion } from 'framer-motion';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { FONTS, SITE_META, THEME } from './constants';
 import { NumunumuContext } from './NumunumuContext';
 import AppErrorBoundary from './components/AppErrorBoundary';
 import Header from './components/Header';
+import HomeArtistBackdrop from './components/HomeArtistBackdrop';
+import HomeUpdateNotice from './components/HomeUpdateNotice';
 import NavigationDock from './components/NavigationDock';
 import { reportClientError } from './utils/reportClientError';
+import {
+    ROUTE_TRANSITION_LOCK_MS,
+    canStartRouteTransition,
+    isHomeEntryReady,
+} from './utils/routeTransition';
 import { CONTENT_TITLES, getPageTitle, isKnownPath, normalizePathname } from './utils/routes';
 
 const MagicCube = lazy(() => import('./components/MagicCube'));
@@ -26,16 +33,30 @@ const LoadingFallback = () => (
     </div>
 );
 
-const PageWrapper = ({ children }) => (
+const PageWrapper = ({ children, animatePosition = true }) => (
     <motion.main
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -20 }}
+        initial={animatePosition ? { opacity: 0, y: 20 } : { opacity: 0 }}
+        animate={animatePosition ? { opacity: 1, y: 0 } : { opacity: 1 }}
+        exit={animatePosition ? { opacity: 0, y: -20 } : { opacity: 0 }}
         className="w-full min-h-screen pt-20 pb-28 sm:pt-24 sm:pb-32"
     >
         {children}
     </motion.main>
 );
+
+const RouteTransitionFrame = ({ children, hasOpaqueBackground = false }) => {
+    const isPresent = useIsPresent();
+
+    return (
+        <motion.div
+            data-route-layer={isPresent ? 'current' : 'exiting'}
+            aria-hidden={isPresent ? undefined : true}
+            className={`${isPresent ? 'relative z-10' : 'pointer-events-none absolute inset-x-0 top-0 z-0 h-screen overflow-hidden'} col-start-1 row-start-1 min-h-screen min-w-0 w-full${hasOpaqueBackground ? ' bg-white' : ''}`}
+        >
+            {children}
+        </motion.div>
+    );
+};
 
 const RouteMetadata = ({ pathname, isNotFound }) => {
     const pageTitle = getPageTitle(pathname, isNotFound);
@@ -93,15 +114,55 @@ function AppContent() {
     const navigate = useNavigate();
     const shouldReduceMotion = useReducedMotion();
     const pathname = normalizePathname(location.pathname);
+    const isReturningFromWorks = pathname === '/' && location.state?.transitionFrom === '/works';
     const isNotFound = !isKnownPath(pathname);
     const firstSegment = pathname.split('/').filter(Boolean)[0];
     const activePage = pathname === '/' ? 'home' : firstSegment;
 
     const [worksFilter, setWorksFilter] = useState('all');
     const [isOpening, setIsOpening] = useState(true);
+    const [completedHomeEntryKey, setCompletedHomeEntryKey] = useState(null);
+    const [isRouteTransitioning, setIsRouteTransitioning] = useState(false);
     const [isNumunumuMode, setIsNumunumuMode] = useState(false);
     const [, setInput] = useState('');
+    const routeTransitionLockRef = useRef(false);
+    const routeTransitionTimerRef = useRef(null);
     const target = 'numunumu';
+    const isCurrentHomeReady = isHomeEntryReady({
+        pathname,
+        currentEntryKey: location.key,
+        completedEntryKey: completedHomeEntryKey,
+    });
+
+    const finishRouteTransition = useCallback(() => {
+        window.clearTimeout(routeTransitionTimerRef.current);
+        routeTransitionTimerRef.current = null;
+        routeTransitionLockRef.current = false;
+        setIsRouteTransitioning(false);
+    }, []);
+
+    const beginRouteTransition = useCallback((targetPath) => {
+        const canNavigate = canStartRouteTransition({
+            currentPath: pathname,
+            targetPath,
+            isTransitioning: routeTransitionLockRef.current,
+            isCurrentHomeReady,
+        });
+        if (!canNavigate) return false;
+
+        routeTransitionLockRef.current = true;
+        setIsRouteTransitioning(true);
+        window.clearTimeout(routeTransitionTimerRef.current);
+        window.scrollTo(0, 0);
+        navigate(targetPath, { state: { transitionFrom: pathname } });
+        routeTransitionTimerRef.current = window.setTimeout(
+            finishRouteTransition,
+            ROUTE_TRANSITION_LOCK_MS,
+        );
+        return true;
+    }, [finishRouteTransition, isCurrentHomeReady, navigate, pathname]);
+
+    useEffect(() => () => window.clearTimeout(routeTransitionTimerRef.current), []);
 
     useEffect(() => {
         const handler = (event) => {
@@ -137,14 +198,19 @@ function AppContent() {
 
     const handleCubeSelect = (key) => {
         if (!['music', 'entame', 'fun'].includes(key)) return;
+        if (!beginRouteTransition('/works')) return;
         setWorksFilter(key);
-        navigate('/works');
     };
 
     const handleNavSelect = (page) => {
+        const targetPath = page === 'home' ? '/' : `/${page}`;
+        if (!beginRouteTransition(targetPath)) return;
         if (page === 'works') setWorksFilter('all');
-        navigate(page === 'home' ? '/' : `/${page}`);
     };
+
+    const handleCubeIntroComplete = useCallback((entryKey) => {
+        setCompletedHomeEntryKey(entryKey);
+    }, []);
 
     const routeKey = pathname.startsWith('/contents/') ? 'contents' : pathname;
     const contextValue = useMemo(() => ({ isNumunumuMode }), [isNumunumuMode]);
@@ -152,7 +218,10 @@ function AppContent() {
     return (
         <NumunumuContext.Provider value={contextValue}>
             <RouteMetadata pathname={pathname} isNotFound={isNotFound} />
-            <div className="min-h-screen w-full relative overflow-x-hidden selection:bg-black selection:text-[#FFD700]">
+            <div
+                className="min-h-screen w-full relative overflow-x-hidden selection:bg-black selection:text-[#FFD700]"
+                data-route-transitioning={isRouteTransitioning ? 'true' : 'false'}
+            >
                 <style>{`
                     body {
                         font-family: ${FONTS.sans};
@@ -167,23 +236,46 @@ function AppContent() {
                 {pathname !== '/secret' && !isNotFound && (
                     <>
                         <Header onNavigate={handleNavSelect} isOpening={isOpening} />
-                        <NavigationDock activePage={activePage} onNavigate={handleNavSelect} isOpening={isOpening} />
+                        <NavigationDock
+                            activePage={activePage}
+                            onNavigate={handleNavSelect}
+                            isOpening={isOpening}
+                            disabled={isRouteTransitioning || (pathname === '/' && !isCurrentHomeReady)}
+                        />
                     </>
                 )}
 
                 <Suspense fallback={<LoadingFallback />}>
-                    <AnimatePresence mode="wait" onExitComplete={() => window.scrollTo(0, 0)}>
-                        <Routes location={location} key={routeKey}>
+                    <LayoutGroup id="site-cube-route-transition">
+                        <div className="relative grid min-h-screen w-full">
+                            <AnimatePresence mode="sync">
+                                <RouteTransitionFrame
+                                    key={routeKey}
+                                    hasOpaqueBackground={pathname === '/' || pathname === '/works'}
+                                >
+                                <Routes location={location}>
                             <Route path="/" element={(
                                 <motion.main
                                     key="home"
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
                                     exit={{ opacity: 0 }}
-                                    className="relative z-10 w-full h-screen flex flex-col items-center justify-center p-4"
+                                    className="relative z-10 w-full h-screen flex flex-col items-center justify-center overflow-hidden bg-white p-4"
                                 >
-                                    <div className="mb-16 sm:mb-20">
-                                        <MagicCube onSelect={handleCubeSelect} isOpening={isOpening} />
+                                    <HomeArtistBackdrop />
+                                    {isCurrentHomeReady && (
+                                        <HomeUpdateNotice onOpenWorks={() => handleNavSelect('works')} reduceMotion={shouldReduceMotion} />
+                                    )}
+                                    <div className="relative z-20 mb-16 sm:mb-20">
+                                        <MagicCube
+                                            onSelect={handleCubeSelect}
+                                            onIntroComplete={handleCubeIntroComplete}
+                                            onRouteAnimationComplete={finishRouteTransition}
+                                            entryKey={location.key}
+                                            isOpening={isOpening}
+                                            layoutId="site-cube"
+                                            isReturningFromWorks={isReturningFromWorks}
+                                        />
                                     </div>
                                     <motion.div
                                         initial={{ opacity: 0 }}
@@ -198,8 +290,12 @@ function AppContent() {
                                 </motion.main>
                             )} />
                             <Route path="/works" element={(
-                                <PageWrapper>
-                                    <WorksPage filter={worksFilter} onFilterChange={setWorksFilter} />
+                                <PageWrapper animatePosition={false}>
+                                    <WorksPage
+                                        filter={worksFilter}
+                                        onFilterChange={setWorksFilter}
+                                        onRouteAnimationComplete={finishRouteTransition}
+                                    />
                                 </PageWrapper>
                             )} />
                             <Route path="/contents" element={<PageWrapper><ContentsPage /></PageWrapper>} />
@@ -208,8 +304,11 @@ function AppContent() {
                             <Route path="/contact" element={<PageWrapper><ContactPage /></PageWrapper>} />
                             <Route path="/secret" element={<SecretPage />} />
                             <Route path="*" element={<NotFoundPage />} />
-                        </Routes>
-                    </AnimatePresence>
+                                </Routes>
+                                </RouteTransitionFrame>
+                            </AnimatePresence>
+                        </div>
+                    </LayoutGroup>
                 </Suspense>
 
                 <div className="absolute bottom-2 right-4 text-[13px] text-gray-500 font-sans pointer-events-none z-0">

@@ -1,216 +1,426 @@
-import React, { useEffect, useState, useMemo } from 'react';
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { Music, Gamepad2, Smile, ArrowUpRight, X, Calendar, User, Tag, ExternalLink } from 'lucide-react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import {
+  Calendar,
+  ExternalLink,
+  Gamepad2,
+  Music,
+  Pause,
+  Play,
+  Smile,
+  Tag,
+  User,
+  X,
+} from 'lucide-react';
+import AccessibleDialog from '../components/AccessibleDialog';
+import FlowingWorksLane from '../components/FlowingWorksLane';
 import ImageWithFallback from '../components/ImageWithFallback';
+import WorkCard from '../components/WorkCard';
+import WorkFilterCube from '../components/WorkFilterCube';
 import { WORKS_DATA } from '../constants';
 import { useNumunumu } from '../NumunumuContext';
-import AccessibleDialog from '../components/AccessibleDialog';
+import {
+  clampWorkPage,
+  filterAndSortWorks,
+  getWorkCategoryLabel,
+  sortWorksForFlow,
+} from '../utils/works';
+import './WorksPage.css';
 
-const WorksPage = ({ filter = 'all', onFilterChange = (_newFilter) => {} }) => {
-    const { isNumunumuMode } = useNumunumu();
-    const shouldReduceMotion = useReducedMotion();
-    const numuText = 'ぬむぬむとんかつ';
-    const [selectedWork, setSelectedWork] = useState(null);
-    const [currentPage, setCurrentPage] = useState(1);
-    const ITEMS_PER_PAGE = 9; // 1ページあたりの表示件数
+const ITEMS_PER_PAGE = 9;
 
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [filter]);
+const CATEGORIES = [
+  { id: 'all', label: 'ALL', icon: null },
+  { id: 'music', label: getWorkCategoryLabel('music'), icon: Music },
+  { id: 'entame', label: 'ENTAME', icon: Gamepad2 },
+  { id: 'fun', label: 'FUN', icon: Smile },
+];
 
-    const handlePageChange = (page) => {
-        setCurrentPage(page);
-        window.scrollTo({ top: 0, behavior: shouldReduceMotion ? 'auto' : 'smooth' });
-    };
+const WORK_KIND_OPTIONS = [
+  { id: 'original', label: 'ORIGINAL' },
+  { id: 'client', label: 'CLIENT' },
+];
 
-    // フィルターが変更されたら、1ページ目に戻す
-    const handleFilterChange = (newFilter) => {
-        onFilterChange(newFilter);
-        // 1ページ目に戻してスクロール
-        handlePageChange(1);
-    };
-    
-    const filteredWorks = useMemo(() => {
-        const sorted = [...WORKS_DATA].sort((a, b) => b.id - a.id);
+const decorateWorks = (works, isNumunumuMode, numuText) => {
+  if (!isNumunumuMode) return works;
 
-        if (isNumunumuMode) {
-            return sorted.map(work => ({
-                ...work,
-                title: numuText,
-                desc: numuText,
-                detailText: numuText,
-                role: numuText,
-                credits: [numuText],
-                year: ' ',
-                type: 'fun',
-                image: '/images/numunumu_icon.webp',
-            }));
-        }
+  return works.map((work) => ({
+    ...work,
+    title: numuText,
+    desc: numuText,
+    detailText: numuText,
+    role: numuText,
+    credits: [numuText],
+    year: ' ',
+    type: 'fun',
+    image: '/images/numunumu_icon.webp',
+  }));
+};
 
-        const filtered = filter === 'all' ? sorted : sorted.filter(w => w.type === filter);
-        return filtered;
-    }, [filter, isNumunumuMode]);
+const WorksPage = ({ filter = 'all', onFilterChange = () => {}, onRouteAnimationComplete }) => {
+  const { isNumunumuMode } = useNumunumu();
+  const shouldReduceMotion = useReducedMotion();
+  const numuText = 'ぬむぬむとんかつ';
+  const [selectedWork, setSelectedWork] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [workKind, setWorkKind] = useState('original');
+  const [viewMode, setViewMode] = useState('flow');
+  const [isFlowStopped, setIsFlowStopped] = useState(false);
+  const activeViewMode = shouldReduceMotion ? 'index' : viewMode;
 
-    // 現在のページに表示する作品と総ページ数を計算
-    const { currentWorks, totalPages } = useMemo(() => {
-        const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-        const endIndex = startIndex + ITEMS_PER_PAGE;
-        const currentWorks = filteredWorks.slice(startIndex, endIndex);
-        const totalPages = Math.ceil(filteredWorks.length / ITEMS_PER_PAGE);
-        return { currentWorks, totalPages };
-    }, [filteredWorks, currentPage]);
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filter, workKind]);
 
-    const PaginationControls = () => {
-        if (totalPages <= 1) return null;
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: shouldReduceMotion ? 'auto' : 'smooth' });
+  };
 
-        return (
-            <nav aria-label="作品一覧のページ送り" className="flex justify-center items-center gap-2 md:gap-4 py-8">
-                <button 
-                    type="button"
-                    aria-label="前のページ"
-                    onClick={() => handlePageChange(Math.max(currentPage - 1, 1))} 
-                    disabled={currentPage === 1}
-                    className="h-12 w-12 flex items-center justify-center border-2 border-black bg-white text-black font-bold shadow-[4px_4px_0px_rgba(0,0,0,0.3)] hover:bg-yellow-100 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white"
-                >
-                    &lt;
-                </button>
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-                    <button type="button" key={page} aria-label={`${page}ページ目`} aria-current={currentPage === page ? 'page' : undefined} onClick={() => handlePageChange(page)} className={`h-12 w-12 flex items-center justify-center border-2 border-black font-bold shadow-[4px_4px_0px_rgba(0,0,0,0.3)] hover:-translate-y-1 hover:shadow-[6px_6px_0px_rgba(0,0,0,0.3)] transition-all ${currentPage === page ? 'bg-black text-[#FFD700]' : 'bg-white text-black hover:bg-yellow-100'}`}>
-                        {page}
-                    </button>
-                ))}
-                <button 
-                    type="button"
-                    aria-label="次のページ"
-                    onClick={() => handlePageChange(Math.min(currentPage + 1, totalPages))} 
-                    disabled={currentPage === totalPages}
-                    className="h-12 w-12 flex items-center justify-center border-2 border-black bg-white text-black font-bold shadow-[4px_4px_0px_rgba(0,0,0,0.3)] hover:bg-yellow-100 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white"
-                >
-                    &gt;
-                </button>
-            </nav>
-        );
-    };
+  const handleFilterChange = (newFilter) => {
+    onFilterChange(newFilter);
+    setCurrentPage(1);
+  };
 
-    const CATEGORIES = [
-        { id: 'all', label: 'ALL', icon: null },
-        { id: 'music', label: 'MUSIC', icon: Music },
-        { id: 'entame', label: 'ENTAME', icon: Gamepad2 },
-        { id: 'fun', label: 'FUN', icon: Smile },
-    ];
+  const handleOpenWork = (work) => {
+    setSelectedWork(work);
+  };
+
+  const handleCloseWork = () => {
+    setSelectedWork(null);
+    setIsFlowStopped(false);
+  };
+
+  const filteredWorks = useMemo(() => {
+    const filtered = filterAndSortWorks(WORKS_DATA, {
+      category: filter,
+      workKind,
+    });
+
+    return decorateWorks(filtered, isNumunumuMode, numuText);
+  }, [filter, isNumunumuMode, workKind]);
+
+  const flowWorks = useMemo(() => {
+    const sorted = sortWorksForFlow(WORKS_DATA, {
+      workKind,
+    });
+
+    return decorateWorks(sorted, isNumunumuMode, numuText);
+  }, [isNumunumuMode, workKind]);
+
+  const totalPages = Math.ceil(filteredWorks.length / ITEMS_PER_PAGE);
+  const activePage = clampWorkPage(currentPage, totalPages);
+  const currentWorks = useMemo(() => {
+    const startIndex = (activePage - 1) * ITEMS_PER_PAGE;
+    return filteredWorks.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  }, [activePage, filteredWorks]);
+
+  const PaginationControls = () => {
+    if (totalPages <= 1) return null;
 
     return (
-        <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 min-h-screen flex flex-col">
-            <header className="mb-8 md:mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-4 md:gap-8 border-b-4 border-black pb-4 md:pb-6 border-double bg-white/80 backdrop-blur-sm p-2 md:p-4">
-                <div>
-                    <h2 className="text-5xl sm:text-6xl md:text-8xl font-black tracking-tighter leading-none mix-blend-hard-light text-[#FFD700] drop-shadow-[4px_4px_0px_rgba(0,0,0,0.3)] font-sans" style={{ WebkitTextStroke: '2px black' }}>{isNumunumuMode ? numuText : 'WORKS'}</h2>
-                    <p className="font-mono font-bold text-black text-base md:text-lg tracking-wide mt-2">
-                        <span className="bg-black text-[#FFD700] px-2 py-1">{isNumunumuMode ? numuText : 'SANMENso`s ARCHIVE'}</span> {isNumunumuMode ? '' : ''}
-                    </p>
-                </div>
-                <div className="flex gap-2 flex-wrap justify-start md:justify-end">
-                    {CATEGORIES.map(cat => (
-                        <button type="button" key={cat.id} aria-pressed={filter === cat.id} onClick={() => handleFilterChange(cat.id)} className={`h-10 px-3 md:h-12 md:px-4 flex items-center justify-center gap-2 border-2 border-black transition-all shadow-[4px_4px_0px_rgba(0,0,0,0.3)] hover:-translate-y-1 hover:shadow-[6px_6px_0px_rgba(0,0,0,0.3)] active:translate-y-0 active:shadow-none font-bold font-sans text-sm md:text-base ${filter === cat.id ? 'bg-black text-[#FFD700]' : 'bg-white text-black hover:bg-yellow-100'}`}>
-                            {cat.icon && <cat.icon size={18} />}<span>{isNumunumuMode ? numuText : cat.label}</span>
-                        </button>
-                    ))}
-                </div>
-            </header>
-
-            <PaginationControls />
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 pb-16">
-                <AnimatePresence mode='popLayout'>
-                    {currentWorks.map((work) => (
-                        <motion.button type="button" key={work.id} initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9 }} transition={{ duration: 0.3 }} onClick={() => setSelectedWork(work)} aria-label={`${work.title}の詳細を開く`} className="group relative bg-white border-4 border-black p-3 md:p-4 h-full flex flex-col text-left transition-all duration-300 hover:-translate-y-2 hover:rotate-1 hover:shadow-[12px_12px_0px_rgba(0,0,0,0.3)] shadow-[6px_6px_0px_rgba(0,0,0,0.3)] cursor-pointer overflow-hidden">
-                            <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 w-20 h-5 bg-yellow-400/80 rotate-[-2deg] opacity-80 shadow-sm z-10"></div>
-                            <div className="w-full aspect-video border-2 border-black mb-3 bg-gray-100 relative overflow-hidden flex items-center justify-center">
-                                <ImageWithFallback
-                                    src={work.image}
-                                    alt={work.title}
-                                    className="w-full h-full object-cover"
-                                    loading="lazy"
-                                    fallback={(
-                                        <>
-                                            <div className="absolute inset-0 opacity-20" style={{ backgroundColor: work.color || '#cccccc' }}></div>
-                                            {work.type === 'music' && <Music size={64} className="opacity-50" />}
-                                            {work.type === 'entame' && <Gamepad2 size={64} className="opacity-50" />}
-                                            {work.type === 'fun' && <Smile size={64} className="opacity-50" />}
-                                        </>
-                                    )}
-                                />
-                            </div>
-                            <div className="flex justify-between items-start mb-2 border-b-2 border-black pb-2 border-dashed">
-                                <h3 className="text-xl md:text-2xl font-black tracking-tight leading-none font-sans">{work.title}</h3>
-                                <span className="font-mono text-xs bg-black text-white px-1 py-0.5 transform rotate-3">{work.year}</span>
-                            </div>
-                            <div className="flex items-center gap-2 mb-2">
-                                <span className="text-xs font-bold border border-black rounded-full px-2 py-0.5 bg-yellow-300 font-mono">{work.type.toUpperCase()}</span>
-                                <span className="text-xs font-mono opacity-60">{work.role}</span>
-                            </div>
-                            <p className="text-sm font-medium leading-snug opacity-80 line-clamp-3 mb-3 flex-grow font-sans">{work.desc}</p>
-                            <div className="flex justify-end mt-auto">
-                                <div className="flex items-center gap-1 font-bold text-sm border-b-2 border-transparent group-hover:border-black transition-all font-sans">{isNumunumuMode ? numuText : 'READ MORE'} <ArrowUpRight size={16} /></div>
-                            </div>
-                        </motion.button>
-                    ))}
-                </AnimatePresence>
-            </div>
-
-            <PaginationControls />
-
-            <AnimatePresence>
-                {selectedWork && (
-                    <AccessibleDialog onClose={() => setSelectedWork(null)} labelledBy="work-dialog-title" className="fixed inset-0 z-[60] flex items-center justify-center bg-black/75 p-2 sm:p-4 md:p-8">
-                        <motion.div initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95, y: 20 }} className="relative w-full max-w-5xl h-[95vh] sm:h-[90vh] bg-[#f0f0f0] border-4 md:border-[6px] border-black shadow-[8px_8px_0px_rgba(0,0,0,0.3)] md:shadow-[16px_16px_0px_rgba(0,0,0,0.3)] flex flex-col md:flex-row overflow-hidden z-10">
-                            <button type="button" data-dialog-close aria-label="作品詳細を閉じる" onClick={() => setSelectedWork(null)} className="absolute top-0 right-0 z-20 bg-black text-white p-3 hover:bg-[#FFD700] hover:text-black transition-colors"><X size={32} /></button>
-                            <div className="w-full md:w-2/5 h-1/3 md:h-full bg-gray-200 border-b-4 md:border-b-0 md:border-r-4 border-black relative overflow-hidden group flex items-center justify-center">
-                                <ImageWithFallback
-                                    src={selectedWork.image}
-                                    alt={selectedWork.title}
-                                    className="w-full h-full object-cover"
-                                    fallback={(
-                                        <>
-                                            <div className="absolute inset-0 opacity-20" style={{ backgroundColor: selectedWork.color }}></div>
-                                            <div className="absolute inset-0 flex items-center justify-center opacity-50 text-black">
-                                                {selectedWork.type === 'music' && <Music size={120} className="stroke-1" />}
-                                                {selectedWork.type === 'entame' && <Gamepad2 size={120} className="stroke-1" />}
-                                                {selectedWork.type === 'fun' && <Smile size={120} className="stroke-1" />}
-                                            </div>
-                                        </>
-                                    )}
-                                />
-                                <div className="absolute bottom-4 left-4 bg-white border-2 border-black px-3 py-1 font-mono text-sm shadow-[4px_4px_0px_rgba(0,0,0,0.3)]">{isNumunumuMode ? numuText : `ID: ${selectedWork.id.toString().padStart(3, '0')}`}</div>
-                            </div>
-                            <div className="w-full md:w-3/5 overflow-y-auto bg-white p-6 md:p-8 lg:p-12 flex flex-col gap-6 md:gap-8">
-                                <div>
-                                    <div className="flex flex-wrap gap-2 mb-4">
-                                        <span className="flex items-center gap-1 font-mono text-xs border border-black px-2 py-0.5 bg-yellow-300"><Tag size={12} /> {isNumunumuMode ? numuText : selectedWork.type.toUpperCase()}</span>
-                                        <span className="flex items-center gap-1 font-mono text-xs border border-black px-2 py-0.5 bg-white"><Calendar size={12} /> {isNumunumuMode ? numuText : selectedWork.year}</span>
-                                        <span className="flex items-center gap-1 font-mono text-xs border border-black px-2 py-0.5 bg-white"><User size={12} /> {isNumunumuMode ? numuText : selectedWork.role}</span>
-                                    </div>
-                                    <h2 id="work-dialog-title" className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tighter leading-none mb-4 font-sans">{selectedWork.title}</h2>
-                                    <div className="h-1 w-24 bg-black"></div>
-                                </div>
-                                <div className="font-serif text-lg leading-loose text-gray-800 whitespace-pre-line">{selectedWork.detailText || selectedWork.desc}</div>
-                                {selectedWork.credits && (
-                                    <div className="bg-gray-100 p-6 border-2 border-black/20 mt-4">
-                                        <h4 className="font-bold border-b border-black/20 pb-2 mb-3 font-sans">{isNumunumuMode ? numuText : 'CREDITS'}</h4>
-                                        <ul className="space-y-1 font-mono text-sm">{selectedWork.credits.map((c, i) => <li key={i}>- {c}</li>)}</ul>
-                                    </div>
-                                )}
-                                {selectedWork.url && (
-                                    <div className="pt-8 mt-auto">
-                                        <a href={selectedWork.url} target="_blank" rel="noreferrer" className="w-full bg-black text-white font-bold py-4 text-xl flex items-center justify-center gap-2 border-2 border-black shadow-[8px_8px_0px_#FFD700] hover:translate-y-1 hover:shadow-none hover:bg-gray-900 transition-all font-sans">{isNumunumuMode ? numuText : 'VIEW MORE'} <ExternalLink size={20} /></a>
-                                    </div>
-                                )}
-                            </div>
-                        </motion.div>
-                    </AccessibleDialog>
-                )}
-            </AnimatePresence>
-        </div>
+      <nav
+        aria-label="作品一覧のページ送り"
+        className="flex items-center justify-center gap-2 py-8 md:gap-4"
+      >
+        <button
+          type="button"
+          aria-label="前のページ"
+          onClick={() => handlePageChange(Math.max(activePage - 1, 1))}
+          disabled={activePage === 1}
+          className="flex h-12 w-12 items-center justify-center border-2 border-black bg-white font-bold text-black shadow-[4px_4px_0px_rgba(0,0,0,0.3)] hover:bg-yellow-100 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-white"
+        >
+          &lt;
+        </button>
+        {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
+          <button
+            type="button"
+            key={page}
+            aria-label={`${page}ページ目`}
+            aria-current={activePage === page ? 'page' : undefined}
+            onClick={() => handlePageChange(page)}
+            className={`flex h-12 w-12 items-center justify-center border-2 border-black font-bold shadow-[4px_4px_0px_rgba(0,0,0,0.3)] transition-all hover:-translate-y-1 hover:shadow-[6px_6px_0px_rgba(0,0,0,0.3)] ${
+              activePage === page
+                ? 'bg-black text-[#FFD700]'
+                : 'bg-white text-black hover:bg-yellow-100'
+            }`}
+          >
+            {page}
+          </button>
+        ))}
+        <button
+          type="button"
+          aria-label="次のページ"
+          onClick={() => handlePageChange(Math.min(activePage + 1, totalPages))}
+          disabled={activePage === totalPages}
+          className="flex h-12 w-12 items-center justify-center border-2 border-black bg-white font-bold text-black shadow-[4px_4px_0px_rgba(0,0,0,0.3)] hover:bg-yellow-100 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-white"
+        >
+          &gt;
+        </button>
+      </nav>
     );
+  };
+
+  return (
+    <div className="works-page min-h-screen bg-white px-4 py-8 md:px-6">
+      <div className="mx-auto max-w-7xl">
+        <header className="works-header mb-8 border-b-4 border-double border-black pb-6 md:mb-12">
+          <div className="works-heading">
+            <div>
+              <h1
+                className="font-sans text-5xl font-black leading-none tracking-tighter text-[#FFD700] drop-shadow-[4px_4px_0px_rgba(0,0,0,0.3)] sm:text-6xl md:text-8xl"
+                style={{ WebkitTextStroke: '2px black' }}
+              >
+                {isNumunumuMode ? numuText : 'WORKS'}
+              </h1>
+              <p className="mt-2 font-mono text-base font-bold tracking-wide text-black md:text-lg">
+                <span className="bg-black px-2 py-1 text-[#FFD700]">
+                  {isNumunumuMode ? numuText : "SANMENso's ARCHIVE"}
+                </span>
+              </p>
+            </div>
+            <WorkFilterCube category={filter} onRouteAnimationComplete={onRouteAnimationComplete} />
+          </div>
+
+          <div className="works-control-panel" aria-label="作品の絞り込みと表示方法">
+            <fieldset className="works-control-group">
+              <legend>CATEGORY</legend>
+              <div className="works-control-row">
+                {CATEGORIES.map((category) => {
+                  const Icon = category.icon;
+                  return (
+                    <button
+                      type="button"
+                      key={category.id}
+                      aria-pressed={filter === category.id}
+                      onClick={() => handleFilterChange(category.id)}
+                      className="works-control-button"
+                    >
+                      {Icon && <Icon size={17} aria-hidden="true" />}
+                      <span>{isNumunumuMode ? numuText : category.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </fieldset>
+
+            <fieldset className="works-control-group">
+              <legend>PROJECT TYPE</legend>
+              <div className="works-control-row">
+                {WORK_KIND_OPTIONS.map((kind) => (
+                  <button
+                    type="button"
+                    key={kind.id}
+                    aria-pressed={workKind === kind.id}
+                    onClick={() => setWorkKind(kind.id)}
+                    className={`works-control-button works-kind-control works-kind-control--${kind.id}`}
+                  >
+                    <span className="works-kind-control__shape" aria-hidden="true" />
+                    {kind.label}
+                  </button>
+                ))}
+              </div>
+            </fieldset>
+
+            <fieldset className="works-control-group">
+              <legend>VIEW</legend>
+              <div className="works-control-row">
+                <button
+                  type="button"
+                  aria-pressed={activeViewMode === 'flow'}
+                  onClick={() => setViewMode('flow')}
+                  disabled={shouldReduceMotion}
+                  className="works-control-button"
+                  title={
+                    shouldReduceMotion
+                      ? '端末の「視差効果を減らす」設定によりINDEX表示になります'
+                      : undefined
+                  }
+                >
+                  FLOW
+                </button>
+                <button
+                  type="button"
+                  aria-pressed={activeViewMode === 'index'}
+                  onClick={() => setViewMode('index')}
+                  className="works-control-button"
+                >
+                  INDEX
+                </button>
+                {activeViewMode === 'flow' && (
+                  <button
+                    type="button"
+                    aria-label={isFlowStopped ? '作品の流れを再開' : '作品の流れを停止'}
+                    onClick={() => setIsFlowStopped((stopped) => !stopped)}
+                    className="works-control-button works-flow-toggle"
+                  >
+                    {isFlowStopped ? (
+                      <Play size={17} aria-hidden="true" />
+                    ) : (
+                      <Pause size={17} aria-hidden="true" />
+                    )}
+                    {isFlowStopped ? 'RESUME' : 'STOP'}
+                  </button>
+                )}
+              </div>
+            </fieldset>
+          </div>
+
+          {shouldReduceMotion && (
+            <p className="works-motion-note" role="status">
+              端末の「視差効果を減らす」設定に合わせ、静止したINDEXで表示しています。
+            </p>
+          )}
+        </header>
+
+        <p className="sr-only" role="status">
+          {workKind === 'original' ? 'ORIGINAL' : 'CLIENT'}、{getWorkCategoryLabel(filter)}、
+          {activeViewMode === 'flow'
+            ? `${flowWorks.length}作品をFLOW表示中`
+            : `${filteredWorks.length}作品をINDEX表示中`}
+        </p>
+
+        {activeViewMode === 'index' && <PaginationControls />}
+
+        {activeViewMode === 'flow' ? (
+          <FlowingWorksLane
+            works={flowWorks}
+            onOpen={handleOpenWork}
+            isStopped={isFlowStopped}
+            isDialogOpen={Boolean(selectedWork)}
+            selectedCategory={filter}
+            isNumunumuMode={isNumunumuMode}
+          />
+        ) : currentWorks.length > 0 ? (
+          <div className="works-index-grid">
+            {currentWorks.map((work) => (
+              <WorkCard
+                key={work.id}
+                work={work}
+                onOpen={handleOpenWork}
+                isNumunumuMode={isNumunumuMode}
+              />
+            ))}
+          </div>
+        ) : (
+          <p className="works-empty-state" role="status">
+            この条件に該当する作品はありません。
+          </p>
+        )}
+
+        {activeViewMode === 'index' && <PaginationControls />}
+      </div>
+
+      <AnimatePresence>
+        {selectedWork && (
+          <AccessibleDialog
+            onClose={handleCloseWork}
+            labelledBy="work-dialog-title"
+            className="fixed inset-0 z-[60] flex items-center justify-center bg-black/75 p-2 sm:p-4 md:p-8"
+          >
+            <motion.div
+              initial={{ scale: 0.95, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 20 }}
+              className="relative z-10 flex h-[95vh] w-full max-w-5xl flex-col overflow-hidden border-4 border-black bg-[#f0f0f0] shadow-[8px_8px_0px_rgba(0,0,0,0.3)] sm:h-[90vh] md:flex-row md:border-[6px] md:shadow-[16px_16px_0px_rgba(0,0,0,0.3)]"
+            >
+              <button
+                type="button"
+                data-dialog-close
+                aria-label="作品詳細を閉じる"
+                onClick={handleCloseWork}
+                className="absolute right-0 top-0 z-20 bg-black p-3 text-white transition-colors hover:bg-[#FFD700] hover:text-black"
+              >
+                <X size={32} />
+              </button>
+              <div className="group relative flex h-1/3 w-full items-center justify-center overflow-hidden border-b-4 border-black bg-gray-200 md:h-full md:w-2/5 md:border-b-0 md:border-r-4">
+                <ImageWithFallback
+                  src={selectedWork.image}
+                  alt={selectedWork.title}
+                  className="h-full w-full object-cover"
+                  fallback={
+                    <>
+                      <div
+                        className="absolute inset-0 opacity-20"
+                        style={{ backgroundColor: selectedWork.color }}
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center text-black opacity-50">
+                        {selectedWork.type === 'music' && <Music size={120} className="stroke-1" />}
+                        {selectedWork.type === 'entame' && (
+                          <Gamepad2 size={120} className="stroke-1" />
+                        )}
+                        {selectedWork.type === 'fun' && <Smile size={120} className="stroke-1" />}
+                      </div>
+                    </>
+                  }
+                />
+                <div className="absolute bottom-4 left-4 border-2 border-black bg-white px-3 py-1 font-mono text-sm shadow-[4px_4px_0px_rgba(0,0,0,0.3)]">
+                  {isNumunumuMode ? numuText : `ID: ${selectedWork.id.toString().padStart(3, '0')}`}
+                </div>
+              </div>
+              <div className="flex w-full flex-col gap-6 overflow-y-auto bg-white p-6 md:w-3/5 md:gap-8 md:p-8 lg:p-12">
+                <div>
+                  <div className="mb-4 flex flex-wrap gap-2">
+                    <span className="flex items-center gap-1 border border-black bg-yellow-300 px-2 py-0.5 font-mono text-xs">
+                      <Tag size={12} />
+                      {isNumunumuMode ? numuText : getWorkCategoryLabel(selectedWork.type)}
+                    </span>
+                    <span className={`work-kind-badge work-kind-badge--${selectedWork.workKind}`}>
+                      <span className="work-kind-badge__shape" aria-hidden="true" />
+                      {selectedWork.workKind === 'original' ? 'ORIGINAL' : 'CLIENT'}
+                    </span>
+                    <span className="flex items-center gap-1 border border-black bg-white px-2 py-0.5 font-mono text-xs">
+                      <Calendar size={12} />
+                      {isNumunumuMode ? numuText : selectedWork.year}
+                    </span>
+                    <span className="flex items-center gap-1 border border-black bg-white px-2 py-0.5 font-mono text-xs">
+                      <User size={12} />
+                      {isNumunumuMode ? numuText : selectedWork.role}
+                    </span>
+                  </div>
+                  <h2
+                    id="work-dialog-title"
+                    className="mb-4 font-sans text-3xl font-black leading-none tracking-tighter md:text-4xl lg:text-5xl"
+                  >
+                    {selectedWork.title}
+                  </h2>
+                  <div className="h-1 w-24 bg-black" />
+                </div>
+                <div className="whitespace-pre-line font-serif text-lg leading-loose text-gray-800">
+                  {selectedWork.detailText || selectedWork.desc}
+                </div>
+                {selectedWork.credits && (
+                  <div className="mt-4 border-2 border-black/20 bg-gray-100 p-6">
+                    <h3 className="mb-3 border-b border-black/20 pb-2 font-sans font-bold">
+                      {isNumunumuMode ? numuText : 'CREDITS'}
+                    </h3>
+                    <ul className="space-y-1 font-mono text-sm">
+                      {selectedWork.credits.map((credit) => (
+                        <li key={credit}>- {credit}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {selectedWork.url && (
+                  <div className="mt-auto pt-8">
+                    <a
+                      href={selectedWork.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex w-full items-center justify-center gap-2 border-2 border-black bg-black py-4 font-sans text-xl font-bold text-white shadow-[8px_8px_0px_#FFD700] transition-all hover:translate-y-1 hover:bg-gray-900 hover:shadow-none"
+                    >
+                      {isNumunumuMode ? numuText : 'VIEW MORE'}
+                      <ExternalLink size={20} />
+                    </a>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          </AccessibleDialog>
+        )}
+      </AnimatePresence>
+    </div>
+  );
 };
 
 export default WorksPage;

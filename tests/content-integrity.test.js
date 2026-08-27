@@ -10,6 +10,8 @@ import {
   SOCIAL_LINKS,
   SONGS,
   WORKS_DATA,
+  WORK_KIND_BY_ID,
+  WORK_KINDS,
 } from '../src/constants.js';
 
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -30,6 +32,19 @@ describe('published content integrity', () => {
     const work50 = WORKS_DATA.find((work) => work.id === 50);
     expect(work50?.url).toBe('https://www.nicovideo.jp/watch/sm45639345');
     expect(work49?.url).not.toBe(work50?.url);
+  });
+
+  it('assigns exactly one supported project type to every work', () => {
+    const ids = WORKS_DATA.map((work) => work.id).sort((a, b) => a - b);
+    const classifiedIds = Object.keys(WORK_KIND_BY_ID)
+      .map(Number)
+      .sort((a, b) => a - b);
+
+    expect(classifiedIds).toEqual(ids);
+    expect(WORKS_DATA.every((work) => work.workKind === WORK_KIND_BY_ID[work.id])).toBe(true);
+    expect(WORKS_DATA.every((work) => Object.values(WORK_KINDS).includes(work.workKind))).toBe(
+      true,
+    );
   });
 
   it('uses HTTPS for every external content link', () => {

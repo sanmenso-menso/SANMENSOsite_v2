@@ -13,7 +13,75 @@ export const FONTS = {
     mono: '"Courier New", Courier, monospace',
 };
 
-export const WORKS_DATA = [
+export const WORK_KINDS = Object.freeze({
+    original: 'original',
+    client: 'client',
+});
+
+export const WORK_KIND_BY_ID = Object.freeze({
+    1: 'original',
+    2: 'original',
+    3: 'original',
+    4: 'original',
+    5: 'original',
+    6: 'original',
+    7: 'original',
+    8: 'original',
+    9: 'original',
+    10: 'original',
+    11: 'original',
+    12: 'original',
+    13: 'original',
+    14: 'client',
+    15: 'client',
+    16: 'client',
+    17: 'client',
+    18: 'client',
+    19: 'client',
+    20: 'client',
+    21: 'original',
+    22: 'original',
+    23: 'client',
+    24: 'original',
+    25: 'client',
+    26: 'client',
+    27: 'original',
+    28: 'original',
+    29: 'client',
+    30: 'original',
+    31: 'original',
+    32: 'original',
+    33: 'original',
+    34: 'client',
+    35: 'client',
+    36: 'client',
+    37: 'original',
+    38: 'original',
+    39: 'client',
+    40: 'original',
+    41: 'client',
+    42: 'client',
+    43: 'client',
+    44: 'client',
+    45: 'client',
+    46: 'client',
+    47: 'original',
+    48: 'original',
+    49: 'client',
+    50: 'original',
+    51: 'client',
+    52: 'original',
+    53: 'client',
+    54: 'original',
+    55: 'client',
+    56: 'client',
+    57: 'client',
+    58: 'client',
+    59: 'client',
+    60: 'client',
+});
+
+const WORKS_DATA_BASE = [
     { 
         id: 1, 
         title: "ButterflyEffectCity/可不", 
@@ -790,6 +858,11 @@ export const WORKS_DATA = [
         image: "/images/flow-vol11-800w.webp",
     },
 ];
+
+export const WORKS_DATA = WORKS_DATA_BASE.map((work) => ({
+    ...work,
+    workKind: WORK_KIND_BY_ID[work.id],
+}));
 
 export const EXCAVATION_LINKS = [
     { 
