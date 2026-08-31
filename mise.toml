@@ -1,0 +1,7 @@
+[tools]
+node = "24.11.1"
+python = "3.12.10"
+
+[settings]
+lockfile = true
+lockfile_platforms = ["windows-x64", "macos-arm64"]

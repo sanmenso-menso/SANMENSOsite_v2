@@ -13,6 +13,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "optimize": "node scripts/optimize-images.js",
+    "doctor": "mise exec -- python scripts/doctor.py",
+    "test:doctor": "mise exec -- python -m unittest discover -s tests -p test_doctor.py -v",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "eslint .",
