@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import {
   CUBE_ROUTE_TRANSITION_SECONDS,
   ROUTE_TRANSITION_LOCK_MS,
+  canCompleteReturningCubeIntro,
   canStartRouteTransition,
   isHomeEntryReady,
 } from '../src/utils/routeTransition.js';
@@ -53,5 +54,29 @@ describe('route transition state', () => {
 
   it('keeps the route lock longer than the shared CUBE animation', () => {
     expect(ROUTE_TRANSITION_LOCK_MS).toBeGreaterThan(CUBE_ROUTE_TRANSITION_SECONDS * 1000);
+  });
+
+  it('waits for both the return animation and opening sequence before enabling HOME', () => {
+    expect(
+      canCompleteReturningCubeIntro({
+        isReturningFromWorks: true,
+        isOpening: false,
+        hasReturnAnimationCompleted: true,
+      }),
+    ).toBe(true);
+    expect(
+      canCompleteReturningCubeIntro({
+        isReturningFromWorks: true,
+        isOpening: true,
+        hasReturnAnimationCompleted: true,
+      }),
+    ).toBe(false);
+    expect(
+      canCompleteReturningCubeIntro({
+        isReturningFromWorks: true,
+        isOpening: false,
+        hasReturnAnimationCompleted: false,
+      }),
+    ).toBe(false);
   });
 });

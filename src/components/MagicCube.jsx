@@ -6,7 +6,10 @@ import { useNumunumu } from '../NumunumuContext';
 import SecretProfileFace from './SecretProfileFace';
 import AboutPage from './AboutPage';
 import HistoryPage from './HistoryPage';
-import { CUBE_ROUTE_TRANSITION_SECONDS } from '../utils/routeTransition';
+import {
+    CUBE_ROUTE_TRANSITION_SECONDS,
+    canCompleteReturningCubeIntro,
+} from '../utils/routeTransition';
 
 const MagicCube = ({
     onSelect,
@@ -43,6 +46,7 @@ const MagicCube = ({
     const [showHistory, setShowHistory] = useState(false);
     const [isInteractionReady, setIsInteractionReady] = useState(false);
     const introCompletionRef = useRef(false);
+    const returnAnimationCompletionRef = useRef(false);
     const isCubeDisabled = !isPresent || !isInteractionReady;
 
     const markIntroComplete = useCallback(() => {
@@ -82,6 +86,7 @@ const MagicCube = ({
         let introStartTimer;
 
         introCompletionRef.current = false;
+        returnAnimationCompletionRef.current = false;
         setIsInteractionReady(false);
 
         if (!isPresent) return undefined;
@@ -134,6 +139,16 @@ const MagicCube = ({
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isPresent, isReturningFromWorks, markIntroComplete, shouldReduceMotion]);
+
+    useEffect(() => {
+        if (canCompleteReturningCubeIntro({
+            isReturningFromWorks,
+            isOpening,
+            hasReturnAnimationCompleted: returnAnimationCompletionRef.current,
+        })) {
+            markIntroComplete();
+        }
+    }, [isOpening, isReturningFromWorks, markIntroComplete]);
 
     useAnimationFrame(() => {
         if (!isPresent || showAbout || showHistory) return; // Stop animation if a page is open or exiting
@@ -266,7 +281,15 @@ const MagicCube = ({
                     animate={entryAnimation}
                     transition={entryTransition}
                     onAnimationComplete={() => {
-                        if (isReturningFromWorks && !isOpening) markIntroComplete();
+                        if (!isReturningFromWorks) return;
+                        returnAnimationCompletionRef.current = true;
+                        if (canCompleteReturningCubeIntro({
+                            isReturningFromWorks,
+                            isOpening,
+                            hasReturnAnimationCompleted: returnAnimationCompletionRef.current,
+                        })) {
+                            markIntroComplete();
+                        }
                     }}
                     style={{ width: '100%', height: '100%', position: 'relative', transformStyle: 'preserve-3d', willChange: 'transform' }}
                 >
