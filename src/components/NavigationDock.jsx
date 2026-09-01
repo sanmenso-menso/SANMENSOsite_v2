@@ -40,12 +40,17 @@ const NavigationDock = ({ activePage, onNavigate, isOpening, disabled = false })
                             disabled={disabled}
                             aria-label={isNumunumuMode ? `${numuText}（${item.label}）` : item.label}
                             aria-current={isActive ? 'page' : undefined}
-                            className="relative w-14 md:w-28 px-2 py-2 md:px-6 md:py-3 group flex flex-col items-center justify-center disabled:cursor-wait disabled:opacity-60"
+                            className={`relative px-2 py-2 md:w-28 md:px-6 md:py-3 group flex items-center justify-center gap-1 md:flex-col md:gap-0 disabled:cursor-wait disabled:opacity-60 ${isActive ? 'w-20' : 'w-12'}`}
                         >
                             {isActive && <div className="absolute inset-0 bg-white/10 rounded-full" />}
                             <span className={`relative z-10 transition-colors duration-300 ${isActive ? 'text-[#FFD700]' : 'text-white group-hover:text-[#FFD700]'}`}>
                                 <span className="hidden md:inline text-xs font-bold tracking-widest">{isNumunumuMode ? numuText : item.label}</span>
                                 <item.icon className="md:hidden" size={20} />
+                                {isActive && (
+                                    <span className="text-[9px] font-bold tracking-wide md:hidden">
+                                        {isNumunumuMode ? numuText : item.label}
+                                    </span>
+                                )}
                             </span>
                             {isActive && <div className="absolute bottom-1 md:bottom-2 w-1 h-1 bg-[#FFD700] rounded-full" />}
                         </button>

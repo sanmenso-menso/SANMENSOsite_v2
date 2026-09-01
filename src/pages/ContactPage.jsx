@@ -14,7 +14,7 @@ const ContactPage = () => {
     return (
         <>
             <ContactHeader />
-            <div className="max-w-5xl mx-auto px-4 md:px-6 py-16 md:py-24 flex flex-col items-center justify-center text-center overflow-hidden">
+            <div className="max-w-5xl mx-auto px-4 md:px-6 py-10 md:py-8 flex flex-col items-center justify-center text-center overflow-hidden">
             <style>
                 {`
                 @keyframes spin {

@@ -7,7 +7,8 @@ SANMENSOsite_v2は、SANMENSOの作品、活動、関連content、連絡先を�
 ## Primary experiences
 
 - HOMEでartist identity、背景演出、更新案内を伝える。
-- WORKSで作品を一覧し、categoryでfilterできる。
+- WORKSで作品を一覧し、`Music`、`Visual`、`Live & Culture` のcategoryと `Original` / `Client` のproject typeでfilterできる。複数分野の成果物がある実績は複数categoryへ掲載する。
+- ラジオ・取材・インタビューと共同制作は、主categoryを増やさず `Appearance` / `Press` と `Collaboration` の横断属性で示す。
 - HOMEとWORKSの往復を連続したvisual transitionとして提供する。
 - CONTENTS、LINKS、CONTACTから追加情報と外部導線を提供する。
 - reduced motionを含む利用環境へ配慮する。

@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { motion, useMotionValue, useAnimationFrame, animate, AnimatePresence, useIsPresent, useReducedMotion } from 'framer-motion';
-import { Music, Gamepad2, Smile } from 'lucide-react';
+import { Music, Palette, RadioTower } from 'lucide-react';
 import * as THREE from 'three';
 import { useNumunumu } from '../NumunumuContext';
 import SecretProfileFace from './SecretProfileFace';
@@ -31,14 +31,6 @@ const MagicCube = ({
     const introRotationY = useMotionValue(0);
     const introRotationX = useMotionValue(0);
     const rotationSpeed = useRef({ x: 0, y: 0 });
-
-    // Initialize rotation
-    useEffect(() => {
-        const qx = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), -20 * Math.PI / 180);
-        const qy = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), -25 * Math.PI / 180);
-        targetQ.current.multiplyQuaternions(qx, qy);
-        currentQ.current.copy(targetQ.current);
-    }, []);
 
     const isDragging = useRef(false);
     const isScrolling = useRef(null);
@@ -74,7 +66,7 @@ const MagicCube = ({
     useEffect(() => {
         const updateSize = () => {
             if (window.innerWidth < 768) {
-                setCubeSize(195); 
+                setCubeSize(185);
             } else {
                 setCubeSize(280); 
             }
@@ -87,87 +79,68 @@ const MagicCube = ({
     useEffect(() => {
         let isCancelled = false;
         let activeAnimation;
+        let introStartTimer;
 
         introCompletionRef.current = false;
         setIsInteractionReady(false);
 
         if (!isPresent) return undefined;
 
-        if (isOpening) {
-            introRotationY.set(0);
-            introRotationX.set(0);
-            rotationSpeed.current = { x: 0, y: 0 };
-        } else {
-            // Reset rotation to initial state
-            const qx = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), -20 * Math.PI / 180);
-            const qy = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), -25 * Math.PI / 180);
-            targetQ.current.multiplyQuaternions(qx, qy);
+        introRotationY.set(0);
+        introRotationX.set(0);
+        rotationSpeed.current = { x: 0, y: 0 };
 
-            if (shouldReduceMotion) {
-                introRotationY.set(0);
-                introRotationX.set(0);
-                markIntroComplete();
-                return undefined;
-            }
+        // Reset rotation to the final resting pose before applying the intro offsets.
+        const qx = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), -20 * Math.PI / 180);
+        const qy = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), -25 * Math.PI / 180);
+        targetQ.current.multiplyQuaternions(qx, qy);
+        currentQ.current.copy(targetQ.current);
 
-            if (isReturningFromWorks) {
-                introRotationY.set(0);
-                introRotationX.set(0);
-                return undefined;
-            }
-
-            // Intro animation sequence
-            const playIntro = async () => {
-                // 1. Horizontal rotation (2 turns)
-                introRotationY.set(Math.PI * 4);
-                activeAnimation = animate(introRotationY, 0, {
-                    type: "tween",
-                    duration: 1.6,
-                    ease: "easeInOut"
-                });
-                await activeAnimation;
-                if (isCancelled) return;
-
-                // 2. Vertical rotation (1 turn)
-                introRotationX.set(Math.PI * 2);
-                activeAnimation = animate(introRotationX, 0, {
-                    type: "tween",
-                    duration: 1.2,
-                    ease: "easeInOut"
-                });
-                await activeAnimation;
-                if (isCancelled) return;
-
-                markIntroComplete();
-
-                // Add inertia after intro
-               //otationSpeed.current = { x: 0, y: -0.015 };
-            };
-            playIntro();
+        if (shouldReduceMotion) {
+            markIntroComplete();
+            return undefined;
         }
+
+        if (isReturningFromWorks) return undefined;
+
+        // Start rotating shortly after the independent floating animation begins.
+        const playIntro = async () => {
+            introRotationY.set(Math.PI * 2);
+            activeAnimation = animate(introRotationY, 0, {
+                type: "tween",
+                duration: 1.2,
+                ease: "easeInOut"
+            });
+            await activeAnimation;
+            if (isCancelled) return;
+
+            introRotationX.set(Math.PI * 2);
+            activeAnimation = animate(introRotationX, 0, {
+                type: "tween",
+                duration: 1,
+                ease: "easeInOut"
+            });
+            await activeAnimation;
+            if (isCancelled) return;
+
+            markIntroComplete();
+        };
+        introStartTimer = window.setTimeout(playIntro, 200);
+
         return () => {
             isCancelled = true;
+            window.clearTimeout(introStartTimer);
             activeAnimation?.stop();
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isOpening, isPresent, isReturningFromWorks, markIntroComplete, shouldReduceMotion]);
+    }, [isPresent, isReturningFromWorks, markIntroComplete, shouldReduceMotion]);
 
-    useAnimationFrame((_time, delta) => {
+    useAnimationFrame(() => {
         if (!isPresent || showAbout || showHistory) return; // Stop animation if a page is open or exiting
 
         if (shouldReduceMotion) {
-            const staticMatrix = new THREE.Matrix4().makeRotationFromQuaternion(currentQ.current);
-            staticMatrix.setPosition(0, 0, 0);
-            transformMV.set(`matrix3d(${staticMatrix.elements.join(',')})`);
-            return;
-        }
-
-        if (isOpening) {
-            // Spin effect during opening
-            const speed = 0.002 * delta;
-            const qSpin = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 1, 0).normalize(), speed);
-            targetQ.current.premultiply(qSpin);
-        } else if (!isDragging.current) {
+            currentQ.current.copy(targetQ.current);
+        } else if (!isOpening && !isDragging.current) {
             // Apply inertia
             if (Math.abs(rotationSpeed.current.x) > 0.0001 || Math.abs(rotationSpeed.current.y) > 0.0001) {
                 const qy = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), rotationSpeed.current.x);
@@ -180,7 +153,7 @@ const MagicCube = ({
         }
 
         // Smoothly interpolate currentQ towards targetQ (Base orientation)
-        currentQ.current.slerp(targetQ.current, 0.1);
+        if (!shouldReduceMotion) currentQ.current.slerp(targetQ.current, 0.1);
 
         // Calculate render quaternion with intro animations applied
         const renderQ = currentQ.current.clone();
@@ -251,13 +224,32 @@ const MagicCube = ({
     }, []);
 
     const HALF_SIZE = cubeSize / 2;
+    const entryInitial = isReturningFromWorks
+        ? { y: 0, scale: 0.86 }
+        : shouldReduceMotion
+          ? false
+          : { opacity: 0, y: 48, scale: 0.84 };
+    const entryAnimation = isReturningFromWorks
+        ? { y: [0, -64, 0], scale: [0.86, 1.08, 1] }
+        : shouldReduceMotion
+          ? { opacity: 1, y: 0, scale: 1 }
+          : { opacity: [0, 0.72, 1], y: [48, 18, 0], scale: [0.84, 0.94, 1] };
+    const entryTransition = isReturningFromWorks
+        ? {
+            duration: CUBE_ROUTE_TRANSITION_SECONDS,
+            times: [0, 0.5, 1],
+            ease: [0.22, 1, 0.36, 1],
+          }
+        : shouldReduceMotion
+          ? { duration: 0.01 }
+          : { duration: 1.8, times: [0, 0.5, 1], ease: [0.4, 0, 0.2, 1] };
 
     return (
         <div
             ref={containerRef}
             data-cube-ready={isInteractionReady && isPresent ? 'true' : 'false'}
             aria-busy={!isInteractionReady}
-            className={`relative z-20 flex items-center justify-center ${isCubeDisabled ? 'pointer-events-none cursor-wait' : 'cursor-grab active:cursor-grabbing'}`}
+            className={`relative z-20 flex items-center justify-center pl-[100px] md:pl-0 ${isCubeDisabled ? 'pointer-events-none cursor-wait' : 'cursor-grab active:cursor-grabbing'}`}
             style={{ width: '100%', height: '60vh', perspective: '1200px', touchAction: 'none' }}
             onPointerDown={handlePointerDown}
         >
@@ -270,18 +262,18 @@ const MagicCube = ({
             >
                 <motion.div
                     data-cube-returning={isReturningFromWorks ? 'true' : 'false'}
-                    initial={isReturningFromWorks ? { y: 0, scale: 0.86 } : false}
-                    animate={isReturningFromWorks ? { y: [0, -64, 0], scale: [0.86, 1.08, 1] } : { y: 0, scale: 1 }}
-                    transition={isReturningFromWorks ? { duration: CUBE_ROUTE_TRANSITION_SECONDS, times: [0, 0.5, 1], ease: [0.22, 1, 0.36, 1] } : { duration: 0.01 }}
+                    initial={entryInitial}
+                    animate={entryAnimation}
+                    transition={entryTransition}
                     onAnimationComplete={() => {
                         if (isReturningFromWorks && !isOpening) markIntroComplete();
                     }}
                     style={{ width: '100%', height: '100%', position: 'relative', transformStyle: 'preserve-3d', willChange: 'transform' }}
                 >
                     <motion.div style={{ width: '100%', height: '100%', position: 'relative', transformStyle: 'preserve-3d', transform: transformMV, willChange: 'transform' }}>
-                <CubeFace disabled={isCubeDisabled} ariaLabel="エンタメ作品を見る" size={cubeSize} halfSize={HALF_SIZE} rotate="rotateY(0deg)" color="bg-brandGreen" borderColor="border-black" label="エンタメ" icon={<Gamepad2 className="text-white w-12 h-12 md:w-16 md:h-16" />} textColor="text-white" onClick={() => !hasDragged.current && onSelect('entame')} />
-                <CubeFace disabled={isCubeDisabled} ariaLabel="FUN作品を見る" size={cubeSize} halfSize={HALF_SIZE} rotate="rotateY(90deg)" color="bg-accentGold" borderColor="border-black" label="楽しさ" icon={<Smile className="text-black w-12 h-12 md:w-16 md:h-16" />} textColor="text-black" onClick={() => !hasDragged.current && onSelect('fun')} />
-                <CubeFace disabled={isCubeDisabled} ariaLabel="創造（CREATE）作品を見る" size={cubeSize} halfSize={HALF_SIZE} rotate="rotateX(90deg)" color="bg-red-600" borderColor="border-black" label="創造" icon={<Music className="text-white w-12 h-12 md:w-16 md:h-16" />} textColor="text-white" onClick={() => !hasDragged.current && onSelect('music')} />
+                <CubeFace disabled={isCubeDisabled} ariaLabel="Live & Culture作品を見る" size={cubeSize} halfSize={HALF_SIZE} rotate="rotateY(0deg)" color="bg-brandGreen" borderColor="border-black" label={<>LIVE &amp;<br />CULTURE</>} icon={<RadioTower className="text-white w-12 h-12 md:w-16 md:h-16" />} textColor="text-white" onClick={() => !hasDragged.current && onSelect('live')} />
+                <CubeFace disabled={isCubeDisabled} ariaLabel="Visual作品を見る" size={cubeSize} halfSize={HALF_SIZE} rotate="rotateY(90deg)" color="bg-accentGold" borderColor="border-black" label="VISUAL" icon={<Palette className="text-black w-12 h-12 md:w-16 md:h-16" />} textColor="text-black" onClick={() => !hasDragged.current && onSelect('visual')} />
+                <CubeFace disabled={isCubeDisabled} ariaLabel="Music作品を見る" size={cubeSize} halfSize={HALF_SIZE} rotate="rotateX(90deg)" color="bg-red-600" borderColor="border-black" label="MUSIC" icon={<Music className="text-white w-12 h-12 md:w-16 md:h-16" />} textColor="text-white" onClick={() => !hasDragged.current && onSelect('music')} />
                 <CubeFace disabled={isCubeDisabled} ariaLabel={isProfileFlipped ? 'プロフィール画像へ戻す' : '隠しプロフィールを表示'} ariaPressed={isProfileFlipped} size={cubeSize} halfSize={HALF_SIZE} rotate="rotateY(-90deg)" color="bg-transparent" borderColor="border-black" customContent={<SecretProfileFace isFlipped={isProfileFlipped} />} onClick={() => !hasDragged.current && setIsProfileFlipped(prev => !prev)} />
                 <CubeFace disabled={isCubeDisabled} ariaLabel="活動履歴を開く" size={cubeSize} halfSize={HALF_SIZE} rotate="rotateX(-90deg)" color="bg-black" borderColor="border-white" onClick={() => !hasDragged.current && setShowHistory(true)} customContent={
                     <div className="w-full h-full p-6 flex flex-col justify-center items-center text-white text-center select-none bg-black">
@@ -294,10 +286,19 @@ const MagicCube = ({
                 <CubeFace disabled={isCubeDisabled} ariaLabel="プロフィールを開く" size={cubeSize} halfSize={HALF_SIZE} rotate="rotateY(180deg)" color="bg-white" borderColor="border-black" onClick={() => !hasDragged.current && setShowAbout(true)} customContent={
                     <div className="w-full h-full p-2 md:p-6 flex flex-col justify-center text-center select-none bg-white">
                         <h3 className="font-black text-xl md:text-3xl mb-2 md:mb-5 border-b-2 md:border-b-4 border-black inline-block self-center">{isNumunumuMode ? numuText : 'WHO?'}</h3>
-                        <p className="font-sans text-[11px] md:text-sm leading-tight md:leading-relaxed text-left font-bold tracking-tight">{isNumunumuMode ? numuText : '大阪在住。'}<br/>{isNumunumuMode ? '' : 'インターネットの片隅で、コラージュを軸に音楽やビジュアルなどのコンテンツを制作し活動している。'}<br/>{isNumunumuMode ? '' : '面白さで世界の境界線を破壊・再構築し、実験的かつ親しみのある作品世界を目指す。'}<br/>{isNumunumuMode ? '' : '制作デスクにはいつもスルメ'}</p>
+                        {isNumunumuMode ? (
+                            <p className="font-sans text-[11px] md:text-sm font-bold">{numuText}</p>
+                        ) : (
+                            <div className="space-y-1 font-sans text-[9px] md:text-[11px] leading-tight text-left font-bold tracking-tight">
+                                <p>2005年生まれ、大阪在住。</p>
+                                <p>音と映像とインターネットのあいだで、楽しいものをつくる「楽し師」。</p>
+                                <p>音楽を軸に、映像やデザイン、その他いろいろ。異なる世界の音や物を混ぜ、つなぎ、コラージュしながら、実験的だけどポップな作品をつくっている。</p>
+                                <p>気持ちいいタイミングと、ユーモアを大切にしている。</p>
+                            </div>
+                        )}
                     </div>
                 } />
-                    <div className="absolute inset-0 m-auto bg-black animate-pulse pointer-events-none" style={{ width: cubeSize * 0.5, height: cubeSize * 0.5, transform: 'translateZ(0)' }} />
+                    <div className="absolute inset-0 m-auto bg-black pointer-events-none" style={{ width: cubeSize * 0.5, height: cubeSize * 0.5, transform: 'translateZ(0)' }} />
                     </motion.div>
                 </motion.div>
             </motion.div>
@@ -336,7 +337,13 @@ const CubeFace = ({
             aria-label={ariaLabel}
             aria-pressed={ariaPressed}
             className={`absolute inset-0 border-[4px] ${borderColor} ${color} flex items-center justify-center cursor-pointer overflow-hidden group select-none shadow-[inset_0_0_40px_rgba(0,0,0,0.2)] focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-blue-600`}
-            style={{ width: size, height: size, transform: `${rotate} translateZ(${halfSize}px)`, backfaceVisibility: 'visible' }}
+            style={{
+                width: size,
+                height: size,
+                transform: `${rotate} translateZ(${halfSize}px)`,
+                backfaceVisibility: 'hidden',
+                WebkitBackfaceVisibility: 'hidden',
+            }}
             onClick={onClick}
         >
             {isNumunumuMode ? (

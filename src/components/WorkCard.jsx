@@ -1,12 +1,12 @@
 import React from 'react';
-import { ArrowUpRight, Gamepad2, Music, Smile } from 'lucide-react';
-import { getWorkCategoryLabel } from '../utils/works';
+import { ArrowUpRight, Music, Palette, RadioTower } from 'lucide-react';
+import { getWorkAttributeLabel, getWorkCategories, getWorkCategoryLabel } from '../utils/works';
 import ImageWithFallback from './ImageWithFallback';
 
 const getFallbackIcon = (type, size = 64) => {
   if (type === 'music') return <Music size={size} className="opacity-50" />;
-  if (type === 'entame') return <Gamepad2 size={size} className="opacity-50" />;
-  return <Smile size={size} className="opacity-50" />;
+  if (type === 'visual') return <Palette size={size} className="opacity-50" />;
+  return <RadioTower size={size} className="opacity-50" />;
 };
 
 const CompactWorkCardContents = ({ work, isClone }) => (
@@ -28,7 +28,9 @@ const CompactWorkCardContents = ({ work, isClone }) => (
       }
     />
     <span className="work-card-compact__category" aria-hidden="true">
-      {getWorkCategoryLabel(work.type).slice(0, 1)}
+      {getWorkCategories(work)
+        .map((category) => getWorkCategoryLabel(category).slice(0, 1))
+        .join('/')}
     </span>
   </div>
 );
@@ -63,13 +65,26 @@ const WorkCardContents = ({ work, isNumunumuMode, isClone }) => (
       </span>
     </div>
     <div className="mb-2 flex flex-wrap items-center gap-2">
-      <span className="rounded-full border border-black bg-yellow-300 px-2 py-0.5 font-mono text-xs font-bold">
-        {getWorkCategoryLabel(work.type)}
-      </span>
+      {getWorkCategories(work).map((category) => (
+        <span
+          key={category}
+          className="rounded-full border border-black bg-yellow-300 px-2 py-0.5 font-mono text-xs font-bold"
+        >
+          {getWorkCategoryLabel(category)}
+        </span>
+      ))}
       <span className={`work-kind-badge work-kind-badge--${work.workKind}`}>
         <span className="work-kind-badge__shape" aria-hidden="true" />
         {work.workKind === 'original' ? 'ORIGINAL' : 'CLIENT'}
       </span>
+      {(work.attributes ?? []).map((attribute) => (
+        <span
+          key={attribute}
+          className={`work-attribute-badge work-attribute-badge--${attribute}`}
+        >
+          {getWorkAttributeLabel(attribute)}
+        </span>
+      ))}
       <span className="font-mono text-xs opacity-60">{work.role}</span>
     </div>
     <p className="mb-3 line-clamp-3 flex-grow font-sans text-sm font-medium leading-snug opacity-80">

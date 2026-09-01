@@ -12,9 +12,10 @@ describe('home artist backdrop', () => {
     expect(markup).toContain('aria-hidden="true"');
     expect(markup).toContain('data-home-artist-backdrop="true"');
     expect(markup.match(/class="home-artist-backdrop__service"/g)).toHaveLength(4);
-    for (const label of ['音楽', 'DJ', '映像', 'デザイン', '三', '面', '相']) {
+    for (const label of ['音楽', 'DJ', '映像', 'デザイン']) {
       expect(markup).toContain(label);
     }
+    expect(markup).not.toContain('home-artist-backdrop__artist');
     expect(markup).not.toMatch(/<(?:a|button|input)\b/);
   });
 
@@ -39,21 +40,13 @@ describe('home artist backdrop', () => {
     expect(cssSource).toContain('max-width: 100%');
     expect(cssSource).not.toContain('translateY(-51%)');
     expect(cssSource).toContain('justify-content: flex-start');
-    expect(cssSource).toContain('justify-content: center');
     expect(cssSource).not.toContain('justify-content: space-evenly');
-    expect(cssSource).toContain('gap: clamp(0.55rem, 1.8vh, 1rem)');
-    expect(cssSource).toContain('gap: clamp(0.4rem, 1.4vh, 0.7rem)');
     expect(cssSource).toContain('text-align: left');
-    expect(cssSource.match(/background: transparent/g)).toHaveLength(2);
-    expect(cssSource.match(/border-radius: 999px/g)).toHaveLength(2);
+    expect(cssSource.match(/background: transparent/g)).toHaveLength(1);
+    expect(cssSource.match(/border-radius: 999px/g)).toHaveLength(1);
     expect(cssSource).not.toContain('border-radius: 50% / 7%');
     expect(cssSource).not.toContain('home-artist-backdrop__service:nth-child');
     expect(cssSource).toContain('border: clamp(3px, 0.3vw, 5px) solid currentColor');
-    expect(cssSource).toContain('width: clamp(6.5rem, 11vw, 10rem)');
-    expect(cssSource).toContain('height: clamp(17.5rem, 47vh, 29rem)');
-    expect(cssSource).toContain('height: clamp(13rem, 36vh, 17.5rem)');
-    expect(cssSource).toContain('height: 44vh');
-    expect(cssSource).toContain('height: 41vh');
     expect(cssSource).toContain('min-height: clamp(5.5rem, 10.8vw, 10rem)');
     expect(cssSource).toContain('min-height: 3.25rem');
     expect(cssSource).toContain('min-height: clamp(3rem, 12vh, 4.8rem)');

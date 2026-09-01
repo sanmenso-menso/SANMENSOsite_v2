@@ -192,12 +192,12 @@ function AppContent() {
             return undefined;
         }
 
-        const timer = window.setTimeout(() => setIsOpening(false), 900);
+        const timer = window.setTimeout(() => setIsOpening(false), 1800);
         return () => window.clearTimeout(timer);
     }, [shouldReduceMotion]);
 
     const handleCubeSelect = (key) => {
-        if (!['music', 'entame', 'fun'].includes(key)) return;
+        if (!['music', 'live', 'visual'].includes(key)) return;
         if (!beginRouteTransition('/works')) return;
         setWorksFilter(key);
     };

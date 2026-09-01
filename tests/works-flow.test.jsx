@@ -14,6 +14,8 @@ const work = {
   color: '#ffffff',
   image: '/images/butteerflyeffectCity.webp',
   workKind: 'original',
+  categories: ['music'],
+  attributes: ['collaboration'],
 };
 
 describe('flowing works lane accessibility', () => {
@@ -35,6 +37,7 @@ describe('flowing works lane accessibility', () => {
     expect(markup).toContain('aria-hidden="true" inert=""');
     expect(markup).toContain('作品が一定速度で流れています。');
     expect(markup).not.toContain('work-card--compact');
+    expect(markup).toContain('COLLABORATION');
     expect(markup.match(/class="works-flow-item/g)).toHaveLength(2);
 
     const placementStyles = [
@@ -51,7 +54,7 @@ describe('flowing works lane accessibility', () => {
   it('renders non-selected categories as compact squares while keeping them in the flow', () => {
     const markup = renderToStaticMarkup(
       <FlowingWorksLane
-        works={[{ ...work, type: 'fun' }]}
+        works={[{ ...work, type: 'visual', categories: ['visual'] }]}
         onOpen={() => {}}
         isStopped={false}
         isDialogOpen={false}

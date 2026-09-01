@@ -447,7 +447,7 @@ const SecretPage = () => {
                                 {win.contentType === 'image' ? (
                                     <img src={win.content} alt="content" className="w-full h-auto border pointer-events-none bg-white/10" style={{ borderColor: colors.text }} />
                                 ) : win.contentType === 'link' ? (
-                                    <a href={win.content.url} target="_blank" rel="noreferrer" className="block group cursor-pointer">
+                                    <a href={win.content.url} target="_blank" rel="noopener noreferrer" className="block group cursor-pointer">
                                         <div className="relative overflow-hidden border" style={{ borderColor: colors.text }}>
                                             <img src={win.content.image} alt="link thumbnail" className="w-full h-auto object-cover transition-transform group-hover:scale-110" />
                                             <div className="absolute inset-0 bg-white/10 group-hover:bg-transparent transition-colors pointer-events-none" />

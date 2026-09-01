@@ -289,7 +289,7 @@ const LinksPage = () => {
 
                         <div className="flex flex-wrap justify-center gap-2 md:gap-4">
                             {finalSocialLinks.map((link, i) => (
-                                <a key={i} href={link.url} target="_blank" rel="noreferrer" className="flex items-center gap-2 bg-black text-white px-4 py-2 md:px-6 md:py-3 text-sm md:text-base font-bold hover:bg-[#FFD700] hover:text-black hover:-translate-y-1 transition-all border-2 border-black shadow-[4px_4px_0px_rgba(0,0,0,0.3)]">
+                                <a key={i} href={link.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 bg-black text-white px-4 py-2 md:px-6 md:py-3 text-sm md:text-base font-bold hover:bg-[#FFD700] hover:text-black hover:-translate-y-1 transition-all border-2 border-black shadow-[4px_4px_0px_rgba(0,0,0,0.3)]">
                                     <ExternalLink size={18} /> {link.name}
                                 </a>
                             ))}
@@ -335,7 +335,7 @@ const LinksPage = () => {
                                 key={i} 
                                 href={link.url} 
                                 target="_blank" 
-                                rel="noreferrer"
+                                rel="noopener noreferrer"
                                 className={`absolute block hover:scale-110 hover:z-50 transition-transform cursor-pointer pointer-events-auto w-32 h-8 sm:w-48 sm:h-12 md:w-64 md:h-16 overflow-hidden ${isBroken && !shouldReduceMotion ? 'animate-[fly-away_1.0s_ease-in_forwards]' : ''}`}
                                 style={{ 
                                     top: randomPositions[i]?.top || '50%', 
@@ -370,7 +370,7 @@ const LinksPage = () => {
                                 key={i} 
                                 href={link.url} 
                                 target="_blank" 
-                                rel="noreferrer"
+                                rel="noopener noreferrer"
                                 className={`absolute bg-white border-2 border-black p-1 sm:p-2 md:p-4 flex flex-col items-center justify-center text-center shadow-[4px_4px_0px_rgba(0,0,0,0.3)] hover:scale-110 hover:z-50 transition-transform cursor-pointer pointer-events-auto w-28 h-20 sm:w-40 sm:h-24 md:w-48 ${isBroken && !shouldReduceMotion ? 'animate-[fly-away_1.0s_ease-in_forwards]' : ''}`}
                                 style={{ 
                                     top: randomPositions[i]?.top || '50%', 

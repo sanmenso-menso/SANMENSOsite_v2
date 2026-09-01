@@ -46,6 +46,11 @@
   font-size: 1.05rem;
   font-weight: 900;
   letter-spacing: 0.08em;
+  text-align: center;
+}
+
+.work-filter-cube__face--front span {
+  line-height: 1.05;
 }
 
 .work-filter-cube__face--front {
@@ -189,6 +194,26 @@
   font-size: 0.69rem;
   font-weight: 900;
   line-height: 1;
+}
+
+.work-attribute-badge {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #111;
+  padding: 0.15rem 0.45rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.69rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.work-attribute-badge--appearance,
+.work-attribute-badge--press {
+  background: #f0e5ff;
+}
+
+.work-attribute-badge--collaboration {
+  background: #dff5ff;
 }
 
 .works-motion-note {
@@ -377,12 +402,18 @@
 }
 
 @media (max-width: 580px) {
+  .works-header {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+  }
+
   .works-heading {
     grid-template-columns: 1fr;
   }
 
   .work-filter-cube-stage {
-    min-height: 10rem;
+    --work-cube-size: 6.5rem;
+    min-height: 8.25rem;
   }
 
   .works-control-button {

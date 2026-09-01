@@ -115,7 +115,7 @@ const ContactHeader = () => {
     };
 
     return (
-        <div className="relative w-full flex flex-col items-center justify-center py-16 sm:py-20 md:py-28 overflow-hidden">
+        <div className="relative w-full flex flex-col items-center justify-center py-12 sm:py-16 md:py-0 overflow-hidden">
             <motion.div
                 className="text-center"
                 initial="initial"

@@ -3,11 +3,11 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import {
   Calendar,
   ExternalLink,
-  Gamepad2,
   Music,
+  Palette,
   Pause,
   Play,
-  Smile,
+  RadioTower,
   Tag,
   User,
   X,
@@ -22,6 +22,8 @@ import { useNumunumu } from '../NumunumuContext';
 import {
   clampWorkPage,
   filterAndSortWorks,
+  getWorkAttributeLabel,
+  getWorkCategories,
   getWorkCategoryLabel,
   sortWorksForFlow,
 } from '../utils/works';
@@ -32,8 +34,8 @@ const ITEMS_PER_PAGE = 9;
 const CATEGORIES = [
   { id: 'all', label: 'ALL', icon: null },
   { id: 'music', label: getWorkCategoryLabel('music'), icon: Music },
-  { id: 'entame', label: 'ENTAME', icon: Gamepad2 },
-  { id: 'fun', label: 'FUN', icon: Smile },
+  { id: 'visual', label: getWorkCategoryLabel('visual'), icon: Palette },
+  { id: 'live', label: getWorkCategoryLabel('live'), icon: RadioTower },
 ];
 
 const WORK_KIND_OPTIONS = [
@@ -52,7 +54,9 @@ const decorateWorks = (works, isNumunumuMode, numuText) => {
     role: numuText,
     credits: [numuText],
     year: ' ',
-    type: 'fun',
+    type: 'visual',
+    categories: ['visual'],
+    attributes: [],
     image: '/images/numunumu_icon.webp',
   }));
 };
@@ -346,10 +350,12 @@ const WorksPage = ({ filter = 'all', onFilterChange = () => {}, onRouteAnimation
                       />
                       <div className="absolute inset-0 flex items-center justify-center text-black opacity-50">
                         {selectedWork.type === 'music' && <Music size={120} className="stroke-1" />}
-                        {selectedWork.type === 'entame' && (
-                          <Gamepad2 size={120} className="stroke-1" />
+                        {selectedWork.type === 'visual' && (
+                          <Palette size={120} className="stroke-1" />
                         )}
-                        {selectedWork.type === 'fun' && <Smile size={120} className="stroke-1" />}
+                        {selectedWork.type === 'live' && (
+                          <RadioTower size={120} className="stroke-1" />
+                        )}
                       </div>
                     </>
                   }
@@ -361,14 +367,27 @@ const WorksPage = ({ filter = 'all', onFilterChange = () => {}, onRouteAnimation
               <div className="flex w-full flex-col gap-6 overflow-y-auto bg-white p-6 md:w-3/5 md:gap-8 md:p-8 lg:p-12">
                 <div>
                   <div className="mb-4 flex flex-wrap gap-2">
-                    <span className="flex items-center gap-1 border border-black bg-yellow-300 px-2 py-0.5 font-mono text-xs">
-                      <Tag size={12} />
-                      {isNumunumuMode ? numuText : getWorkCategoryLabel(selectedWork.type)}
-                    </span>
+                    {getWorkCategories(selectedWork).map((category) => (
+                      <span
+                        key={category}
+                        className="flex items-center gap-1 border border-black bg-yellow-300 px-2 py-0.5 font-mono text-xs"
+                      >
+                        <Tag size={12} />
+                        {isNumunumuMode ? numuText : getWorkCategoryLabel(category)}
+                      </span>
+                    ))}
                     <span className={`work-kind-badge work-kind-badge--${selectedWork.workKind}`}>
                       <span className="work-kind-badge__shape" aria-hidden="true" />
                       {selectedWork.workKind === 'original' ? 'ORIGINAL' : 'CLIENT'}
                     </span>
+                    {(selectedWork.attributes ?? []).map((attribute) => (
+                      <span
+                        key={attribute}
+                        className={`work-attribute-badge work-attribute-badge--${attribute}`}
+                      >
+                        {getWorkAttributeLabel(attribute)}
+                      </span>
+                    ))}
                     <span className="flex items-center gap-1 border border-black bg-white px-2 py-0.5 font-mono text-xs">
                       <Calendar size={12} />
                       {isNumunumuMode ? numuText : selectedWork.year}
@@ -406,7 +425,7 @@ const WorksPage = ({ filter = 'all', onFilterChange = () => {}, onRouteAnimation
                     <a
                       href={selectedWork.url}
                       target="_blank"
-                      rel="noreferrer"
+                      rel="noopener noreferrer"
                       className="flex w-full items-center justify-center gap-2 border-2 border-black bg-black py-4 font-sans text-xl font-bold text-white shadow-[8px_8px_0px_#FFD700] transition-all hover:translate-y-1 hover:bg-gray-900 hover:shadow-none"
                     >
                       {isNumunumuMode ? numuText : 'VIEW MORE'}

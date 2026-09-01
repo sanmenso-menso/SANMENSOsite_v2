@@ -22,8 +22,12 @@ const WorkFilterCube = ({ category, onRouteAnimationComplete }) => {
             '--work-cube-rotate-y': `${orientation.y}deg`,
           }}
         >
-          <div className="work-filter-cube__face work-filter-cube__face--front">ENTAME</div>
-          <div className="work-filter-cube__face work-filter-cube__face--right">FUN</div>
+          <div className="work-filter-cube__face work-filter-cube__face--front">
+            <span>LIVE &amp;<br />CULTURE</span>
+          </div>
+          <div className="work-filter-cube__face work-filter-cube__face--right">
+            {getWorkCategoryLabel('visual')}
+          </div>
           <div className="work-filter-cube__face work-filter-cube__face--top">
             {getWorkCategoryLabel('music')}
           </div>

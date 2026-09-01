@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { workMatchesCategory } from '../utils/works';
 import WorkCard from './WorkCard';
 
 const FLOW_LAYOUTS = [
@@ -56,14 +57,12 @@ const FlowingWorksLane = ({
   }
 
   const isPaused = isStopped || isDialogOpen || isCardHovered;
-  const selectedCount = works.filter(
-    (work) => selectedCategory === 'all' || work.type === selectedCategory,
-  ).length;
+  const selectedCount = works.filter((work) => workMatchesCategory(work, selectedCategory)).length;
   const compactCount = works.length - selectedCount;
   const duration = Math.max(32, selectedCount * 8 + compactCount * 2.4);
   const renderFlowItems = (isClone = false) =>
     works.map((work, index) => {
-      const isCompact = selectedCategory !== 'all' && work.type !== selectedCategory;
+      const isCompact = !workMatchesCategory(work, selectedCategory);
 
       return (
         <div

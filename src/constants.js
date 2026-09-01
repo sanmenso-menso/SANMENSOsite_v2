@@ -18,6 +18,12 @@ export const WORK_KINDS = Object.freeze({
     client: 'client',
 });
 
+export const WORK_ATTRIBUTES = Object.freeze({
+    appearance: 'appearance',
+    press: 'press',
+    collaboration: 'collaboration',
+});
+
 export const WORK_KIND_BY_ID = Object.freeze({
     1: 'original',
     2: 'original',
@@ -79,7 +85,43 @@ export const WORK_KIND_BY_ID = Object.freeze({
     58: 'client',
     59: 'client',
     60: 'client',
+    61: 'client',
+    62: 'client',
+    63: 'original',
+    64: 'client',
+    65: 'client',
 });
+
+export const WORK_ATTRIBUTES_BY_ID = Object.freeze({
+    9: Object.freeze(['collaboration']),
+    12: Object.freeze(['collaboration']),
+    13: Object.freeze(['collaboration']),
+    15: Object.freeze(['collaboration']),
+    16: Object.freeze(['collaboration']),
+    18: Object.freeze(['collaboration']),
+    20: Object.freeze(['collaboration']),
+    22: Object.freeze(['collaboration']),
+    23: Object.freeze(['collaboration']),
+    24: Object.freeze(['collaboration']),
+    25: Object.freeze(['collaboration']),
+    27: Object.freeze(['collaboration']),
+    28: Object.freeze(['appearance']),
+    29: Object.freeze(['collaboration']),
+    39: Object.freeze(['collaboration']),
+    41: Object.freeze(['collaboration']),
+    42: Object.freeze(['collaboration']),
+    45: Object.freeze(['collaboration']),
+    48: Object.freeze(['collaboration']),
+    49: Object.freeze(['collaboration']),
+    53: Object.freeze(['collaboration']),
+    55: Object.freeze(['collaboration']),
+    60: Object.freeze(['collaboration']),
+    63: Object.freeze(['collaboration']),
+    64: Object.freeze(['collaboration']),
+    65: Object.freeze(['collaboration']),
+});
+
+const EMPTY_WORK_ATTRIBUTES = Object.freeze([]);
 
 const WORKS_DATA_BASE = [
     { 
@@ -254,7 +296,7 @@ const WORKS_DATA_BASE = [
     { 
         id: 14, 
         title: "鏡像異性体", 
-        type: "entame", 
+        type: "live",
         year: "2024", 
         role: "DJ", 
         desc: "鏡像異性体というイベントにDJで出演しました", 
@@ -293,7 +335,7 @@ const WORKS_DATA_BASE = [
     { 
         id: 17, 
         title: "#雑ボカ 〜雑にボカロをかけれる会〜 第19回",
-        type: "entame", 
+        type: "live",
         year: "2024", 
         role: "DJ", 
         desc: "VRCイベント『雑ボカ』の第19回に出演しました", 
@@ -306,7 +348,7 @@ const WORKS_DATA_BASE = [
     { 
         id: 18, 
         title: "CDs＋いよわ『きゅうくらりん』即興リミックス",
-        type: "entame", 
+        type: "live",
         year: "2024", 
         role: "Remix", 
         desc: "イベントにCDsとして出演しました", 
@@ -319,7 +361,7 @@ const WORKS_DATA_BASE = [
     { 
         id: 19, 
         title: "DJ24",
-        type: "entame", 
+        type: "live",
         year: "2024", 
         role: "DJ", 
         desc: "イベントにDJとして出演しました", 
@@ -410,7 +452,7 @@ const WORKS_DATA_BASE = [
     { 
         id: 26, 
         title: "TRY FORCE v3.0",
-        type: "entame", 
+        type: "live",
         year: "2025", 
         role: "DJ", 
         desc: "DJとして出演しました", 
@@ -423,7 +465,7 @@ const WORKS_DATA_BASE = [
     { 
         id: 27, 
         title: "Soundtrap遊び",
-        type: "fun", 
+        type: "music",
         year: "2025", 
         role: "Composition", 
         desc: "オンラインDTMで遊びました", 
@@ -436,7 +478,7 @@ const WORKS_DATA_BASE = [
     { 
         id: 28, 
         title: "クリラジ〜明日から作曲家〜",
-        type: "fun", 
+        type: "live",
         year: "2025", 
         role: "Radio personality / Logo design", 
         desc: "友人とラジオを始めました", 
@@ -488,7 +530,7 @@ const WORKS_DATA_BASE = [
     { 
         id: 32, 
         title: "Cut,solid,solar panel",
-        type: "fun", 
+        type: "music",
         year: "2025", 
         role: "Composition / design", 
         desc: "CSSで遊びました", 
@@ -502,6 +544,7 @@ const WORKS_DATA_BASE = [
         id: 33, 
         title: "Coffee Break Down / 花隈千冬",
         type: "music", 
+        categories: ['music', 'visual'],
         year: "2025", 
         role: "Composition / Movie", 
         desc: "チルエレクトロなMVを投稿しました", 
@@ -514,7 +557,7 @@ const WORKS_DATA_BASE = [
     { 
         id: 34, 
         title: "鏡像異性体vol.2",
-        type: "entame", 
+        type: "live",
         year: "2025", 
         role: "DJ", 
         desc: "イベントにDJとして出演しました", 
@@ -527,7 +570,7 @@ const WORKS_DATA_BASE = [
     { 
         id: 35, 
         title: "DJs for anywere 001",
-        type: "fun", 
+        type: "live",
         year: "2025", 
         role: "DJ", 
         desc: "サプライズ型イベントにDJとして参加しました", 
@@ -540,7 +583,7 @@ const WORKS_DATA_BASE = [
     { 
         id: 36, 
         title: "LOLOLOLOVELOID vol.3",
-        type: "entame", 
+        type: "live",
         year: "2025", 
         role: "DJ", 
         desc: "イベントにDJとして参加しました", 
@@ -566,7 +609,7 @@ const WORKS_DATA_BASE = [
     { 
         id: 38, 
         title: "ロゴ制作",
-        type: "entame", 
+        type: "visual",
         year: "2025", 
         role: "Logo design", 
         desc: "三面相のロゴを制作しました", 
@@ -604,7 +647,7 @@ const WORKS_DATA_BASE = [
     { 
         id: 41, 
         title: "GOLD DISC 25.08.16",
-        type: "entame", 
+        type: "live",
         year: "2025", 
         role: "DJ", 
         desc: "イベントにCDs crewとして参加しました", 
@@ -617,7 +660,7 @@ const WORKS_DATA_BASE = [
     { 
         id: 42, 
         title: "CDs YouTubeMusicWeekend 2025",
-        type: "entame", 
+        type: "live",
         year: "2025", 
         role: "Composition / act", 
         desc: "『CDs 2025』に出演しました", 
@@ -630,7 +673,7 @@ const WORKS_DATA_BASE = [
     { 
         id: 43, 
         title: "ℬaⓢ9 - Chill",
-        type: "entame", 
+        type: "live",
         year: "2025", 
         role: "DJ", 
         desc: "イベントにDJとして出演しました", 
@@ -643,7 +686,7 @@ const WORKS_DATA_BASE = [
     { 
         id: 44, 
         title: "つながり v1.0",
-        type: "entame", 
+        type: "live",
         year: "2025", 
         role: "DJ", 
         desc: "イベントにDJとして出演しました", 
@@ -656,7 +699,7 @@ const WORKS_DATA_BASE = [
     { 
         id: 45, 
         title: "FOR UNREAL TO REAL",
-        type: "entame", 
+        type: "live",
         year: "2025", 
         role: "DJ", 
         desc: "イベントにDJとして出演しました", 
@@ -668,7 +711,7 @@ const WORKS_DATA_BASE = [
     { 
         id: 46, 
         title: "VIRAL 2025.10.19",
-        type: "entame", 
+        type: "live",
         year: "2025", 
         role: "DJ", 
         desc: "イベントにDJとして出演しました", 
@@ -680,7 +723,7 @@ const WORKS_DATA_BASE = [
     { 
         id: 47, 
         title: "培養オム　BGM・SE制作",
-        type: "fun", 
+        type: "music",
         year: "2025", 
         role: "Composition", 
         desc: "BGMを制作しました", 
@@ -693,7 +736,7 @@ const WORKS_DATA_BASE = [
     { 
         id: 48, 
         title: "hard",
-        type: "fun", 
+        type: "live",
         year: "2025", 
         role: "Act", 
         desc: "セッションをしました。", 
@@ -720,6 +763,7 @@ const WORKS_DATA_BASE = [
         id: 50, 
         title: "vitali ga nai",
         type: "music", 
+        categories: ['music', 'visual'],
         year: "2025", 
         role: "Composition / Movie", 
         desc: "寝れないけどやる気がない時をイメージした楽曲を投稿しました", 
@@ -732,7 +776,7 @@ const WORKS_DATA_BASE = [
     { 
         id: 51, 
         title: "2025's VOCALIFE",
-        type: "entame", 
+        type: "live",
         year: "2026", 
         role: "DJ", 
         desc: "イベントにDJmixで出演しました", 
@@ -746,6 +790,7 @@ const WORKS_DATA_BASE = [
         id: 52, 
         title: "CHOCOL人´∀｀ATE!!!",
         type: "music", 
+        categories: ['music', 'visual'],
         year: "2026", 
         role: "Composition / Movie", 
         desc: "楽観的に生きるという楽曲を投稿しました", 
@@ -770,7 +815,7 @@ const WORKS_DATA_BASE = [
     },
 　  {   id: 54, 
         title: "三面相 - SANMENso Official Site",
-        type: "fun", 
+        type: "visual",
         year: "2026", 
         role: "Web design", 
         desc: "三面相のポートフォリオサイトを制作しました", 
@@ -794,7 +839,7 @@ const WORKS_DATA_BASE = [
     },
     {   id: 56, 
         title: "『共創の測地線』アフターDJパーティ",
-        type: "entame", 
+        type: "live",
         year: "2026", 
         role: "DJ", 
         desc: "イベントにDJで出演しました", 
@@ -805,7 +850,7 @@ const WORKS_DATA_BASE = [
     },
     {   id: 57, 
         title: "ボカ脈in関西 Vol.2",
-        type: "entame", 
+        type: "live",
         year: "2026", 
         role: "DJ", 
         desc: "イベントにDJで出演しました", 
@@ -816,7 +861,7 @@ const WORKS_DATA_BASE = [
     },
     {   id: 58, 
         title: "SMILEVIDEO in Osaka",
-        type: "entame", 
+        type: "live",
         year: "2026", 
         role: "DJ", 
         desc: "イベントにDJで出演しました", 
@@ -827,7 +872,7 @@ const WORKS_DATA_BASE = [
    {
         id: 59,
         title: "VIRAL with In_da_DnB",
-        type: "entame",
+        type: "live",
         year: "2026",
         role: "DJ",
         desc: "イベントにDJとして出演しました",
@@ -843,7 +888,7 @@ const WORKS_DATA_BASE = [
     {
         id: 60,
         title: "Flow vol.11",
-        type: "entame",
+        type: "live",
         year: "2026",
         role: "DJ",
         desc: "ライブパフォーマンスを行いました",
@@ -857,11 +902,94 @@ const WORKS_DATA_BASE = [
         url: "https://x.com/flow_fellow/status/2058149190602244138",
         image: "/images/flow-vol11-800w.webp",
     },
+    {
+        id: 61,
+        title: "妹・他者・パラノイア",
+        type: "music",
+        year: "2026",
+        role: "Sound effects",
+        desc: "ヴィジュアルノベルゲームの効果音を担当しました",
+        detailText: "ヴィジュアルノベルゲーム『妹・他者・パラノイア』の効果音を担当しました。\n\n鐘を鳴らしたり、キャベツを刺したり、チェロを擦ったりして、不穏でグロテスク、少し奇妙な音を制作しています。",
+        credits: ["Sound effects:三面相"],
+        color: "#FFD700",
+        url: "https://x.com/nyalra/status/2088460950752096308",
+        image: "/images/sister-other-paranoia.webp",
+    },
+    {
+        id: 62,
+        title: "Dream Jail set",
+        type: "live",
+        year: "2026",
+        role: "Shooting / Sound",
+        desc: "撮影と音響を担当しました",
+        detailText: "Dream Jail setにて、撮影と音響を担当しました。\n\n襲い掛かる謎の怪異を演出し、音を鳴らしています。",
+        credits: [
+            "director：長谷川迷子",
+            "Shooting,Sound:三面相,d.j.ァネイロ",
+            "Composite：藤白詩集",
+        ],
+        color: "#FFD700",
+        url: "https://youtu.be/H2VHHma9Z9c",
+        image: "/images/dream-jail-set.webp",
+    },
+    {
+        id: 63,
+        title: "サブリメる / 星界",
+        type: "music",
+        categories: ['music', 'visual'],
+        year: "2026",
+        role: "Composition / Movie",
+        desc: "ボカコレ2026夏へMVを投稿しました",
+        detailText: "コンピレーションアルバム『ドラムアンドベース』収録曲『サブリメる』の楽曲と映像を制作しました。\n\nボカコレ2026夏TOP100参加作品です。",
+        credits: ["Composition,Movie:三面相", "Vocal:星界", "Mastering:ブブゼラ"],
+        color: "#FF6B6B",
+        url: "https://youtu.be/_19lBxlk-bs",
+        image: "/images/sublimeru.webp",
+    },
+    {
+        id: 64,
+        title: "おお阪 IN DA PARTY!2",
+        type: "live",
+        year: "2026",
+        role: "DJ",
+        desc: "d.j.ァネイロとB2Bで出演しました",
+        detailText: "おお阪 IN DA PARTY!2に、d.j.ァネイロとのB2Bで出演しました。\n\n折角の機会だったので、好きに暴れさせてもらいました。",
+        credits: [
+            "DJ,LIVE:オーバーネット2(おおつく、米教タルタル、POPFACES、namitape),異亖2. × Negitoro,Hqdwe,d.j.ァネイロ × 三面相,原始主義ドラゴン(mealerrand、デバカエル),.+ × Molluscholar,U / 会長 × simotaka,r-906 × フロクロ,駱駝法師 × おおつく,四度寝 × MIDy",
+            "VJ:.+,Mano.Hsmt,おおつく",
+            "Staff:くらいん,simotaka,U / 会長,Lil ZiLLA,.+,異亖2.,おおつく",
+        ],
+        color: "#4ECDC4",
+        url: "https://x.com/Quartz_Tea/status/2093315174803673227",
+        image: "/images/osaka-in-da-party-2.webp",
+    },
+    {
+        id: 65,
+        title: "CDs YouTubeMusicWeekend 2026",
+        type: "music",
+        categories: ['music', 'visual'],
+        year: "2026",
+        role: "Edit / Music / Video / Voice",
+        desc: "映像のカットアップと音源制作、一部音声を担当しました",
+        detailText: "YouTube Music Weekend 12.0で公開された『CDs WORKs 2025 - 2026』に参加しました。\n\nCDsに関連する映像のカットアップと音源制作、数パートの音声を担当しています。",
+        credits: [
+            "Edit,Music:原口沙輔,Talich Helfen,三面相,フロクロ",
+            "Video:原口沙輔,Talich Helfen,三面相,フロクロ",
+            "Voice:三面相",
+            "Composite:藤白詩集",
+            "Archive:CDs",
+        ],
+        color: "#FF6B6B",
+        url: "https://youtu.be/UCd6Sw4P8Xk",
+        image: "/images/cds-youtube-music-weekend-2026.webp",
+    },
 ];
 
 export const WORKS_DATA = WORKS_DATA_BASE.map((work) => ({
     ...work,
     workKind: WORK_KIND_BY_ID[work.id],
+    attributes: WORK_ATTRIBUTES_BY_ID[work.id] ?? EMPTY_WORK_ATTRIBUTES,
+    categories: work.categories ?? [work.type],
 }));
 
 export const EXCAVATION_LINKS = [
