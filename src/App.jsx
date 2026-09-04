@@ -3,13 +3,14 @@ import { BrowserRouter, Route, Routes, useLocation, useNavigate, useParams } fro
 import { AnimatePresence, LayoutGroup, MotionConfig, motion, useIsPresent, useReducedMotion } from 'framer-motion';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { FONTS, SITE_META, THEME } from './constants';
-import { NumunumuContext } from './NumunumuContext';
+import { NUMUNUMU_TEXT, NumunumuContext } from './NumunumuContext';
 import AppErrorBoundary from './components/AppErrorBoundary';
 import Header from './components/Header';
 import HomeArtistBackdrop from './components/HomeArtistBackdrop';
 import HomeUpdateNotice from './components/HomeUpdateNotice';
 import NavigationDock from './components/NavigationDock';
 import { reportClientError } from './utils/reportClientError';
+import { activatesNumunumuMode, advanceNumunumuInput } from './utils/numunumu';
 import {
     ROUTE_TRANSITION_LOCK_MS,
     canStartRouteTransition,
@@ -25,10 +26,10 @@ const ContentsPage = lazy(() => import('./pages/ContentsPage'));
 const SecretPage = lazy(() => import('./pages/SecretPage'));
 const NotFoundPage = lazy(() => import('./pages/NotfoundPage'));
 
-const LoadingFallback = () => (
+const LoadingFallback = ({ isNumunumuMode = false }) => (
     <div className="min-h-screen flex items-center justify-center px-4" role="status" aria-live="polite">
         <span className="bg-black text-[#FFD700] border-2 border-white px-4 py-2 font-mono font-bold">
-            LOADING...
+            {isNumunumuMode ? NUMUNUMU_TEXT : 'LOADING...'}
         </span>
     </div>
 );
@@ -58,9 +59,13 @@ const RouteTransitionFrame = ({ children, hasOpaqueBackground = false }) => {
     );
 };
 
-const RouteMetadata = ({ pathname, isNotFound }) => {
+const RouteMetadata = ({ pathname, isNotFound, isNumunumuMode }) => {
     const pageTitle = getPageTitle(pathname, isNotFound);
-    const fullTitle = pageTitle ? `${pageTitle} | ${SITE_META.title}` : SITE_META.title;
+    const fullTitle = isNumunumuMode
+        ? NUMUNUMU_TEXT
+        : pageTitle
+          ? `${pageTitle} | ${SITE_META.title}`
+          : SITE_META.title;
 
     return (
         <Helmet>
@@ -127,7 +132,6 @@ function AppContent() {
     const [, setInput] = useState('');
     const routeTransitionLockRef = useRef(false);
     const routeTransitionTimerRef = useRef(null);
-    const target = 'numunumu';
     const isCurrentHomeReady = isHomeEntryReady({
         pathname,
         currentEntryKey: location.key,
@@ -177,8 +181,8 @@ function AppContent() {
             }
 
             setInput((previousInput) => {
-                const nextInput = (previousInput + event.key.toLowerCase()).slice(-target.length);
-                if (nextInput === target) setIsNumunumuMode(true);
+                const nextInput = advanceNumunumuInput(previousInput, event.key);
+                if (activatesNumunumuMode(nextInput)) setIsNumunumuMode(true);
                 return nextInput;
             });
         };
@@ -215,11 +219,26 @@ function AppContent() {
     const routeKey = pathname.startsWith('/contents/') ? 'contents' : pathname;
     const contextValue = useMemo(() => ({ isNumunumuMode }), [isNumunumuMode]);
 
+    useEffect(() => {
+        if (isNumunumuMode) {
+            document.documentElement.dataset.numunumuMode = 'true';
+        } else {
+            delete document.documentElement.dataset.numunumuMode;
+        }
+
+        return () => delete document.documentElement.dataset.numunumuMode;
+    }, [isNumunumuMode]);
+
     return (
         <NumunumuContext.Provider value={contextValue}>
-            <RouteMetadata pathname={pathname} isNotFound={isNotFound} />
+            <RouteMetadata
+                pathname={pathname}
+                isNotFound={isNotFound}
+                isNumunumuMode={isNumunumuMode}
+            />
             <div
                 className="min-h-screen w-full relative overflow-x-hidden selection:bg-black selection:text-[#FFD700]"
+                data-numunumu-mode={isNumunumuMode ? 'true' : 'false'}
                 data-route-transitioning={isRouteTransitioning ? 'true' : 'false'}
             >
                 <style>{`
@@ -245,7 +264,7 @@ function AppContent() {
                     </>
                 )}
 
-                <Suspense fallback={<LoadingFallback />}>
+                <Suspense fallback={<LoadingFallback isNumunumuMode={isNumunumuMode} />}>
                     <LayoutGroup id="site-cube-route-transition">
                         <div className="relative grid min-h-screen w-full">
                             <AnimatePresence mode="sync">
@@ -284,7 +303,7 @@ function AppContent() {
                                         className="absolute bottom-28 sm:bottom-32 pointer-events-none z-50"
                                     >
                                         <p className="font-serif text-xs sm:text-sm md:text-lg bg-black text-[#FFD700] px-3 py-1 sm:px-4 md:px-6 md:py-2 transform -rotate-2 border-2 border-white shadow-[4px_4px_0px_rgba(0,0,0,0.3)] whitespace-nowrap">
-                                            {isNumunumuMode ? 'ぬむぬむとんかつ' : 'ドラッグして CUBE を回せ。'}
+                                            {isNumunumuMode ? NUMUNUMU_TEXT : 'ドラッグして CUBE を回せ。'}
                                         </p>
                                     </motion.div>
                                 </motion.main>
@@ -312,7 +331,7 @@ function AppContent() {
                 </Suspense>
 
                 <div className="absolute bottom-2 right-4 text-[13px] text-gray-500 font-sans pointer-events-none z-0">
-                    Copyright © 2026 {isNumunumuMode ? 'ぬむぬむとんかつ' : 'SANMENso'}
+                    Copyright © 2026 {isNumunumuMode ? NUMUNUMU_TEXT : 'SANMENso'}
                 </div>
             </div>
         </NumunumuContext.Provider>

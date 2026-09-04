@@ -1,9 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { NUMUNUMU_TEXT, useNumunumu } from '../NumunumuContext';
 import { CUBE_ROUTE_TRANSITION_SECONDS } from '../utils/routeTransition';
 import { getWorkCategoryLabel, getWorkCubeOrientation } from '../utils/works';
 
 const WorkFilterCube = ({ category, onRouteAnimationComplete }) => {
+  const { isNumunumuMode } = useNumunumu();
   const orientation = getWorkCubeOrientation(category);
 
   return (
@@ -23,17 +25,17 @@ const WorkFilterCube = ({ category, onRouteAnimationComplete }) => {
           }}
         >
           <div className="work-filter-cube__face work-filter-cube__face--front">
-            <span>LIVE &amp;<br />CULTURE</span>
+            <span>{isNumunumuMode ? NUMUNUMU_TEXT : <><span>LIVE &amp;</span><br /><span>CULTURE</span></>}</span>
           </div>
           <div className="work-filter-cube__face work-filter-cube__face--right">
-            {getWorkCategoryLabel('visual')}
+            {isNumunumuMode ? NUMUNUMU_TEXT : getWorkCategoryLabel('visual')}
           </div>
           <div className="work-filter-cube__face work-filter-cube__face--top">
-            {getWorkCategoryLabel('music')}
+            {isNumunumuMode ? NUMUNUMU_TEXT : getWorkCategoryLabel('music')}
           </div>
-          <div className="work-filter-cube__face work-filter-cube__face--back">ALL</div>
-          <div className="work-filter-cube__face work-filter-cube__face--left">SAN</div>
-          <div className="work-filter-cube__face work-filter-cube__face--bottom">WORKS</div>
+          <div className="work-filter-cube__face work-filter-cube__face--back">{isNumunumuMode ? NUMUNUMU_TEXT : 'ALL'}</div>
+          <div className="work-filter-cube__face work-filter-cube__face--left">{isNumunumuMode ? NUMUNUMU_TEXT : 'SAN'}</div>
+          <div className="work-filter-cube__face work-filter-cube__face--bottom">{isNumunumuMode ? NUMUNUMU_TEXT : 'WORKS'}</div>
         </div>
       </motion.div>
     </div>

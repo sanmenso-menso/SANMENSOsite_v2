@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Zap, HelpCircle, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useNumunumu } from '../NumunumuContext';
+import { NUMUNUMU_SHORT_TEXT, NUMUNUMU_TEXT, useNumunumu } from '../NumunumuContext';
 import { THEME } from '../constants';
 
 const TIPS_LIST = [
@@ -24,7 +24,7 @@ const NotFoundPage = () => {
   const [isCanvasVisible, setIsCanvasVisible] = useState(false);
   const navigate = useNavigate();
   const { isNumunumuMode } = useNumunumu();
-  const numuText = 'ぬむぬむとんかつ';
+  const numuText = NUMUNUMU_TEXT;
 
   useEffect(() => {
     if (!mounted) return;
@@ -194,7 +194,7 @@ const NotFoundPage = () => {
             }}
             style={{ WebkitTextStroke: '3px black' }}
           >
-            404
+            {isNumunumuMode ? NUMUNUMU_SHORT_TEXT : '404'}
           </motion.h1>
           
           {/* Magenta Layer - 順方向に大きく歪む */}
@@ -213,7 +213,7 @@ const NotFoundPage = () => {
             }}
             style={{ WebkitTextStroke: '3px black' }}
           >
-            404
+            {isNumunumuMode ? NUMUNUMU_SHORT_TEXT : '404'}
           </motion.h1>
           
           {/* Main White Layer - 中心に留まりつつ、伸縮する */}
@@ -231,7 +231,7 @@ const NotFoundPage = () => {
             }}
             style={{ WebkitTextStroke: '4px black' }}
           >
-            404
+            {isNumunumuMode ? NUMUNUMU_SHORT_TEXT : '404'}
           </motion.h1>
         </div>
 

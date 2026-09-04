@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import * as THREE from 'three';
 import { Play, Pause, SkipBack, SkipForward, X } from 'lucide-react';
 import { SONGS } from '../constants';
-import { useNumunumu } from '../NumunumuContext';
+import { NUMUNUMU_TEXT, useNumunumu } from '../NumunumuContext';
 
 // -----------------------------------------------------------------------------
 // CONSTANTS & ASSETS
@@ -329,7 +329,7 @@ const PopVectorPlayer = ({ onClose }) => {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const { isNumunumuMode } = useNumunumu();
-  const numuText = 'ぬむぬむとんかつ';
+  const numuText = NUMUNUMU_TEXT;
   
   const audioRef = useRef(null);
   const audioContextRef = useRef(null);
@@ -343,7 +343,7 @@ const PopVectorPlayer = ({ onClose }) => {
       title: numuText,
       genre: numuText,
       flavor: numuText
-  } : rawSong, [isNumunumuMode, rawSong]);
+  } : rawSong, [isNumunumuMode, numuText, rawSong]);
 
   const initAudio = async () => {
     if (!audioContextRef.current) {
@@ -487,7 +487,7 @@ const PopVectorPlayer = ({ onClose }) => {
             {/* TEXT INFO */}
             <div className="space-y-1 sm:space-y-2 text-center md:text-left">
                 <div className="inline-block bg-black text-white px-2 py-0.5 sm:px-3 sm:py-1 text-[10px] sm:text-xs font-bold uppercase tracking-wider mb-1 sm:mb-2 transform -rotate-1">
-                    Now Playing
+                    {isNumunumuMode ? numuText : 'Now Playing'}
                 </div>
                 <h1 className="text-2xl sm:text-4xl md:text-6xl font-black leading-[0.9] tracking-tighter uppercase stroke-text break-words">
                     {currentSong.title}
@@ -525,8 +525,8 @@ const PopVectorPlayer = ({ onClose }) => {
                 </div>
                 {/* Time Display */}
                 <div className="absolute top-8 left-0 flex justify-between w-full text-xs font-mono font-bold pt-1">
-                    <span>{formatTime(currentTime)}</span>
-                    <span>{formatTime(duration)}</span>
+                    <span>{isNumunumuMode ? numuText : formatTime(currentTime)}</span>
+                    <span>{isNumunumuMode ? numuText : formatTime(duration)}</span>
                 </div>
             </div>
 
@@ -542,7 +542,9 @@ const PopVectorPlayer = ({ onClose }) => {
                     className={`flex-1 h-12 sm:h-16 md:h-20 border-4 border-black ${currentSong.bgAccent} flex items-center justify-center gap-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] sm:shadow-[8px_8px_0px_0px_rgba(0,0,0,0.3)] hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] active:translate-x-[8px] active:translate-y-[8px] active:shadow-none transition-all rounded-xl text-black`}
                 >
                     {isPlaying ? <Pause className="w-6 h-6 sm:w-8 sm:h-8" strokeWidth={2} /> : <Play className="w-6 h-6 sm:w-8 sm:h-8" strokeWidth={2} />}
-                    <span className="font-black text-lg sm:text-xl md:text-2xl tracking-widest italic">{isPlaying ? "PAUSE" : "PLAY"}</span>
+                    <span className="font-black text-lg sm:text-xl md:text-2xl tracking-widest italic">
+                      {isNumunumuMode ? numuText : isPlaying ? 'PAUSE' : 'PLAY'}
+                    </span>
                 </button>
 
                 <button type="button" aria-label="次の曲" onClick={handleNext} className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 border-4 border-black bg-white flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] sm:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all rounded-lg">

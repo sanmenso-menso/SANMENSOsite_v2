@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import {
   Calendar,
@@ -15,10 +15,13 @@ import {
 import AccessibleDialog from '../components/AccessibleDialog';
 import FlowingWorksLane from '../components/FlowingWorksLane';
 import ImageWithFallback from '../components/ImageWithFallback';
+import ShootingGalleryControls, {
+  ShootingModeToggle,
+} from '../components/ShootingGalleryControls';
 import WorkCard from '../components/WorkCard';
 import WorkFilterCube from '../components/WorkFilterCube';
 import { WORKS_DATA } from '../constants';
-import { useNumunumu } from '../NumunumuContext';
+import { NUMUNUMU_IMAGE, NUMUNUMU_TEXT, useNumunumu } from '../NumunumuContext';
 import {
   clampWorkPage,
   filterAndSortWorks,
@@ -30,6 +33,10 @@ import {
 import './WorksPage.css';
 
 const ITEMS_PER_PAGE = 9;
+const SHOOTING_CURTAIN_SWITCH_MS = 2600;
+const SHOOTING_CURTAIN_TOTAL_MS = 3400;
+const SHOOTING_BULLET_TRAVEL_MS = 650;
+const SHOOTING_FINAL_SCORE_MS = 3500;
 
 const CATEGORIES = [
   { id: 'all', label: 'ALL', icon: null },
@@ -57,24 +64,55 @@ const decorateWorks = (works, isNumunumuMode, numuText) => {
     type: 'visual',
     categories: ['visual'],
     attributes: [],
-    image: '/images/numunumu_icon.webp',
+    image: NUMUNUMU_IMAGE,
   }));
 };
 
 const WorksPage = ({ filter = 'all', onFilterChange = () => {}, onRouteAnimationComplete }) => {
   const { isNumunumuMode } = useNumunumu();
   const shouldReduceMotion = useReducedMotion();
-  const numuText = 'ぬむぬむとんかつ';
+  const numuText = NUMUNUMU_TEXT;
   const [selectedWork, setSelectedWork] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [workKind, setWorkKind] = useState('original');
   const [viewMode, setViewMode] = useState('flow');
   const [isFlowStopped, setIsFlowStopped] = useState(false);
-  const activeViewMode = shouldReduceMotion ? 'index' : viewMode;
+  const [isShootingMode, setIsShootingMode] = useState(false);
+  const [isShootingTransitioning, setIsShootingTransitioning] = useState(false);
+  const [curtainCycle, setCurtainCycle] = useState(0);
+  const [curtainMessage, setCurtainMessage] = useState('開店準備中・・・');
+  const [shootingScore, setShootingScore] = useState(0);
+  const [lastShotResult, setLastShotResult] = useState(null);
+  const [shotToken, setShotToken] = useState(0);
+  const [resolvedShotToken, setResolvedShotToken] = useState(0);
+  const [isBulletInFlight, setIsBulletInFlight] = useState(false);
+  const [finalShootingScore, setFinalShootingScore] = useState(null);
+  const shootingTimersRef = useRef([]);
+  const shotSequenceRef = useRef(0);
+  const activeViewMode =
+    isShootingMode || finalShootingScore !== null
+      ? 'flow'
+      : shouldReduceMotion
+        ? 'index'
+        : viewMode;
+
+  useEffect(
+    () => () => {
+      shootingTimersRef.current.forEach((timerId) => window.clearTimeout(timerId));
+    },
+    [],
+  );
 
   useEffect(() => {
     setCurrentPage(1);
   }, [filter, workKind]);
+
+  useEffect(() => {
+    if (!isNumunumuMode) return;
+    setSelectedWork((currentWork) =>
+      currentWork ? decorateWorks([currentWork], true, numuText)[0] : currentWork,
+    );
+  }, [isNumunumuMode, numuText]);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -95,6 +133,95 @@ const WorksPage = ({ filter = 'all', onFilterChange = () => {}, onRouteAnimation
     setIsFlowStopped(false);
   };
 
+  const resetShootingGame = useCallback(() => {
+    setShootingScore(0);
+    setLastShotResult(null);
+    setShotToken(0);
+    setResolvedShotToken(0);
+    setIsBulletInFlight(false);
+    shotSequenceRef.current = 0;
+  }, []);
+
+  const handleToggleShootingMode = () => {
+    if (isShootingTransitioning) return;
+
+    const nextMode = !isShootingMode;
+    const completedScore = shootingScore;
+    shootingTimersRef.current.forEach((timerId) => window.clearTimeout(timerId));
+    shootingTimersRef.current = [];
+    setFinalShootingScore(null);
+    setCurtainMessage(nextMode ? '開店準備中・・・' : '閉店作業中');
+
+    if (shouldReduceMotion) {
+      resetShootingGame();
+      setSelectedWork(null);
+      setViewMode('flow');
+      setIsFlowStopped(false);
+      setIsShootingMode(nextMode);
+      if (!nextMode) {
+        setFinalShootingScore(completedScore);
+        const finalScoreTimer = window.setTimeout(
+          () => setFinalShootingScore(null),
+          SHOOTING_FINAL_SCORE_MS,
+        );
+        shootingTimersRef.current = [finalScoreTimer];
+      }
+      return;
+    }
+
+    setIsShootingTransitioning(true);
+    setCurtainCycle((cycle) => cycle + 1);
+
+    const switchTimer = window.setTimeout(() => {
+      resetShootingGame();
+      setSelectedWork(null);
+      setViewMode('flow');
+      setIsFlowStopped(false);
+      setIsShootingMode(nextMode);
+    }, SHOOTING_CURTAIN_SWITCH_MS);
+    const completionTimer = window.setTimeout(() => {
+      setIsShootingTransitioning(false);
+      if (!nextMode) {
+        setFinalShootingScore(completedScore);
+      }
+    }, SHOOTING_CURTAIN_TOTAL_MS);
+
+    const finalScoreTimer = !nextMode
+      ? window.setTimeout(
+          () => setFinalShootingScore(null),
+          SHOOTING_CURTAIN_TOTAL_MS + SHOOTING_FINAL_SCORE_MS,
+        )
+      : null;
+
+    shootingTimersRef.current = [switchTimer, completionTimer, finalScoreTimer].filter(Boolean);
+  };
+
+  const handleFire = () => {
+    if (!isShootingMode || isShootingTransitioning || isBulletInFlight) return;
+
+    const nextShotToken = shotSequenceRef.current + 1;
+    shotSequenceRef.current = nextShotToken;
+    setShotToken(nextShotToken);
+    setIsBulletInFlight(true);
+
+    const impactTimer = window.setTimeout(() => {
+      setResolvedShotToken(nextShotToken);
+      setIsBulletInFlight(false);
+    }, SHOOTING_BULLET_TRAVEL_MS);
+    shootingTimersRef.current.push(impactTimer);
+  };
+
+  const handleShotResult = useCallback((result) => {
+    if (result.hit && result.points > 0) {
+      setShootingScore((score) => score + result.points);
+      setLastShotResult(`HIT! +${result.points} pt`);
+    } else if (result.hit) {
+      setLastShotResult('HIT! 景品がずれた！');
+    } else {
+      setLastShotResult('MISS!');
+    }
+  }, []);
+
   const filteredWorks = useMemo(() => {
     const filtered = filterAndSortWorks(WORKS_DATA, {
       category: filter,
@@ -102,15 +229,17 @@ const WorksPage = ({ filter = 'all', onFilterChange = () => {}, onRouteAnimation
     });
 
     return decorateWorks(filtered, isNumunumuMode, numuText);
-  }, [filter, isNumunumuMode, workKind]);
+  }, [filter, isNumunumuMode, numuText, workKind]);
 
   const flowWorks = useMemo(() => {
-    const sorted = sortWorksForFlow(WORKS_DATA, {
-      workKind,
-    });
+    const sorted = isShootingMode
+      ? [...WORKS_DATA].sort((a, b) => b.id - a.id)
+      : sortWorksForFlow(WORKS_DATA, {
+          workKind,
+        });
 
     return decorateWorks(sorted, isNumunumuMode, numuText);
-  }, [isNumunumuMode, workKind]);
+  }, [isNumunumuMode, isShootingMode, numuText, workKind]);
 
   const totalPages = Math.ceil(filteredWorks.length / ITEMS_PER_PAGE);
   const activePage = clampWorkPage(currentPage, totalPages);
@@ -166,7 +295,11 @@ const WorksPage = ({ filter = 'all', onFilterChange = () => {}, onRouteAnimation
   };
 
   return (
-    <div className="works-page min-h-screen bg-white px-4 py-8 md:px-6">
+    <div
+      className={`works-page min-h-screen bg-white px-4 py-8 md:px-6${
+        isShootingMode ? ' works-page--shooting' : ''
+      }`}
+    >
       <div className="mx-auto max-w-7xl">
         <header className="works-header mb-8 border-b-4 border-double border-black pb-6 md:mb-12">
           <div className="works-heading">
@@ -188,7 +321,7 @@ const WorksPage = ({ filter = 'all', onFilterChange = () => {}, onRouteAnimation
 
           <div className="works-control-panel" aria-label="作品の絞り込みと表示方法">
             <fieldset className="works-control-group">
-              <legend>CATEGORY</legend>
+              <legend>{isNumunumuMode ? numuText : 'CATEGORY'}</legend>
               <div className="works-control-row">
                 {CATEGORIES.map((category) => {
                   const Icon = category.icon;
@@ -196,8 +329,9 @@ const WorksPage = ({ filter = 'all', onFilterChange = () => {}, onRouteAnimation
                     <button
                       type="button"
                       key={category.id}
-                      aria-pressed={filter === category.id}
+                      aria-pressed={isShootingMode ? category.id === 'all' : filter === category.id}
                       onClick={() => handleFilterChange(category.id)}
+                      disabled={isShootingMode || isShootingTransitioning}
                       className="works-control-button"
                     >
                       {Icon && <Icon size={17} aria-hidden="true" />}
@@ -209,31 +343,32 @@ const WorksPage = ({ filter = 'all', onFilterChange = () => {}, onRouteAnimation
             </fieldset>
 
             <fieldset className="works-control-group">
-              <legend>PROJECT TYPE</legend>
+              <legend>{isNumunumuMode ? numuText : 'PROJECT TYPE'}</legend>
               <div className="works-control-row">
                 {WORK_KIND_OPTIONS.map((kind) => (
                   <button
                     type="button"
                     key={kind.id}
-                    aria-pressed={workKind === kind.id}
+                    aria-pressed={isShootingMode || workKind === kind.id}
                     onClick={() => setWorkKind(kind.id)}
+                    disabled={isShootingMode || isShootingTransitioning}
                     className={`works-control-button works-kind-control works-kind-control--${kind.id}`}
                   >
                     <span className="works-kind-control__shape" aria-hidden="true" />
-                    {kind.label}
+                    {isNumunumuMode ? numuText : kind.label}
                   </button>
                 ))}
               </div>
             </fieldset>
 
             <fieldset className="works-control-group">
-              <legend>VIEW</legend>
+              <legend>{isNumunumuMode ? numuText : 'VIEW'}</legend>
               <div className="works-control-row">
                 <button
                   type="button"
                   aria-pressed={activeViewMode === 'flow'}
                   onClick={() => setViewMode('flow')}
-                  disabled={shouldReduceMotion}
+                  disabled={shouldReduceMotion || isShootingMode || isShootingTransitioning}
                   className="works-control-button"
                   title={
                     shouldReduceMotion
@@ -241,21 +376,23 @@ const WorksPage = ({ filter = 'all', onFilterChange = () => {}, onRouteAnimation
                       : undefined
                   }
                 >
-                  FLOW
+                  {isNumunumuMode ? numuText : 'FLOW'}
                 </button>
                 <button
                   type="button"
                   aria-pressed={activeViewMode === 'index'}
                   onClick={() => setViewMode('index')}
+                  disabled={isShootingMode || isShootingTransitioning}
                   className="works-control-button"
                 >
-                  INDEX
+                  {isNumunumuMode ? numuText : 'INDEX'}
                 </button>
                 {activeViewMode === 'flow' && (
                   <button
                     type="button"
                     aria-label={isFlowStopped ? '作品の流れを再開' : '作品の流れを停止'}
                     onClick={() => setIsFlowStopped((stopped) => !stopped)}
+                    disabled={isShootingMode || isShootingTransitioning}
                     className="works-control-button works-flow-toggle"
                   >
                     {isFlowStopped ? (
@@ -263,7 +400,7 @@ const WorksPage = ({ filter = 'all', onFilterChange = () => {}, onRouteAnimation
                     ) : (
                       <Pause size={17} aria-hidden="true" />
                     )}
-                    {isFlowStopped ? 'RESUME' : 'STOP'}
+                    {isNumunumuMode ? numuText : isFlowStopped ? 'RESUME' : 'STOP'}
                   </button>
                 )}
               </div>
@@ -272,13 +409,17 @@ const WorksPage = ({ filter = 'all', onFilterChange = () => {}, onRouteAnimation
 
           {shouldReduceMotion && (
             <p className="works-motion-note" role="status">
-              端末の「視差効果を減らす」設定に合わせ、静止したINDEXで表示しています。
+              {isNumunumuMode
+                ? numuText
+                : '端末の「視差効果を減らす」設定に合わせ、静止したINDEXで表示しています。'}
             </p>
           )}
         </header>
 
         <p className="sr-only" role="status">
-          {workKind === 'original' ? 'ORIGINAL' : 'CLIENT'}、{getWorkCategoryLabel(filter)}、
+          {isShootingMode
+            ? '全カテゴリー、ORIGINALとCLIENTの全プロジェクト、'
+            : `${workKind === 'original' ? 'ORIGINAL' : 'CLIENT'}、${getWorkCategoryLabel(filter)}、`}
           {activeViewMode === 'flow'
             ? `${flowWorks.length}作品をFLOW表示中`
             : `${filteredWorks.length}作品をINDEX表示中`}
@@ -294,7 +435,25 @@ const WorksPage = ({ filter = 'all', onFilterChange = () => {}, onRouteAnimation
             isDialogOpen={Boolean(selectedWork)}
             selectedCategory={filter}
             isNumunumuMode={isNumunumuMode}
-          />
+            isShootingMode={isShootingMode}
+            shotToken={resolvedShotToken}
+            projectileToken={shotToken}
+            onShotResult={handleShotResult}
+          >
+            <ShootingGalleryControls
+              isActive={isShootingMode}
+              isTransitioning={isShootingTransitioning}
+              curtainCycle={curtainCycle}
+              curtainMessage={curtainMessage}
+              score={shootingScore}
+              lastResult={lastShotResult}
+              shotToken={shotToken}
+              isBulletInFlight={isBulletInFlight}
+              finalScore={finalShootingScore}
+              isNumunumuMode={isNumunumuMode}
+              onFire={handleFire}
+            />
+          </FlowingWorksLane>
         ) : currentWorks.length > 0 ? (
           <div className="works-index-grid">
             {currentWorks.map((work) => (
@@ -308,12 +467,23 @@ const WorksPage = ({ filter = 'all', onFilterChange = () => {}, onRouteAnimation
           </div>
         ) : (
           <p className="works-empty-state" role="status">
-            この条件に該当する作品はありません。
+            {isNumunumuMode ? numuText : 'この条件に該当する作品はありません。'}
           </p>
         )}
 
         {activeViewMode === 'index' && <PaginationControls />}
       </div>
+
+      {activeViewMode === 'flow' && (
+        <div className="shooting-mode-entry">
+          <ShootingModeToggle
+            isActive={isShootingMode}
+            isTransitioning={isShootingTransitioning}
+            isNumunumuMode={isNumunumuMode}
+            onToggle={handleToggleShootingMode}
+          />
+        </div>
+      )}
 
       <AnimatePresence>
         {selectedWork && (
@@ -378,14 +548,18 @@ const WorksPage = ({ filter = 'all', onFilterChange = () => {}, onRouteAnimation
                     ))}
                     <span className={`work-kind-badge work-kind-badge--${selectedWork.workKind}`}>
                       <span className="work-kind-badge__shape" aria-hidden="true" />
-                      {selectedWork.workKind === 'original' ? 'ORIGINAL' : 'CLIENT'}
+                      {isNumunumuMode
+                        ? numuText
+                        : selectedWork.workKind === 'original'
+                          ? 'ORIGINAL'
+                          : 'CLIENT'}
                     </span>
                     {(selectedWork.attributes ?? []).map((attribute) => (
                       <span
                         key={attribute}
                         className={`work-attribute-badge work-attribute-badge--${attribute}`}
                       >
-                        {getWorkAttributeLabel(attribute)}
+                        {isNumunumuMode ? numuText : getWorkAttributeLabel(attribute)}
                       </span>
                     ))}
                     <span className="flex items-center gap-1 border border-black bg-white px-2 py-0.5 font-mono text-xs">

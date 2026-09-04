@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { X } from 'lucide-react';
+import { NUMUNUMU_SHORT_TEXT, NUMUNUMU_TEXT, useNumunumu } from '../NumunumuContext';
 import './KineticVisualizer.css';
 import { KINETIC_VISUALIZER_SONGS } from '../constants';
 
@@ -12,6 +13,7 @@ const floorBounce = 0.6; // 床に落ちたときの弾み具合
 
 const KineticVisualizer = ({ onClose }) => {
   const shouldReduceMotion = useReducedMotion();
+  const { isNumunumuMode } = useNumunumu();
   // 再生する曲の状態管理
   const [song, setSong] = useState(KINETIC_VISUALIZER_SONGS.find(s => s.id === 1) || KINETIC_VISUALIZER_SONGS[0]);
   const [statusText, setStatusText] = useState('Initializing...');
@@ -48,6 +50,12 @@ const KineticVisualizer = ({ onClose }) => {
   // Make charRadius responsive to window size
   const getCharRadius = useCallback(() => (window.innerWidth < 768 ? 30 : 50), []);
   const [charRadius, setCharRadius] = useState(getCharRadius());
+  const displaySong = useMemo(
+    () => isNumunumuMode
+      ? { ...song, title: NUMUNUMU_TEXT, genre: NUMUNUMU_TEXT, text: NUMUNUMU_TEXT }
+      : song,
+    [isNumunumuMode, song],
+  );
 
   // 物理演算ループ
   const updatePhysics = useCallback((bassVal) => {
@@ -159,7 +167,7 @@ const KineticVisualizer = ({ onClose }) => {
     const boxTopY = floorY - (boxHeight * 0.8);
     const boxHalfWidth = (Math.min(window.innerWidth * 0.9, 600) / 2) - charRadius;
 
-    const textString = song.text || "POP!CORN!";
+    const textString = displaySong.text || "POP!CORN!";
     const chars = textString.split('');
     particlesRef.current = chars.map((char, index) => {
       const el = document.createElement('div');
@@ -191,7 +199,7 @@ const KineticVisualizer = ({ onClose }) => {
       particlesRef.current.forEach(p => p.el.remove());
       particlesRef.current = [];
     };
-  }, [charRadius, song, updatePhysics]);
+  }, [charRadius, displaySong, updatePhysics]);
 
   // オーディオ処理と描画ループ
   const renderFrame = useCallback(() => {
@@ -479,8 +487,8 @@ const KineticVisualizer = ({ onClose }) => {
 
       <div className="controls">
         <div className="song-info">
-          <h2 className="song-title">{song.title}</h2>
-          <p className="song-genre">{song.genre}</p>
+          <h2 className="song-title">{displaySong.title}</h2>
+          <p className="song-genre">{displaySong.genre}</p>
         </div>
 
         <div className="song-selector">
@@ -490,23 +498,23 @@ const KineticVisualizer = ({ onClose }) => {
               onClick={() => handleSongChange(s)}
               className={`song-button ${song.id === s.id ? 'active' : ''}`}
               disabled={isLoading}
-              title={`Play ${s.title} (${s.genre})`}
+              title={isNumunumuMode ? NUMUNUMU_TEXT : `Play ${s.title} (${s.genre})`}
             >
-              {s.genre}
+              {isNumunumuMode ? NUMUNUMU_TEXT : s.genre}
             </button>
           ))}
         </div>
 
-        {isLoading && <button disabled>Loading...</button>}
+        {isLoading && <button disabled>{isNumunumuMode ? NUMUNUMU_TEXT : 'Loading...'}</button>}
         {!isLoading && isAudioActive && (
           <button onClick={togglePlayPause}>
-            {isPlaying ? 'Pause' : 'Play'}
+            {isNumunumuMode ? NUMUNUMU_TEXT : isPlaying ? 'Pause' : 'Play'}
           </button>
         )}
         <div className={`status ${isAudioActive ? 'active' : ''}`}>
           <div className="status-indicator"></div>
           <span style={{ color: statusText === 'Audio Error' ? 'red' : isPlaying ? 'var(--accent-red)' : '#888' }}>
-            {statusText}
+            {isNumunumuMode ? NUMUNUMU_TEXT : statusText}
           </span>
         </div>
       </div>
@@ -515,7 +523,7 @@ const KineticVisualizer = ({ onClose }) => {
 
       <div className="popcorn-box-container">
         <div className="popcorn-box-front">
-          <div className="box-label">POP!</div>
+          <div className="box-label">{isNumunumuMode ? NUMUNUMU_SHORT_TEXT : 'POP!'}</div>
         </div>
       </div>
 

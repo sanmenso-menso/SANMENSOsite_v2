@@ -2,7 +2,7 @@ import React, { Suspense, lazy } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
-import { useNumunumu } from '../NumunumuContext';
+import { NUMUNUMU_TEXT, useNumunumu } from '../NumunumuContext';
 import AccessibleDialog from '../components/AccessibleDialog';
 
 const PopVectorPlayer = lazy(() => import('../components/PopVectorPlayer'));
@@ -28,7 +28,7 @@ const ContentsPage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const { isNumunumuMode } = useNumunumu();
-    const numuText = 'ぬむぬむとんかつ';
+    const numuText = NUMUNUMU_TEXT;
 
     const displayContents = isNumunumuMode ? contents.map(c => ({
         ...c,
@@ -130,7 +130,7 @@ const ContentsPage = () => {
                     >
                         <Suspense fallback={(
                             <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 text-white" role="status">
-                                コンテンツを読み込んでいます…
+                                {isNumunumuMode ? numuText : 'コンテンツを読み込んでいます…'}
                             </div>
                         )}>
                             <SelectedComponent onClose={handleBack} />

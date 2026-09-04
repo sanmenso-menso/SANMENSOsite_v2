@@ -1,12 +1,17 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowUpRight, Zap } from 'lucide-react';
+import { NUMUNUMU_TEXT, useNumunumu } from '../NumunumuContext';
 
-const HomeUpdateNotice = ({ onOpenWorks, reduceMotion = false }) => (
-  <motion.button
+const HomeUpdateNotice = ({ onOpenWorks, reduceMotion = false }) => {
+  const { isNumunumuMode } = useNumunumu();
+  const label = isNumunumuMode ? NUMUNUMU_TEXT : 'アップデートしたヨ！ WORKSページをチェック';
+
+  return (
+    <motion.button
     type="button"
     data-home-update-notice
-    aria-label="アップデートしたヨ！ WORKSページをチェック"
+    aria-label={label}
     onClick={onOpenWorks}
     initial={reduceMotion ? false : { opacity: 0, x: 80, rotate: 4 }}
     animate={{ opacity: 1, x: 0, rotate: -1 }}
@@ -19,13 +24,14 @@ const HomeUpdateNotice = ({ onOpenWorks, reduceMotion = false }) => (
       <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 border-black bg-white" aria-hidden="true">
         <Zap size={18} strokeWidth={3} fill="black" />
       </span>
-      <span>アップデートしたヨ！</span>
+      <span>{isNumunumuMode ? NUMUNUMU_TEXT : 'アップデートしたヨ！'}</span>
     </p>
     <span className="mt-2 flex items-center justify-end gap-1 border-t-2 border-black pt-2 font-mono text-xs font-bold sm:text-sm">
-      WORKSページをチェック
+      {isNumunumuMode ? NUMUNUMU_TEXT : 'WORKSページをチェック'}
       <ArrowUpRight size={16} strokeWidth={3} aria-hidden="true" />
     </span>
-  </motion.button>
-);
+    </motion.button>
+  );
+};
 
 export default HomeUpdateNotice;

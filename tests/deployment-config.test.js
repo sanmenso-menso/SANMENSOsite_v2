@@ -7,11 +7,30 @@ const readPublicConfig = (name) => readFile(new URL(`../public/${name}`, import.
 describe('static hosting security and routing', () => {
   it('serves only known SPA content routes and returns a real 404 for unknown IDs', async () => {
     const redirects = await readPublicConfig('_redirects');
+    const notFoundPage = await readPublicConfig('404.html');
 
-    expect(redirects).toContain('/contents/pop-vector-player');
-    expect(redirects).toContain('/contents/kinetic-visualizer');
-    expect(redirects).toMatch(/\/contents\/\*\s+\/404\.html\s+404/);
-    expect(redirects).not.toMatch(/\/contents\/\*\s+\/index\.html\s+200/);
+    for (const route of [
+      '/works',
+      '/works/',
+      '/links',
+      '/links/',
+      '/contact',
+      '/contact/',
+      '/secret',
+      '/secret/',
+      '/contents',
+      '/contents/',
+      '/contents/pop-vector-player',
+      '/contents/pop-vector-player/',
+      '/contents/kinetic-visualizer',
+      '/contents/kinetic-visualizer/',
+    ]) {
+      expect(redirects).toMatch(new RegExp(`^${route.replaceAll('/', '\\/')}\\s+\\/\\s+200$`, 'm'));
+    }
+
+    expect(redirects).not.toContain('/index.html');
+    expect(redirects).not.toMatch(/\s404(?:\s|$)/);
+    expect(notFoundPage).toContain('<!doctype html>');
   });
 
   it('declares browser hardening headers without third-party font or image allowlists', async () => {

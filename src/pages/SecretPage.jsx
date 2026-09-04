@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useReducedMotion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { useNumunumu } from '../NumunumuContext';
+import { NUMUNUMU_IMAGE, NUMUNUMU_TEXT, useNumunumu } from '../NumunumuContext';
 
 const CHAOS_BATCH_SIZE = 12;
 const MAX_CHAOS_ITEMS = 60;
@@ -11,7 +11,7 @@ const SecretPage = () => {
     const shouldReduceMotion = useReducedMotion();
     const navigate = useNavigate();
     const { isNumunumuMode } = useNumunumu();
-    const numuText = 'ぬむぬむとんかつ';
+    const numuText = NUMUNUMU_TEXT;
     const containerRef = useRef(null);
     const [windows, setWindows] = useState([]);
     const [chaosItems, setChaosItems] = useState([]);
@@ -98,6 +98,11 @@ const SecretPage = () => {
     }, []);
 
     const consultOracle = () => {
+        if (isNumunumuMode) {
+            createWindow(numuText, numuText, 'text');
+            return;
+        }
+
         if (Math.random() > 0.43) {
             const msg = ORACLE_MESSAGES[Math.floor(Math.random() * ORACLE_MESSAGES.length)];
             if (typeof msg === 'string') {
@@ -118,7 +123,7 @@ const SecretPage = () => {
             const winW = window.innerWidth;
             const winH = window.innerHeight;
             
-            const isFace = Math.random() > 0.8;
+            const isFace = !isNumunumuMode && Math.random() > 0.8;
             const baseX = Math.random() * winW;
             const baseY = Math.random() * winH;
 
@@ -162,7 +167,7 @@ const SecretPage = () => {
             }
         }
         setChaosItems(prev => [...prev, ...newChaos].slice(-MAX_CHAOS_ITEMS));
-    }, [isNumunumuMode]);
+    }, [isNumunumuMode, numuText]);
 
     useEffect(() => {
         itemsRef.current = [...windows, ...chaosItems];
@@ -304,7 +309,7 @@ const SecretPage = () => {
             document.removeEventListener('visibilitychange', handleVisibilityChange);
             stopLoop();
         };
-    }, [createWindow, injectChaos, isNumunumuMode, shouldReduceMotion]);
+    }, [createWindow, injectChaos, isNumunumuMode, numuText, shouldReduceMotion]);
 
     const handleDragStart = (e, id) => {
         dragCleanupRef.current?.();
@@ -395,15 +400,15 @@ const SecretPage = () => {
                 onClick={() => navigate('/')} 
                 className="fixed top-4 left-4 z-[9999] bg-black border-2 border-white text-white px-2 py-1 hover:bg-white hover:text-black font-mono font-bold text-xs sm:text-sm tracking-widest"
             >
-                ← ROOT_DIR
+                ← {isNumunumuMode ? numuText : 'ROOT_DIR'}
             </button>
 
             <div className="fixed bottom-4 right-4 z-[9999] flex flex-col gap-2 items-end">
                 {[
-                    { l: 'ORACLE', fn: consultOracle }, 
-                    { l: 'CHAOS', fn: injectChaos }, 
-                    { l: isNoiseActive ? 'NOISE: ON' : 'NOISE: OFF', fn: () => setIsNoiseActive(!isNoiseActive) }, 
-                    { l: 'COLOR', fn: randomizeColors }
+                    { l: isNumunumuMode ? numuText : 'ORACLE', fn: consultOracle },
+                    { l: isNumunumuMode ? numuText : 'CHAOS', fn: injectChaos },
+                    { l: isNumunumuMode ? numuText : isNoiseActive ? 'NOISE: ON' : 'NOISE: OFF', fn: () => setIsNoiseActive(!isNoiseActive) },
+                    { l: isNumunumuMode ? numuText : 'COLOR', fn: randomizeColors }
                 ].map((btn, i) => (
                     <button 
                         key={i} 
@@ -443,13 +448,13 @@ const SecretPage = () => {
                         </div>
                         <div className="p-2 flex flex-col gap-2 bg-black">
                             <fieldset className="border p-2 m-0" style={{ borderColor: colors.text }}>
-                                <legend className="px-1 text-[8px] sm:text-[10px] font-mono" style={{ color: colors.text }}>preview</legend>
+                                <legend className="px-1 text-[8px] sm:text-[10px] font-mono" style={{ color: colors.text }}>{isNumunumuMode ? numuText : 'preview'}</legend>
                                 {win.contentType === 'image' ? (
-                                    <img src={win.content} alt="content" className="w-full h-auto border pointer-events-none bg-white/10" style={{ borderColor: colors.text }} />
+                                    <img src={isNumunumuMode ? NUMUNUMU_IMAGE : win.content} alt={isNumunumuMode ? numuText : 'content'} className="w-full h-auto border pointer-events-none bg-white/10" style={{ borderColor: colors.text }} />
                                 ) : win.contentType === 'link' ? (
                                     <a href={win.content.url} target="_blank" rel="noopener noreferrer" className="block group cursor-pointer">
                                         <div className="relative overflow-hidden border" style={{ borderColor: colors.text }}>
-                                            <img src={win.content.image} alt="link thumbnail" className="w-full h-auto object-cover transition-transform group-hover:scale-110" />
+                                            <img src={isNumunumuMode ? NUMUNUMU_IMAGE : win.content.image} alt={isNumunumuMode ? numuText : 'link thumbnail'} className="w-full h-auto object-cover transition-transform group-hover:scale-110" />
                                             <div className="absolute inset-0 bg-white/10 group-hover:bg-transparent transition-colors pointer-events-none" />
                                         </div>
                                         {win.content.text && <div className="mt-1 font-mono text-[10px] sm:text-xs break-words" style={{ color: colors.text }}>{`> ${win.content.text}`}</div>}
@@ -479,7 +484,7 @@ const SecretPage = () => {
                         }}
                     >
                         {item.type === 'chaos_text' ? item.text : (
-                            <img src={item.content} alt="chaos" style={{ width: '100%', height: 'auto' }} />
+                            <img src={isNumunumuMode ? NUMUNUMU_IMAGE : item.content} alt={isNumunumuMode ? numuText : 'chaos'} style={{ width: '100%', height: 'auto' }} />
                         )}
                     </div>
                 ))}
