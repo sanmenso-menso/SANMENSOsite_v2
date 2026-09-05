@@ -23,6 +23,8 @@ WORKSの射的modeはFLOW表示上だけで動作する一時的なgame UIであ
 
 WORKSの作品panelは主categoryに対応する面色を持ち、複数categoryの作品は対応色のgradientで示す。project typeはORIGINALを赤い二重枠、CLIENTを青い二重枠で区別する。文字badgeも併用し、色だけに意味を依存させない。長いtitleは文字数に応じて段階的に縮小し、thumbnailの縦横比を固定して作品画像の視認性を保つ。固定高のFLOW panelはtitleを最大3行、説明文を最大2行とし、tagとREAD MOREを含めてpanel内へ収める。全文は作品詳細で表示する。
 
+射的modeでは複製を含む景品のREAD MOREから作品詳細を開ける。詳細表示中はレーン移動・浮遊・発射を停止し、閉じるとscoreと景品状態を維持して再開する。飛翔中と落下済み景品のREAD MOREは無効化する。命中判定は照準と景品の矩形座標を比較し、page scrollによって照準が画面外になっても判定を維持する。スマホのscoreはレーン左下、発射操作の上へ配置する。
+
 ## Build and deployment assets
 
 Viteが `dist/` を生成する。`public/_redirects` は既知のSPA routeをURLを維持したままroot documentへproxyし、未知のpathは `public/404.html` によるCloudflare Pages標準の404 responseへ委ねる。`public/_headers` はresponse header設定に使う。画像最適化は `scripts/` の既存Node scriptで扱う。

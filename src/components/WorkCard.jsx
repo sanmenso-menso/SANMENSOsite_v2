@@ -68,7 +68,7 @@ const CompactWorkCardContents = ({ work, isClone, isNumunumuMode }) => (
   </div>
 );
 
-const WorkCardContents = ({ work, isNumunumuMode, isClone, isFlowItem }) => (
+const WorkCardContents = ({ work, isNumunumuMode, isClone, isFlowItem, onReadMore, isReadMoreDisabled }) => (
   <>
     <div className="absolute -top-2.5 left-1/2 z-10 h-5 w-20 -translate-x-1/2 rotate-[-2deg] bg-yellow-400/80 opacity-80 shadow-sm" />
     <div className="relative mb-3 flex aspect-video w-full shrink-0 items-center justify-center overflow-hidden border-2 border-black bg-gray-100">
@@ -132,9 +132,17 @@ const WorkCardContents = ({ work, isNumunumuMode, isClone, isFlowItem }) => (
       {work.desc}
     </p>
     <div className="mt-auto flex justify-end">
+      {onReadMore ? (
+        <button type="button" onClick={onReadMore} disabled={isReadMoreDisabled}
+          aria-label={`${work.title}の詳細を開く`}
+          className="border-b-2 border-black text-sm font-bold disabled:opacity-50">
+          {isNumunumuMode ? NUMUNUMU_TEXT : 'READ MORE'} ↗
+        </button>
+      ) : (
       <span className="flex items-center gap-1 border-b-2 border-transparent font-sans text-sm font-bold transition-all group-hover:border-black">
         {isNumunumuMode ? NUMUNUMU_TEXT : 'READ MORE'} <ArrowUpRight size={16} />
       </span>
+      )}
     </div>
   </>
 );
@@ -142,6 +150,7 @@ const WorkCardContents = ({ work, isNumunumuMode, isClone, isFlowItem }) => (
 const WorkCard = ({
   work,
   onOpen,
+  isReadMoreDisabled = false,
   isNumunumuMode = false,
   isClone = false,
   isCompact = false,
@@ -173,10 +182,12 @@ const WorkCard = ({
       isNumunumuMode={isNumunumuMode}
       isClone={isClone}
       isFlowItem={isFlowItem}
+      onReadMore={isShootingTarget ? () => onOpen(work) : undefined}
+      isReadMoreDisabled={isReadMoreDisabled}
     />
   );
 
-  if (isClone) {
+  if (isClone && !isShootingTarget) {
     return (
       <div className={className} style={cardStyle} aria-hidden="true" inert="">
         {contents}

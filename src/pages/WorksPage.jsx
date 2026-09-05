@@ -125,6 +125,7 @@ const WorksPage = ({ filter = 'all', onFilterChange = () => {}, onRouteAnimation
   };
 
   const handleOpenWork = (work) => {
+    if (isShootingMode && (isBulletInFlight || isShootingTransitioning)) return;
     setSelectedWork(work);
   };
 
@@ -197,7 +198,7 @@ const WorksPage = ({ filter = 'all', onFilterChange = () => {}, onRouteAnimation
   };
 
   const handleFire = () => {
-    if (!isShootingMode || isShootingTransitioning || isBulletInFlight) return;
+    if (!isShootingMode || isShootingTransitioning || isBulletInFlight || selectedWork) return;
 
     const nextShotToken = shotSequenceRef.current + 1;
     shotSequenceRef.current = nextShotToken;
@@ -433,6 +434,7 @@ const WorksPage = ({ filter = 'all', onFilterChange = () => {}, onRouteAnimation
             onOpen={handleOpenWork}
             isStopped={isFlowStopped}
             isDialogOpen={Boolean(selectedWork)}
+            isBulletInFlight={isBulletInFlight}
             selectedCategory={filter}
             isNumunumuMode={isNumunumuMode}
             isShootingMode={isShootingMode}

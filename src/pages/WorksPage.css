@@ -418,6 +418,11 @@
   white-space: nowrap;
 }
 
+.works-flow-track[data-paused='true'] .works-flow-item,
+.works-flow-track[data-paused='true'] .work-card {
+  animation-play-state: paused !important;
+}
+
 .shooting-crosshair {
   position: absolute;
   z-index: 45;
@@ -1036,8 +1041,13 @@
   }
 
   .shooting-result {
-    top: 0.75rem;
-    right: 0.75rem;
+    top: auto;
+    right: auto;
+    bottom: 7rem;
+    left: 0.75rem;
+    min-width: 0;
+    max-width: calc(100% - 1.5rem);
+    text-align: left;
   }
 
   .shooting-controls {

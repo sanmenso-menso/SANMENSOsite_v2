@@ -114,7 +114,7 @@ describe('flowing works lane accessibility', () => {
     expect(markup).toContain('作品の流れを停止しています。');
   });
 
-  it('turns every loop copy into a visible shooting prize without opening details', () => {
+  it('lets every shooting prize loop copy open its details', () => {
     const markup = renderToStaticMarkup(
       <FlowingWorksLane
         works={[work]}
@@ -131,11 +131,23 @@ describe('flowing works lane accessibility', () => {
     expect(markup).toContain('data-shooting-difficulty="1"');
     expect(markup).toContain('--flow-gap-after:48px');
     expect(markup).toContain('--shooting-scale:0.94');
-    expect(markup.match(/data-shooting-prize="true"/g)).toHaveLength(1);
-    expect(markup).not.toContain('<button');
+    expect(markup.match(/data-shooting-prize="true"/g)).toHaveLength(3);
+    expect(markup.match(/<button/g)).toHaveLength(3);
+    expect(markup).not.toContain('inert=""');
     expect(markup).toContain('shooting-crosshair');
     expect(markup).not.toContain('work-card--compact');
     expect(markup).toContain('作品は動き続けます。中央の照準に景品を合わせて発射してください。');
+  });
+
+  it('pauses shooting only while details are open and disables details during flight', () => {
+    for (const isDialogOpen of [true, false]) {
+      const markup = renderToStaticMarkup(
+        <FlowingWorksLane works={[work]} onOpen={() => {}} isStopped
+          isDialogOpen={isDialogOpen} isShootingMode isBulletInFlight />,
+      );
+      expect(markup).toContain(`data-paused="${isDialogOpen}"`);
+      expect(markup.match(/disabled=""/g)).toHaveLength(3);
+    }
   });
 
   it('uses category colors and project-type frames for multi-category client work', () => {

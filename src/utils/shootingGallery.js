@@ -4,6 +4,11 @@ export const SHOOTING_ATTRIBUTE_BONUS_POINTS = 100;
 export const SHOOTING_SHIFT_STEP_PX = 48;
 export const SHOOTING_MAX_SHIFT_PX = 96;
 
+export const isShootingPointInBounds = (x, y, bounds) =>
+  bounds.width > 0 && bounds.height > 0 &&
+  x >= bounds.left && x <= bounds.right &&
+  y >= bounds.top && y <= bounds.bottom;
+
 export const getShootingPrizePoints = (work) => {
   const basePoints =
     work?.workKind === 'client' ? SHOOTING_CLIENT_POINTS : SHOOTING_ORIGINAL_POINTS;

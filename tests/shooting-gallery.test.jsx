@@ -11,12 +11,22 @@ import {
   getShootingPoints,
   getShootingPrizePoints,
   getShootingShiftOffset,
+  isShootingPointInBounds,
   SHOOTING_ATTRIBUTE_BONUS_POINTS,
   SHOOTING_CLIENT_POINTS,
   SHOOTING_ORIGINAL_POINTS,
 } from '../src/utils/shootingGallery.js';
 
 describe('shooting gallery', () => {
+  it('keeps hits consistent when scrolling moves the aim off screen', () => {
+    for (const offset of [0, -1000, 1000]) {
+      const bounds = { left: 100, right: 200, top: 100 + offset,
+        bottom: 300 + offset, width: 100, height: 200 };
+      expect(isShootingPointInBounds(150, 200 + offset, bounds)).toBe(true);
+      expect(isShootingPointInBounds(250, 200 + offset, bounds)).toBe(false);
+      expect(isShootingPointInBounds(150, 301 + offset, bounds)).toBe(false);
+    }
+  });
   it('classifies center and offset hits against the target width', () => {
     expect(getShootingHitDirection(125, 100, 100)).toBe('left');
     expect(getShootingHitDirection(142, 100, 100)).toBe('left');

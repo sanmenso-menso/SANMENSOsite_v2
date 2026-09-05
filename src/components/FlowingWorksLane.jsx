@@ -11,6 +11,7 @@ import {
   getShootingPoints,
   getShootingPrizePoints,
   getShootingShiftOffset,
+  isShootingPointInBounds,
 } from '../utils/shootingGallery';
 import { workMatchesCategory } from '../utils/works';
 import WorkCard from './WorkCard';
@@ -76,6 +77,7 @@ const getFlowPlacementStyle = (workId, index, isCompact) => {
 const FlowingWorksLane = ({
   works,
   onOpen,
+  isBulletInFlight = false,
   isStopped,
   isDialogOpen,
   selectedCategory = 'all',
@@ -99,7 +101,7 @@ const FlowingWorksLane = ({
   const suppressClickTimerRef = useRef(null);
 
   const isPaused = isShootingMode
-    ? false
+    ? isDialogOpen
     : isStopped || isDialogOpen || isCardHovered || isDragging;
   const selectedCount = isShootingMode
     ? works.length
@@ -156,6 +158,7 @@ const FlowingWorksLane = ({
           <WorkCard
             work={work}
             onOpen={onOpen}
+            isReadMoreDisabled={isBulletInFlight || isKnockedDown}
             isNumunumuMode={isNumunumuMode}
             isCompact={isCompact}
             isFlowItem
@@ -258,10 +261,13 @@ const FlowingWorksLane = ({
     const viewportBounds = viewport.getBoundingClientRect();
     const hitX = viewportBounds.left + viewportBounds.width * 0.5;
     const hitY = viewportBounds.top + viewportBounds.height * 0.5;
-    const target = document
-      .elementsFromPoint(hitX, hitY)
-      .map((element) => element.closest?.('.works-flow-item'))
-      .find((element) => element && viewport.contains(element));
+    // Geometry also works when page scrolling puts the aim outside the viewport.
+    const targetCard = Array.from(viewport.querySelectorAll('.work-card')).find((card) => {
+      const item = card.closest('.works-flow-item');
+      return item && !item.classList.contains('works-flow-item--hit-center') &&
+        isShootingPointInBounds(hitX, hitY, card.getBoundingClientRect());
+    });
+    const target = targetCard?.closest('.works-flow-item');
 
     const targetWork = works.find((work) => String(work.id) === target?.dataset.workId);
     const workId = targetWork?.id;
@@ -271,7 +277,7 @@ const FlowingWorksLane = ({
       return;
     }
 
-    const targetBounds = target.getBoundingClientRect();
+    const targetBounds = targetCard.getBoundingClientRect();
     const direction = getShootingHitDirection(hitX, targetBounds.left, targetBounds.width);
     const points = getShootingPoints(direction, targetWork);
     setHitStates((currentStates) => {
@@ -437,13 +443,13 @@ const FlowingWorksLane = ({
           className="works-flow-track"
           data-paused={isPaused ? 'true' : 'false'}
         >
-          <div className="works-flow-set" aria-hidden="true" inert="">
+          <div className="works-flow-set" aria-hidden={isShootingMode ? undefined : true} inert={isShootingMode ? undefined : ''}>
             {renderFlowItems(true)}
           </div>
           <div ref={primarySetRef} className="works-flow-set">
             {renderFlowItems()}
           </div>
-          <div className="works-flow-set" aria-hidden="true" inert="">
+          <div className="works-flow-set" aria-hidden={isShootingMode ? undefined : true} inert={isShootingMode ? undefined : ''}>
             {renderFlowItems(true)}
           </div>
         </div>
