@@ -8,6 +8,7 @@ const HomeUpdateNotice = ({ onOpenWorks, reduceMotion = false }) => {
   const label = isNumunumuMode ? NUMUNUMU_TEXT : 'アップデートしたヨ！ WORKSページをチェック';
 
   return (
+    <div className="absolute right-4 top-24 z-40 flex max-w-[calc(100vw-2rem)] flex-col items-end gap-4 sm:right-6 sm:top-6 md:right-8 md:top-8">
     <motion.button
     type="button"
     data-home-update-notice
@@ -18,7 +19,7 @@ const HomeUpdateNotice = ({ onOpenWorks, reduceMotion = false }) => {
     whileHover={reduceMotion ? undefined : { scale: 1.03, rotate: 0, boxShadow: '8px 8px 0 #000' }}
     whileTap={reduceMotion ? undefined : { x: 4, y: 4, boxShadow: '0 0 0 #000' }}
     transition={reduceMotion ? { duration: 0 } : { type: 'spring', stiffness: 150, damping: 16 }}
-    className="absolute right-4 top-24 z-40 max-w-[calc(100vw-2rem)] cursor-pointer border-4 border-black bg-[#00E0FF] px-4 py-3 text-left shadow-[6px_6px_0_#000] focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-[#FF0080] sm:right-6 sm:top-6 md:right-8 md:top-8"
+    className="max-w-full cursor-pointer border-4 border-black bg-[#00E0FF] px-4 py-3 text-left shadow-[6px_6px_0_#000] focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-[#FF0080]"
   >
     <p className="flex items-center gap-3 whitespace-nowrap font-sans text-base font-black tracking-tight sm:text-lg">
       <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 border-black bg-white" aria-hidden="true">
@@ -31,6 +32,14 @@ const HomeUpdateNotice = ({ onOpenWorks, reduceMotion = false }) => {
       <ArrowUpRight size={16} strokeWidth={3} aria-hidden="true" />
     </span>
     </motion.button>
+    <a
+      href="/portfolio"
+      className="inline-flex min-h-11 items-center gap-3 border-2 border-black bg-white px-4 py-2 font-sans text-sm font-bold shadow-[3px_3px_0_#000] transition-colors hover:bg-[#FFD700] focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-[#FF0080] sm:text-base"
+    >
+      {isNumunumuMode ? NUMUNUMU_TEXT : 'ポートフォリオはこちら'}
+      <span className="text-xl font-black" aria-hidden="true">↗</span>
+    </a>
+    </div>
   );
 };
 

@@ -14,6 +14,8 @@ describe('home update notice', () => {
     expect(markup).toContain('aria-label="アップデートしたヨ！ WORKSページをチェック"');
     expect(markup).toContain('アップデートしたヨ！');
     expect(markup).toContain('WORKSページをチェック');
-    expect(markup).not.toMatch(/<a(?:\s|>)/);
+    expect(markup).toContain('href="/portfolio"');
+    expect(markup).toContain('ポートフォリオはこちら');
+    expect(markup.match(/<button\b[\s\S]*?<\/button>/)?.[0]).not.toMatch(/<a(?:\s|>)/);
   });
 });
