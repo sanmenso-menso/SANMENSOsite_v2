@@ -16,7 +16,7 @@ import {
     canStartRouteTransition,
     isHomeEntryReady,
 } from './utils/routeTransition';
-import { CONTENT_TITLES, getPageTitle, isKnownPath, normalizePathname } from './utils/routes';
+import { CONTENT_TITLES, getPageTitle, isKnownPath, normalizePathname, resolvePortfolioPath, PORTFOLIO_PAGES } from './utils/routes';
 
 const MagicCube = lazy(() => import('./components/MagicCube'));
 const WorksPage = lazy(() => import('./pages/WorksPage'));
@@ -25,6 +25,7 @@ const ContactPage = lazy(() => import('./pages/ContactPage'));
 const ContentsPage = lazy(() => import('./pages/ContentsPage'));
 const SecretPage = lazy(() => import('./pages/SecretPage'));
 const NotFoundPage = lazy(() => import('./pages/NotfoundPage'));
+const PortfolioPage = lazy(() => import('./pages/PortfolioPage'));
 
 const LoadingFallback = ({ isNumunumuMode = false }) => (
     <div className="min-h-screen flex items-center justify-center px-4" role="status" aria-live="polite">
@@ -71,6 +72,9 @@ const RouteMetadata = ({ pathname, isNotFound, isNumunumuMode }) => {
         <Helmet>
             <title>{fullTitle}</title>
             <meta property="og:title" content={fullTitle} />
+            <meta name="twitter:title" content={fullTitle} />
+            <meta name="robots" content={isNotFound ? 'noindex' : 'index, follow'} />
+            {!isNotFound && <link rel="canonical" href={`https://sanmenso.com${normalizePathname(pathname)}`} />}
         </Helmet>
     );
 };
@@ -338,6 +342,14 @@ function AppContent() {
     );
 }
 
+function RoutedApp() {
+    const { pathname } = useLocation();
+    if (PORTFOLIO_PAGES[resolvePortfolioPath(pathname)]) {
+        return <Suspense fallback={<LoadingFallback />}><PortfolioPage /></Suspense>;
+    }
+    return <AppContent />;
+}
+
 function App() {
     return (
         <HelmetProvider>
@@ -353,9 +365,10 @@ function App() {
                             <meta property="og:image" content={SITE_META.image} />
                             <meta name="twitter:card" content="summary_large_image" />
                             <meta name="twitter:site" content={SITE_META.twitterUsername} />
+                            <meta name="twitter:description" content={SITE_META.description} />
                         </Helmet>
                         <GlobalErrorReporter />
-                        <AppContent />
+                        <RoutedApp />
                     </BrowserRouter>
                 </AppErrorBoundary>
             </MotionConfig>

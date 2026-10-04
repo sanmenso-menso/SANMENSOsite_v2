@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="811 308 307 256"><defs xmlns="http://www.w3.org/2000/svg">
+    <linearGradient id="_名称未設定グラデーション_21" x1="41.85" y1="148.39" x2="331.37" y2="148.39" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff6e2"/>
+      <stop offset="0" stop-color="#f4efde"/>
+      <stop offset=".02" stop-color="#bbcdce"/>
+      <stop offset=".04" stop-color="#89afc0"/>
+      <stop offset=".06" stop-color="#5f95b4"/>
+      <stop offset=".07" stop-color="#3c80ab"/>
+      <stop offset=".09" stop-color="#2270a3"/>
+      <stop offset=".11" stop-color="#0f659e"/>
+      <stop offset=".13" stop-color="#035e9b"/>
+      <stop offset=".15" stop-color="#005c9a"/>
+      <stop offset=".26" stop-color="#005c9a"/>
+      <stop offset=".3" stop-color="#fff6e2"/>
+      <stop offset=".64" stop-color="#c9114f"/>
+      <stop offset=".78" stop-color="#fff6e2"/>
+      <stop offset=".86" stop-color="#005c9a"/>
+      <stop offset=".93" stop-color="#c9114f"/>
+      <stop offset="1" stop-color="#fff6e2"/>
+    </linearGradient>
+    <linearGradient id="_名称未設定グラデーション_369" x1="429.3" y1="148.39" x2="708.31" y2="148.39" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff6e2"/>
+      <stop offset="0" stop-color="#f4f2de"/>
+      <stop offset=".02" stop-color="#bbe3ce"/>
+      <stop offset=".04" stop-color="#89d5c0"/>
+      <stop offset=".06" stop-color="#5fc9b4"/>
+      <stop offset=".08" stop-color="#3cbfab"/>
+      <stop offset=".1" stop-color="#22b8a3"/>
+      <stop offset=".12" stop-color="#0fb39e"/>
+      <stop offset=".13" stop-color="#03b09b"/>
+      <stop offset=".16" stop-color="#00af9a"/>
+      <stop offset=".26" stop-color="#00879a"/>
+      <stop offset=".3" stop-color="#fff6e2"/>
+      <stop offset=".63" stop-color="#f16e2c"/>
+      <stop offset=".78" stop-color="#fff6e2"/>
+      <stop offset=".86" stop-color="#00af9a"/>
+      <stop offset=".93" stop-color="#f16e2c"/>
+      <stop offset="1" stop-color="#fff6e2"/>
+    </linearGradient>
+    <linearGradient id="_名称未設定グラデーション_3691" x1="856.6" y1="154.15" x2="1143.99" y2="154.15" xmlns:ns1="http://www.w3.org/1999/xlink" ns1:href="#_名称未設定グラデーション_369"/>
+    <linearGradient id="_名称未設定グラデーション_371" x1="823.51" y1="523.53" x2="1124.22" y2="349.91" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff6e2"/>
+      <stop offset="0" stop-color="#f4efde"/>
+      <stop offset=".02" stop-color="#bbcdce"/>
+      <stop offset=".04" stop-color="#89afc0"/>
+      <stop offset=".06" stop-color="#5f95b4"/>
+      <stop offset=".07" stop-color="#3c80ab"/>
+      <stop offset=".09" stop-color="#2270a3"/>
+      <stop offset=".11" stop-color="#0f659e"/>
+      <stop offset=".13" stop-color="#035e9b"/>
+      <stop offset=".15" stop-color="#005c9a"/>
+      <stop offset=".3" stop-color="#fff6e2"/>
+      <stop offset=".47" stop-color="#005c9a"/>
+      <stop offset=".64" stop-color="#c9114f"/>
+      <stop offset=".75" stop-color="#fff6e2"/>
+      <stop offset=".86" stop-color="#005c9a"/>
+      <stop offset=".93" stop-color="#c9114f"/>
+      <stop offset="1" stop-color="#fff6e2"/>
+    </linearGradient>
+  </defs><g xmlns="http://www.w3.org/2000/svg">
+      <polygon points="1004.22 444.23 838.56 466.2 925.77 426.25 1050.9 371.38 816.06 510.61 824.33 512.49 1043.89 431.91 870.16 340.15 834.66 314.49 969.22 546.81 1103.77 314.49 1068.28 340.15 896.66 441.33 1080.95 544.23 1112.51 559.27 962.5 348.13 1010.3 455.71 1033.9 521.61 1004.22 444.23" fill="url(#_名称未設定グラデーション_371)"/>
+      <polygon points="1004.22 444.23 838.56 466.2 925.77 426.25 1050.9 371.38 816.06 510.61 824.33 512.49 1043.89 431.91 870.16 340.15 834.66 314.49 969.22 546.81 1103.77 314.49 1068.28 340.15 896.66 441.33 1080.95 544.23 1112.51 559.27 962.5 348.13 1010.3 455.71 1033.9 521.61 1004.22 444.23" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="2"/>
+    </g></svg>

@@ -5,6 +5,7 @@ import {
   getPageTitle,
   isKnownPath,
   normalizePathname,
+  resolvePortfolioPath,
 } from '../src/utils/routes.js';
 
 describe('route contracts', () => {
@@ -20,6 +21,10 @@ describe('route contracts', () => {
   it.each([
     '/',
     '/works',
+    '/portfolio',
+    '/portfolio/about',
+    '/portfolio/works',
+    '/portfolio/contact',
     '/contents',
     '/links',
     '/contact',
@@ -29,16 +34,24 @@ describe('route contracts', () => {
     expect(isKnownPath(pathname)).toBe(true);
   });
 
-  it.each(['/unknown', '/contents/unknown', '/contents/kinetic-visualizer/extra'])(
-    'rejects an unknown route: %s',
-    (pathname) => {
-      expect(isKnownPath(pathname)).toBe(false);
-      expect(getPageTitle(pathname)).toBe('ページが見つかりません');
-    },
-  );
+  it.each([
+    '/unknown',
+    '/contents/unknown',
+    '/contents/kinetic-visualizer/extra',
+    '/portfolio/unknown',
+    '/portfolio/about/extra',
+  ])('rejects an unknown route: %s', (pathname) => {
+    expect(isKnownPath(pathname)).toBe(false);
+    expect(getPageTitle(pathname)).toBe('ページが見つかりません');
+  });
 
   it('keeps route-specific document titles', () => {
     expect(getPageTitle('/works')).toBe('作品');
+    expect(getPageTitle('/portfolio')).toBe('ポートフォリオ');
     expect(getPageTitle('/contents/kinetic-visualizer')).toBe(CONTENT_TITLES['kinetic-visualizer']);
+  });
+  it('resolves the previous About link to the new portfolio home', () => {
+    expect(resolvePortfolioPath('/portfolio/about/')).toBe('/portfolio');
+    expect(resolvePortfolioPath('/portfolio/works/')).toBe('/portfolio/works');
   });
 });

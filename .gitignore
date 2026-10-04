@@ -2,6 +2,7 @@ node_modules/
 dist/
 coverage/
 .vite/
+.wrangler/
 .vs/
 
 .env
@@ -14,3 +15,8 @@ __pycache__/
 *.py[cod]
 .DS_Store
 Thumbs.db
+
+# Local spreadsheet exports may contain unpublished works and working notes.
+portfolio-source/
+public/data/*.tmp
+public/images/portfolio/*.tmp
