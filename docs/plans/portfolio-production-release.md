@@ -28,12 +28,14 @@
 - 公開JSONは許可した公開列のみ。管理メモや非公開行を排除し、リンク・ローカル画像pathの検証を実施。
 - CSP、frame制限、nosniff、Permissions-Policy、HSTSを維持。Turnstileの必要なhostだけ追加。静的ファイルには秘密キーを含めない。
 
-## 公開までの残作業
+## 本番公開と確認結果
 
-1. 承認済みのcommit/pushでPR #6を更新し、GitHub CIとPages previewの両方を確認する。
-2. latest `main` が変わっていないことを再確認し、検証済み変更を安全に統合してPagesの本番buildを確認する。
-3. 公開URLの404 status/演出、portfolio各page、CSP、APIの設定状態を確認する。
-4. 本番フォームで確認メール1件を送り、Resendの配達結果とGmail側の受信を確認する。
+- ユーザーの明示承認に基づきcommit/push。PR [#6](https://github.com/sanmenso-menso/SANMENSOsite_v2/pull/6)をmainへ統合。公開commit: `2fddba0268dc1b2843298fa9c31138f93a68ab30`。
+- 修復後のGitHub CIとPages previewはいずれも成功。本番main CI [37228544268](https://github.com/sanmenso-menso/SANMENSOsite_v2/actions/runs/37228544268)とPages production deployment `c1e8e62c-6e76-4a77-980f-601c6875caa2`も成功。
+- [本番ポートフォリオ](https://sanmenso.com/portfolio)とWorks/Contact、従来のトップ/WorksはHTTP 200。未知pathはHTTP 404、従来のアニメーションが描画され、noindex/canonicalなし。静的ページのCSPを確認。
+- 本番 `/api/contact` は `available: true`。Managed Turnstileの確認後、実フォームから公開確認用のメールを1件送信。成功表示と入力クリアを確認。
+- Resendで送信元、固定宛先、返信先、本文6項目とDeliveredを確認。ユーザーがGmailで「届いている」と確認したため、入力から受信まで検証完了。確認メールID: `01a10867-4702-763c-9b53-e27f57a9ab90`。秘密キーは記録しない。
+- Resend/Turnstileは無料設定を維持し、従量課金を有効にしていない。
 
 ## 制約とロールバック
 
