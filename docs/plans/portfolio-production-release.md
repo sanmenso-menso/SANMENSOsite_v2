@@ -16,6 +16,8 @@
 - WranglerでFunctionsのcompile、22 redirects / 7 headersのparseが成功。通常ページ200、未知path404、未設定APIの正しい準備中応答を確認。
 - Chromeで元のCube、既存Works、ポートフォリオWorks/About/404を確認。画像の読み込み失敗なし。Aboutの5分野表示、閉じる操作、ポップへ戻す操作を確認。
 - Resend Free、従量課金無効を管理画面で確認。認証済み `mail.sanmenso.com` 専用Sending access。Turnstile Managed / `sanmenso.com`。本番4設定を登録。秘密キーをGit・公開ファイル・ログに残さず、コピー時のクリップボードも消去。
+- PR #6の初回GitHub CIは成功したが、Pages previewのnpm 10.9.2はlockfileのWASM optional依存欠落で失敗。本番は未変更。同じnpmによる再現後、空の検証ディレクトリでlockfileを修復し、既存package versionの変更なしを確認。npm 10.9.2/Linux x64のclean-install dry runと再度の140 tests/buildがPASS。
+- Pages用 `.node-version` を既存の `mise.toml` と同じ24.11.1に固定し、CI・local・公開buildのruntimeを揃える。
 
 ## セキュリティ確認
 
@@ -28,7 +30,7 @@
 
 ## 公開までの残作業
 
-1. Gitへのcommit/pushの明示承認後、作業branchを保存しCIを確認する。
+1. 承認済みのcommit/pushでPR #6を更新し、GitHub CIとPages previewの両方を確認する。
 2. latest `main` が変わっていないことを再確認し、検証済み変更を安全に統合してPagesの本番buildを確認する。
 3. 公開URLの404 status/演出、portfolio各page、CSP、APIの設定状態を確認する。
 4. 本番フォームで確認メール1件を送り、Resendの配達結果とGmail側の受信を確認する。
