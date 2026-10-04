@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useNumunumu } from '../NumunumuContext';
 
@@ -45,9 +44,6 @@ const Header = ({ onNavigate, isOpening }) => {
                     <span className="text-[10px] md:text-xs font-mono font-bold tracking-[0.2em] opacity-60 group-hover:opacity-100 transition-opacity">{isNumunumuMode ? numuText : 'OFFICIAL SITE 2026'}</span>
                 </div>
             </button>
-            <Link to="/portfolio" className="inline-flex items-center min-h-11 mt-2 px-3 bg-white border border-black text-xs font-bold tracking-wider hover:bg-[#FFD700]">
-                PORTFOLIO ↗
-            </Link>
         </motion.header>
     );
 };
