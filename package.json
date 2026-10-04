@@ -11,6 +11,7 @@
     "dev": "vite",
     "prebuild": "node scripts/clean-dist.js",
     "build": "vite build",
+    "postbuild": "node scripts/build-404.js",
     "preview": "vite preview",
     "optimize": "node scripts/optimize-images.js",
     "doctor": "mise exec -- python scripts/doctor.py",
@@ -19,9 +20,10 @@
     "test:watch": "vitest",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit -p jsconfig.json",
-    "format": "prettier --write package.json vite.config.js eslint.config.js prettier.config.js vitest.config.js jsconfig.json scripts/*.js tests/*.js ASSETS.md LICENSE.md .github/workflows/*.yml",
-    "format:check": "prettier --check package.json vite.config.js eslint.config.js prettier.config.js vitest.config.js jsconfig.json scripts/*.js tests/*.js ASSETS.md LICENSE.md .github/workflows/*.yml",
-    "check": "npm run format:check && npm run lint && npm run typecheck && npm test && npm run build"
+    "format": "prettier --write package.json postcss.config.js src/tailwind-compat.css vite.config.js eslint.config.js prettier.config.js vitest.config.js jsconfig.json scripts/*.js server/*.js functions/api/*.js tests/*.js public/_routes.json ASSETS.md LICENSE.md .github/workflows/*.yml portfolio.config.json portfolio-media.json portfolio-numbers.json PORTFOLIO.md CONTACT-SETUP.md src/utils/portfolio.js src/utils/portfolio-presentation.js src/utils/portfolio-numbers.js src/config/portfolio.js src/components/PortfolioMasks.jsx src/components/PortfolioBackdrop.jsx src/components/PortfolioAboutTypography.jsx src/components/PortfolioContactForm.jsx src/components/PortfolioWorkNumber.jsx src/pages/PortfolioPage.jsx src/pages/PortfolioPage.css",
+    "format:check": "prettier --check package.json postcss.config.js src/tailwind-compat.css vite.config.js eslint.config.js prettier.config.js vitest.config.js jsconfig.json scripts/*.js server/*.js functions/api/*.js tests/*.js public/_routes.json ASSETS.md LICENSE.md .github/workflows/*.yml portfolio.config.json portfolio-media.json portfolio-numbers.json PORTFOLIO.md CONTACT-SETUP.md src/utils/portfolio.js src/utils/portfolio-presentation.js src/utils/portfolio-numbers.js src/config/portfolio.js src/components/PortfolioMasks.jsx src/components/PortfolioBackdrop.jsx src/components/PortfolioAboutTypography.jsx src/components/PortfolioContactForm.jsx src/components/PortfolioWorkNumber.jsx src/pages/PortfolioPage.jsx src/pages/PortfolioPage.css",
+    "check": "npm run format:check && npm run lint && npm run typecheck && npm test && npm run build",
+    "portfolio:sync": "node scripts/sync-portfolio.js"
   },
   "dependencies": {
     "framer-motion": "^10.18.0",
@@ -34,6 +36,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@tailwindcss/postcss": "^4.3.3",
     "@types/node": "^20.19.0",
     "@types/react": "^18.3.31",
     "@types/react-dom": "^18.3.7",
@@ -47,10 +50,10 @@
     "jsdom": "^29.1.1",
     "postcss": "^8.5.25",
     "prettier": "^3.9.5",
-    "sharp": "0.35.3",
-    "tailwindcss": "^3.4.19",
+    "sharp": "^0.35.5",
+    "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2",
     "vite": "^8.1.4",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.11"
   }
 }

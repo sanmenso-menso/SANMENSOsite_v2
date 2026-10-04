@@ -1,0 +1,1649 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-02T12:01:29.834Z",
+  "works": [
+    {
+      "id": "work-de501c58",
+      "number": 44,
+      "category": "案件",
+      "title": "サブリメる",
+      "artist": "星界",
+      "roles": [
+        "作曲",
+        "編曲",
+        "映像"
+      ],
+      "date": "2026-08-31",
+      "url": "https://youtu.be/_19lBxlk-bs",
+      "image": "/images/portfolio/youtube-_19lBxlk-bs.webp",
+      "description": ""
+    },
+    {
+      "id": "work-a67b0cba",
+      "number": 43,
+      "category": "案件",
+      "title": "おお阪 IN DA PARTY!2",
+      "artist": "",
+      "roles": [
+        "DJ"
+      ],
+      "date": "2026-08-28",
+      "url": "https://x.com/Quartz_Tea/status/2093315174803673227",
+      "image": "/images/portfolio/osaka-in-da-party-2.webp",
+      "description": ""
+    },
+    {
+      "id": "work-54b8a5f9",
+      "number": 41,
+      "category": "案件",
+      "title": "Dream Jail set",
+      "artist": "d.j.ァネイロ",
+      "roles": [
+        "撮影",
+        "音響"
+      ],
+      "date": "2026-08-21",
+      "url": "https://youtu.be/H2VHHma9Z9c",
+      "image": "/images/portfolio/youtube-H2VHHma9Z9c.webp",
+      "description": ""
+    },
+    {
+      "id": "work-e017e5c6",
+      "number": 42,
+      "category": "案件",
+      "title": "CDs YouTubeMusicWeekend 2026",
+      "artist": "CDs",
+      "roles": [
+        "編集",
+        "音楽",
+        "映像",
+        "音声"
+      ],
+      "date": "2026-08-21",
+      "url": "https://youtu.be/UCd6Sw4P8Xk",
+      "image": "/images/portfolio/youtube-UCd6Sw4P8Xk.webp",
+      "description": ""
+    },
+    {
+      "id": "work-f91e3574",
+      "number": 40,
+      "category": "案件",
+      "title": "妹、他者、パラノイア",
+      "artist": "HazeDenki",
+      "roles": [
+        "SE制作"
+      ],
+      "date": "2026-08-14",
+      "url": "https://store.steampowered.com/app/4240150/_/?beta=1",
+      "image": "/images/portfolio/sister-other-paranoia.webp",
+      "description": ""
+    },
+    {
+      "id": "work-4a8b5a3c",
+      "number": 39,
+      "category": "案件",
+      "title": "神風帝国 メインテーマ",
+      "artist": "神風帝国（Kamikaze Kobo）",
+      "roles": [
+        "作曲",
+        "編曲"
+      ],
+      "date": "2026-06-08",
+      "url": "https://store.steampowered.com/app/3031720/_/?l=japanese",
+      "image": "/images/portfolio/kamikaze-empire.webp",
+      "description": ""
+    },
+    {
+      "id": "work-5161ca56",
+      "number": 38,
+      "category": "案件",
+      "title": "Flow vol.11",
+      "artist": "",
+      "roles": [
+        "DJ"
+      ],
+      "date": "2026-05-23",
+      "url": "https://x.com/flow_fellow/status/2058149190602244138",
+      "image": "/images/flow-vol11-800w.webp",
+      "description": ""
+    },
+    {
+      "id": "work-3a6ca54c",
+      "number": 37,
+      "category": "案件",
+      "title": "VIRAL with In_da_DnB",
+      "artist": "",
+      "roles": [
+        "DJ"
+      ],
+      "date": "2026-05-14",
+      "url": "https://x.com/VIRAL_ZEROTOKYO/status/2054834174994038907",
+      "image": "/images/viral-in-da-dnb-1280w.webp",
+      "description": ""
+    },
+    {
+      "id": "work-0928c582",
+      "number": 34,
+      "category": "案件",
+      "title": "SMILEVIDEO in Osaka",
+      "artist": "",
+      "roles": [
+        "DJ"
+      ],
+      "date": "2026-03-21",
+      "url": "",
+      "image": "/images/smile.webp",
+      "description": ""
+    },
+    {
+      "id": "work-173db83e",
+      "number": 35,
+      "category": "案件",
+      "title": "足立って俺のダチ！？",
+      "artist": "足立って俺のダチ！？",
+      "roles": [
+        "コンピ参加"
+      ],
+      "date": "2026-03-21",
+      "url": "https://youtu.be/Irqtj3njWSM",
+      "image": "/images/adatidati.webp",
+      "description": ""
+    },
+    {
+      "id": "work-ce862c65",
+      "number": 36,
+      "category": "案件",
+      "title": "『共創の測地線』アフターDJパーティ",
+      "artist": "",
+      "roles": [
+        "DJ"
+      ],
+      "date": "2026-03-21",
+      "url": "https://twipla.jp/events/720452",
+      "image": "/images/kyousoukansoku.webp",
+      "description": ""
+    },
+    {
+      "id": "work-e5f65d1c",
+      "number": 33,
+      "category": "案件",
+      "title": "ボカ脈in関西 Vol.2",
+      "artist": "",
+      "roles": [
+        "DJ"
+      ],
+      "date": "2026-03-20",
+      "url": "https://twipla.jp/events/711380",
+      "image": "/images/vocamyaku.webp",
+      "description": ""
+    },
+    {
+      "id": "work-9b331b68",
+      "number": 32,
+      "category": "案件",
+      "title": "2025's VOCALIFE",
+      "artist": "",
+      "roles": [
+        "DJ"
+      ],
+      "date": "2026-01-18",
+      "url": "https://x.com/mimi0heart/status/2012774449011949640",
+      "image": "/images/vocalife.webp",
+      "description": ""
+    },
+    {
+      "id": "work-f7137382",
+      "number": 31,
+      "category": "案件",
+      "title": "『Chill』コンピ",
+      "artist": "あなざ～せかい",
+      "roles": [
+        "コンピ参加"
+      ],
+      "date": "2025-11-22",
+      "url": "https://youtu.be/XBIYO-n2pRg",
+      "image": "/images/vocachillconpi.webp",
+      "description": ""
+    },
+    {
+      "id": "work-2af48c8c",
+      "number": 30,
+      "category": "案件",
+      "title": "終点帰行",
+      "artist": "ああああ",
+      "roles": [
+        "コンピ参加"
+      ],
+      "date": "2025-11-16",
+      "url": "https://www.nicovideo.jp/watch/sm45629216",
+      "image": "/images/endkikou.webp",
+      "description": ""
+    },
+    {
+      "id": "work-033e578b",
+      "number": 29,
+      "category": "案件",
+      "title": "VIRAL 2025.10.19",
+      "artist": "",
+      "roles": [
+        "DJ"
+      ],
+      "date": "2025-10-19",
+      "url": "",
+      "image": "/images/VIRAL.webp",
+      "description": ""
+    },
+    {
+      "id": "work-19d2b7b6",
+      "number": 28,
+      "category": "案件",
+      "title": "FOR UNREAL TO REAL",
+      "artist": "",
+      "roles": [
+        "DJ"
+      ],
+      "date": "2025-09-27",
+      "url": "",
+      "image": "/images/UtageOsaka.webp",
+      "description": ""
+    },
+    {
+      "id": "work-56e8246d",
+      "number": 27,
+      "category": "案件",
+      "title": "つながり v1.0",
+      "artist": "",
+      "roles": [
+        "DJ"
+      ],
+      "date": "2025-09-18",
+      "url": "https://youtu.be/SyGYHXMDgSw",
+      "image": "/images/Tunagari.webp",
+      "description": ""
+    },
+    {
+      "id": "work-663f7f62",
+      "number": 26,
+      "category": "案件",
+      "title": "ℬaⓢ9 - Chill",
+      "artist": "",
+      "roles": [
+        "DJ"
+      ],
+      "date": "2025-09-04",
+      "url": "https://x.com/Quartz_Tea/status/1963542562209218923",
+      "image": "/images/basschill.webp",
+      "description": ""
+    },
+    {
+      "id": "work-ecce519b",
+      "number": 25,
+      "category": "案件",
+      "title": "CDs YouTubeMusicWeekend 2025",
+      "artist": "CDs",
+      "roles": [
+        "作曲",
+        "ライブパフォーマンス"
+      ],
+      "date": "2025-08-31",
+      "url": "https://youtu.be/ci4NOQnobyc",
+      "image": "/images/CDsYMW2025.webp",
+      "description": ""
+    },
+    {
+      "id": "work-8102ef39",
+      "number": 24,
+      "category": "案件",
+      "title": "GOLD DISC 25.08.16",
+      "artist": "CDs crew",
+      "roles": [
+        "DJ"
+      ],
+      "date": "2025-08-16",
+      "url": "https://zerotokyo.zaiko.io/e/gold-disc-0816",
+      "image": "/images/GoldDiscCds.webp",
+      "description": ""
+    },
+    {
+      "id": "work-dce9a778",
+      "number": 23,
+      "category": "案件",
+      "title": "あみだくじコンピ",
+      "artist": "あなざ～せかい",
+      "roles": [
+        "コンピ参加"
+      ],
+      "date": "2025-07-16",
+      "url": "https://x.com/Quartz_Tea/status/1945453379670720820",
+      "image": "/images/amidakuji.webp",
+      "description": ""
+    },
+    {
+      "id": "work-c73be06b",
+      "number": 22,
+      "category": "案件",
+      "title": "LOLOLOLOVELOID vol.3",
+      "artist": "",
+      "roles": [
+        "DJ"
+      ],
+      "date": "2025-06-23",
+      "url": "https://x.com/Quartz_Tea/status/1937118483202162899",
+      "image": "/images/Lololo3.webp",
+      "description": ""
+    },
+    {
+      "id": "work-13c34fa7",
+      "number": 21,
+      "category": "案件",
+      "title": "DJs for anywere 001",
+      "artist": "",
+      "roles": [
+        "DJ"
+      ],
+      "date": "2025-06-21",
+      "url": "https://x.com/CDs_inter/status/1936250376598307004",
+      "image": "/images/DJs1.webp",
+      "description": ""
+    },
+    {
+      "id": "work-96926618",
+      "number": 20,
+      "category": "案件",
+      "title": "lite to.flac",
+      "artist": "CDs",
+      "roles": [
+        "コンピ参加"
+      ],
+      "date": "2025-06-10",
+      "url": "https://booth.pm/ja/items/6986076",
+      "image": "/images/litetoflac.webp",
+      "description": ""
+    },
+    {
+      "id": "work-3e34a01d",
+      "number": 19,
+      "category": "案件",
+      "title": "おいかける",
+      "artist": "ドラムアンドベース",
+      "roles": [
+        "コンピ参加"
+      ],
+      "date": "2025-04-16",
+      "url": "https://www.nicovideo.jp/watch/sm44883627",
+      "image": "/images/おいかける.webp",
+      "description": ""
+    },
+    {
+      "id": "work-c4c6cb6c",
+      "number": 18,
+      "category": "案件",
+      "title": "鏡像異性体vol.2",
+      "artist": "",
+      "roles": [
+        "DJ"
+      ],
+      "date": "2025-04-13",
+      "url": "https://x.com/enantiomer_eve/status/1911381350579339547",
+      "image": "/images/kyoudouiseitaivol2.webp",
+      "description": ""
+    },
+    {
+      "id": "work-60000c4f",
+      "number": 17,
+      "category": "案件",
+      "title": "クリラジ〜明日から作曲家〜",
+      "artist": "",
+      "roles": [
+        "ラジオパーソナリティ",
+        "ロゴデザイン"
+      ],
+      "date": "2025-03-19",
+      "url": "https://creators.spotify.com/pod/profile/gbo3oabestg/episodes/0-e30b26n",
+      "image": "/images/kuriraji.webp",
+      "description": ""
+    },
+    {
+      "id": "work-4c63aea5",
+      "number": 16,
+      "category": "案件",
+      "title": "TRY FORCE v3.0",
+      "artist": "",
+      "roles": [
+        "DJ"
+      ],
+      "date": "2025-03-02",
+      "url": "https://x.com/Try04_/status/1896162495460757727",
+      "image": "/images/try3.webp",
+      "description": ""
+    },
+    {
+      "id": "work-64c6297b",
+      "number": 15,
+      "category": "案件",
+      "title": "Hello, Morning (rework by CDs)",
+      "artist": "KizunaAI",
+      "roles": [
+        "リミックス"
+      ],
+      "date": "2025-01-27",
+      "url": "https://youtu.be/Y_MLRgQZRig",
+      "image": "/images/HelloJacket.webp",
+      "description": ""
+    },
+    {
+      "id": "work-bb39baff",
+      "number": 14,
+      "category": "案件",
+      "title": "【DTM鯖合作】おちゃめ機能",
+      "artist": "DTM鯖",
+      "roles": [
+        "リミックス"
+      ],
+      "date": "2025-01-21",
+      "url": "https://www.nicovideo.jp/watch/sm44562404",
+      "image": "/images/otyameRemix.webp",
+      "description": ""
+    },
+    {
+      "id": "work-0eb767a7",
+      "number": 13,
+      "category": "案件",
+      "title": "咳",
+      "artist": "カゼヒキコンピ準備室",
+      "roles": [
+        "コンピ参加"
+      ],
+      "date": "2025-01-11",
+      "url": "https://www.nicovideo.jp/watch/sm44518881",
+      "image": "/images/seki.webp",
+      "description": ""
+    },
+    {
+      "id": "work-899376e3",
+      "number": 12,
+      "category": "案件",
+      "title": "DJ24",
+      "artist": "",
+      "roles": [
+        "DJ"
+      ],
+      "date": "2024-09-29",
+      "url": "https://x.com/DJVocaSpot/status/1840387427934024051",
+      "image": "/images/DJ24.webp",
+      "description": ""
+    },
+    {
+      "id": "work-4297ac45",
+      "number": 10,
+      "category": "案件",
+      "title": "#雑ボカ 〜雑にボカロをかけれる会〜 第19回",
+      "artist": "",
+      "roles": [
+        "DJ"
+      ],
+      "date": "2024-09-28",
+      "url": "https://www.nicovideo.jp/watch/sm44153767",
+      "image": "/images/zatuboka.webp",
+      "description": ""
+    },
+    {
+      "id": "work-ddd156fd",
+      "number": 11,
+      "category": "案件",
+      "title": "CDs＋いよわ『きゅうくらりん』即興リミックス",
+      "artist": "いよわ／CDs",
+      "roles": [
+        "リミックス"
+      ],
+      "date": "2024-09-28",
+      "url": "https://x.com/GALLERIA_GM/status/1839878767990452463",
+      "image": "/images/gareriremixCds.webp",
+      "description": ""
+    },
+    {
+      "id": "work-7ab3c7e8",
+      "number": 9,
+      "category": "案件",
+      "title": "希望の糸 / 花隈千冬",
+      "artist": "冷麦高校そうめん部",
+      "roles": [
+        "作曲",
+        "編曲"
+      ],
+      "date": "2024-08-25",
+      "url": "https://www.nicovideo.jp/watch/sm44021435",
+      "image": "/images/soumenbu.webp",
+      "description": ""
+    },
+    {
+      "id": "work-b429fd0f",
+      "number": 8,
+      "category": "案件",
+      "title": "SUPER MURAKAMI BEST HITS",
+      "artist": "",
+      "roles": [
+        "コンピ参加"
+      ],
+      "date": "2024-08-16",
+      "url": "https://lostfrog.bandcamp.com/album/super-murakami-best-hits",
+      "image": "/images/murakamibest.webp",
+      "description": ""
+    },
+    {
+      "id": "work-019a76c2",
+      "number": 7,
+      "category": "案件",
+      "title": "それと同じ陽の暖かさ/ ゲキヤクβ・カゼヒキβ",
+      "artist": "猫じゃらし道",
+      "roles": [
+        "編曲"
+      ],
+      "date": "2024-06-28",
+      "url": "https://youtu.be/15z0vwS77u0",
+      "image": "/images/soretoonaji.webp",
+      "description": ""
+    },
+    {
+      "id": "work-40290f17",
+      "number": 6,
+      "category": "案件",
+      "title": "鏡像異性体",
+      "artist": "",
+      "roles": [
+        "DJ"
+      ],
+      "date": "2024-05-15",
+      "url": "https://x.com/enantiomer_eve/status/1790714101284676068",
+      "image": "/images/kyoudouiseitaiVol1.webp",
+      "description": ""
+    },
+    {
+      "id": "work-b152b9c9",
+      "number": 5,
+      "category": "案件",
+      "title": "ょく",
+      "artist": "三択はむり",
+      "roles": [
+        "編曲"
+      ],
+      "date": "2024-04-20",
+      "url": "https://www.nicovideo.jp/watch/sm43683720",
+      "image": "/images/yoku.webp",
+      "description": ""
+    },
+    {
+      "id": "work-f748af3d",
+      "number": 4,
+      "category": "案件",
+      "title": "ダンスロボットダンス",
+      "artist": "DTＭ鯖",
+      "roles": [
+        "リミックス"
+      ],
+      "date": "2023-08-05",
+      "url": "https://www.nicovideo.jp/watch/sm42576695",
+      "image": "/images/dancerobotRemix.webp",
+      "description": ""
+    },
+    {
+      "id": "work-c0315086",
+      "number": 3,
+      "category": "案件",
+      "title": "バベル",
+      "artist": "ノア",
+      "roles": [
+        "作曲",
+        "編曲"
+      ],
+      "date": "2023-07-06",
+      "url": "https://youtu.be/KSlT4hv3QKw",
+      "image": "/images/babel.webp",
+      "description": ""
+    },
+    {
+      "id": "work-909040e6",
+      "number": 2,
+      "category": "案件",
+      "title": "音楽と夢想",
+      "artist": "神椿の会",
+      "roles": [
+        "作曲",
+        "編曲"
+      ],
+      "date": "2022-10-18",
+      "url": "https://youtu.be/sDP95docQeA",
+      "image": "/images/portfolio/youtube-sDP95docQeA.webp",
+      "description": ""
+    },
+    {
+      "id": "work-b6d3b1f8",
+      "number": 1,
+      "category": "案件",
+      "title": "電脳 / 32 Observers Chorus cover",
+      "artist": "神椿の会",
+      "roles": [
+        "MIX"
+      ],
+      "date": "2022-04-14",
+      "url": "https://youtu.be/ssPrdDRpBZw",
+      "image": "/images/portfolio/youtube-ssPrdDRpBZw.webp",
+      "description": ""
+    }
+  ],
+  "activities": [
+    {
+      "id": "work-de501c58",
+      "category": "案件",
+      "title": "サブリメる",
+      "artist": "星界",
+      "roles": [
+        "作曲",
+        "編曲",
+        "映像"
+      ],
+      "date": "2026-08-31",
+      "url": "https://youtu.be/_19lBxlk-bs",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-a67b0cba",
+      "category": "案件",
+      "title": "おお阪 IN DA PARTY!2",
+      "artist": "",
+      "roles": [
+        "DJ"
+      ],
+      "date": "2026-08-28",
+      "url": "https://x.com/Quartz_Tea/status/2093315174803673227",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-54b8a5f9",
+      "category": "案件",
+      "title": "Dream Jail set",
+      "artist": "d.j.ァネイロ",
+      "roles": [
+        "撮影",
+        "音響"
+      ],
+      "date": "2026-08-21",
+      "url": "https://youtu.be/H2VHHma9Z9c",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-e017e5c6",
+      "category": "案件",
+      "title": "CDs YouTubeMusicWeekend 2026",
+      "artist": "CDs",
+      "roles": [
+        "編集",
+        "音楽",
+        "映像",
+        "音声"
+      ],
+      "date": "2026-08-21",
+      "url": "https://youtu.be/UCd6Sw4P8Xk",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-f91e3574",
+      "category": "案件",
+      "title": "妹、他者、パラノイア",
+      "artist": "HazeDenki",
+      "roles": [
+        "SE制作"
+      ],
+      "date": "2026-08-14",
+      "url": "https://store.steampowered.com/app/4240150/_/?beta=1",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-4a8b5a3c",
+      "category": "案件",
+      "title": "神風帝国 メインテーマ",
+      "artist": "神風帝国（Kamikaze Kobo）",
+      "roles": [
+        "作曲",
+        "編曲"
+      ],
+      "date": "2026-06-08",
+      "url": "https://store.steampowered.com/app/3031720/_/?l=japanese",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-5161ca56",
+      "category": "案件",
+      "title": "Flow vol.11",
+      "artist": "",
+      "roles": [
+        "DJ"
+      ],
+      "date": "2026-05-23",
+      "url": "https://x.com/flow_fellow/status/2058149190602244138",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-3a6ca54c",
+      "category": "案件",
+      "title": "VIRAL with In_da_DnB",
+      "artist": "",
+      "roles": [
+        "DJ"
+      ],
+      "date": "2026-05-14",
+      "url": "https://x.com/VIRAL_ZEROTOKYO/status/2054834174994038907",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-0928c582",
+      "category": "案件",
+      "title": "SMILEVIDEO in Osaka",
+      "artist": "",
+      "roles": [
+        "DJ"
+      ],
+      "date": "2026-03-21",
+      "url": "",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-173db83e",
+      "category": "案件",
+      "title": "足立って俺のダチ！？",
+      "artist": "足立って俺のダチ！？",
+      "roles": [
+        "コンピ参加"
+      ],
+      "date": "2026-03-21",
+      "url": "https://youtu.be/Irqtj3njWSM",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-ce862c65",
+      "category": "案件",
+      "title": "『共創の測地線』アフターDJパーティ",
+      "artist": "",
+      "roles": [
+        "DJ"
+      ],
+      "date": "2026-03-21",
+      "url": "https://twipla.jp/events/720452",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-e5f65d1c",
+      "category": "案件",
+      "title": "ボカ脈in関西 Vol.2",
+      "artist": "",
+      "roles": [
+        "DJ"
+      ],
+      "date": "2026-03-20",
+      "url": "https://twipla.jp/events/711380",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-823b5258",
+      "category": "オリジナル",
+      "title": "三面相 - SANMENso Official Site",
+      "artist": "三面相",
+      "roles": [
+        "Webデザイン"
+      ],
+      "date": "2026-03-04",
+      "url": "",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-beac03cb",
+      "category": "オリジナル",
+      "title": "CHOCOL人´∀｀ATE!!! / 羽累",
+      "artist": "三面相",
+      "roles": [
+        "作曲",
+        "編曲",
+        "映像"
+      ],
+      "date": "2026-02-21",
+      "url": "https://www.nicovideo.jp/watch/sm45975101",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-9b331b68",
+      "category": "案件",
+      "title": "2025's VOCALIFE",
+      "artist": "",
+      "roles": [
+        "DJ"
+      ],
+      "date": "2026-01-18",
+      "url": "https://x.com/mimi0heart/status/2012774449011949640",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-f7137382",
+      "category": "案件",
+      "title": "『Chill』コンピ",
+      "artist": "あなざ～せかい",
+      "roles": [
+        "コンピ参加"
+      ],
+      "date": "2025-11-22",
+      "url": "https://youtu.be/XBIYO-n2pRg",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-862ccc7f",
+      "category": "オリジナル",
+      "title": "vitali ga nai / 知声",
+      "artist": "三面相",
+      "roles": [
+        "作曲",
+        "編曲",
+        "映像"
+      ],
+      "date": "2025-11-18",
+      "url": "https://www.nicovideo.jp/watch/sm45639345",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-2af48c8c",
+      "category": "案件",
+      "title": "終点帰行",
+      "artist": "ああああ",
+      "roles": [
+        "コンピ参加"
+      ],
+      "date": "2025-11-16",
+      "url": "https://www.nicovideo.jp/watch/sm45629216",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-7e64485e",
+      "category": "オリジナル",
+      "title": "hard",
+      "artist": "CDs、三面相",
+      "roles": [
+        "ライブパフォーマンス"
+      ],
+      "date": "2025-10-20",
+      "url": "https://www.youtube.com/live/fDZq0DSR3aY",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-033e578b",
+      "category": "案件",
+      "title": "VIRAL 2025.10.19",
+      "artist": "",
+      "roles": [
+        "DJ"
+      ],
+      "date": "2025-10-19",
+      "url": "",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-1da0125d",
+      "category": "オリジナル",
+      "title": "培養オム　BGM・SE制作",
+      "artist": "三面相",
+      "roles": [
+        "作曲",
+        "編曲"
+      ],
+      "date": "2025-10-19",
+      "url": "https://x.com/biomu_/status/1979857862479552865",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-19d2b7b6",
+      "category": "案件",
+      "title": "FOR UNREAL TO REAL",
+      "artist": "",
+      "roles": [
+        "DJ"
+      ],
+      "date": "2025-09-27",
+      "url": "",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-56e8246d",
+      "category": "案件",
+      "title": "つながり v1.0",
+      "artist": "",
+      "roles": [
+        "DJ"
+      ],
+      "date": "2025-09-18",
+      "url": "https://youtu.be/SyGYHXMDgSw",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-663f7f62",
+      "category": "案件",
+      "title": "ℬaⓢ9 - Chill",
+      "artist": "",
+      "roles": [
+        "DJ"
+      ],
+      "date": "2025-09-04",
+      "url": "https://x.com/Quartz_Tea/status/1963542562209218923",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-ecce519b",
+      "category": "案件",
+      "title": "CDs YouTubeMusicWeekend 2025",
+      "artist": "CDs",
+      "roles": [
+        "作曲",
+        "ライブパフォーマンス"
+      ],
+      "date": "2025-08-31",
+      "url": "https://youtu.be/ci4NOQnobyc",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-8102ef39",
+      "category": "案件",
+      "title": "GOLD DISC 25.08.16",
+      "artist": "CDs crew",
+      "roles": [
+        "DJ"
+      ],
+      "date": "2025-08-16",
+      "url": "https://zerotokyo.zaiko.io/e/gold-disc-0816",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-88265a14",
+      "category": "オリジナル",
+      "title": "重ねトマト缶 (SANMENso Remix)",
+      "artist": "三面相",
+      "roles": [
+        "リミックス"
+      ],
+      "date": "2025-08-01",
+      "url": "https://soundcloud.com/sanmenso/sanmenso-remix",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-dce9a778",
+      "category": "案件",
+      "title": "あみだくじコンピ",
+      "artist": "あなざ～せかい",
+      "roles": [
+        "コンピ参加"
+      ],
+      "date": "2025-07-16",
+      "url": "https://x.com/Quartz_Tea/status/1945453379670720820",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-cf6dbe9a",
+      "category": "オリジナル",
+      "title": "消えちゃう世界と僕、ソリチュード / 知声",
+      "artist": "三面相",
+      "roles": [
+        "作曲"
+      ],
+      "date": "2025-07-06",
+      "url": "https://www.nicovideo.jp/watch/sm45161376",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-c73be06b",
+      "category": "案件",
+      "title": "LOLOLOLOVELOID vol.3",
+      "artist": "",
+      "roles": [
+        "DJ"
+      ],
+      "date": "2025-06-23",
+      "url": "https://x.com/Quartz_Tea/status/1937118483202162899",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-13c34fa7",
+      "category": "案件",
+      "title": "DJs for anywere 001",
+      "artist": "",
+      "roles": [
+        "DJ"
+      ],
+      "date": "2025-06-21",
+      "url": "https://x.com/CDs_inter/status/1936250376598307004",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-96926618",
+      "category": "案件",
+      "title": "lite to.flac",
+      "artist": "CDs",
+      "roles": [
+        "コンピ参加"
+      ],
+      "date": "2025-06-10",
+      "url": "https://booth.pm/ja/items/6986076",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-844525e3",
+      "category": "オリジナル",
+      "title": "Coffee Break Down / 花隈千冬",
+      "artist": "三面相",
+      "roles": [
+        "作曲",
+        "編曲",
+        "映像"
+      ],
+      "date": "2025-06-06",
+      "url": "https://www.nicovideo.jp/watch/sm45058224",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-c69d6048",
+      "category": "オリジナル",
+      "title": "Cut,solid,solar panel",
+      "artist": "三面相",
+      "roles": [
+        "作曲",
+        "編曲",
+        "デザイン"
+      ],
+      "date": "2025-06-01",
+      "url": "https://soundcloud.com/lb3uw4iphdxy/css_cutsolidsolar-panel",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-b3dad610",
+      "category": "オリジナル",
+      "title": "splash rush",
+      "artist": "三面相",
+      "roles": [
+        "作曲",
+        "編曲",
+        "デザイン"
+      ],
+      "date": "2025-05-13",
+      "url": "https://sanmenso.bandcamp.com/track/splash-rush",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-22d8c3e2",
+      "category": "オリジナル",
+      "title": "おはよう",
+      "artist": "三面相",
+      "roles": [
+        "作曲",
+        "編曲",
+        "デザイン"
+      ],
+      "date": "2025-04-22",
+      "url": "https://www.nicovideo.jp/watch/sm44904337",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-3e34a01d",
+      "category": "案件",
+      "title": "おいかける",
+      "artist": "ドラムアンドベース",
+      "roles": [
+        "コンピ参加"
+      ],
+      "date": "2025-04-16",
+      "url": "https://www.nicovideo.jp/watch/sm44883627",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-c4c6cb6c",
+      "category": "案件",
+      "title": "鏡像異性体vol.2",
+      "artist": "",
+      "roles": [
+        "DJ"
+      ],
+      "date": "2025-04-13",
+      "url": "https://x.com/enantiomer_eve/status/1911381350579339547",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-ff5a71df",
+      "category": "オリジナル",
+      "title": "Soundtrap遊び",
+      "artist": "三面相",
+      "roles": [
+        "作曲"
+      ],
+      "date": "2025-03-20",
+      "url": "https://x.com/kakothk/status/1902477682149093578",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-60000c4f",
+      "category": "案件",
+      "title": "クリラジ〜明日から作曲家〜",
+      "artist": "",
+      "roles": [
+        "ラジオパーソナリティ",
+        "ロゴデザイン"
+      ],
+      "date": "2025-03-19",
+      "url": "https://creators.spotify.com/pod/profile/gbo3oabestg/episodes/0-e30b26n",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-4c63aea5",
+      "category": "案件",
+      "title": "TRY FORCE v3.0",
+      "artist": "",
+      "roles": [
+        "DJ"
+      ],
+      "date": "2025-03-02",
+      "url": "https://x.com/Try04_/status/1896162495460757727",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-75d1e101",
+      "category": "オリジナル",
+      "title": "イガク♡着せ替えコレクション～キラって☆デコって☆メタメタREMIX～",
+      "artist": "三面相 vs d.j.ァネイロ",
+      "roles": [
+        "リミックス",
+        "ロゴデザイン"
+      ],
+      "date": "2025-02-22",
+      "url": "https://www.nicovideo.jp/watch/sm44677545",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-64c6297b",
+      "category": "案件",
+      "title": "Hello, Morning (rework by CDs)",
+      "artist": "KizunaAI",
+      "roles": [
+        "リミックス"
+      ],
+      "date": "2025-01-27",
+      "url": "https://youtu.be/Y_MLRgQZRig",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-bb39baff",
+      "category": "案件",
+      "title": "【DTM鯖合作】おちゃめ機能",
+      "artist": "DTM鯖",
+      "roles": [
+        "リミックス"
+      ],
+      "date": "2025-01-21",
+      "url": "https://www.nicovideo.jp/watch/sm44562404",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-6d3943c8",
+      "category": "オリジナル",
+      "title": "憧れbootleg / 初音ミク",
+      "artist": "三面相",
+      "roles": [
+        "作曲",
+        "編曲"
+      ],
+      "date": "2025-01-17",
+      "url": "https://youtu.be/lLUPKj_wgyM",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-0eb767a7",
+      "category": "案件",
+      "title": "咳",
+      "artist": "カゼヒキコンピ準備室",
+      "roles": [
+        "コンピ参加"
+      ],
+      "date": "2025-01-11",
+      "url": "https://www.nicovideo.jp/watch/sm44518881",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-a7554945",
+      "category": "オリジナル",
+      "title": "ロゴ制作",
+      "artist": "三面相",
+      "roles": [
+        "ロゴデザイン"
+      ],
+      "date": "2025",
+      "url": "",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-899376e3",
+      "category": "案件",
+      "title": "DJ24",
+      "artist": "",
+      "roles": [
+        "DJ"
+      ],
+      "date": "2024-09-29",
+      "url": "https://x.com/DJVocaSpot/status/1840387427934024051",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-4297ac45",
+      "category": "案件",
+      "title": "#雑ボカ 〜雑にボカロをかけれる会〜 第19回",
+      "artist": "",
+      "roles": [
+        "DJ"
+      ],
+      "date": "2024-09-28",
+      "url": "https://www.nicovideo.jp/watch/sm44153767",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-ddd156fd",
+      "category": "案件",
+      "title": "CDs＋いよわ『きゅうくらりん』即興リミックス",
+      "artist": "いよわ／CDs",
+      "roles": [
+        "リミックス"
+      ],
+      "date": "2024-09-28",
+      "url": "https://x.com/GALLERIA_GM/status/1839878767990452463",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-7ab3c7e8",
+      "category": "案件",
+      "title": "希望の糸 / 花隈千冬",
+      "artist": "冷麦高校そうめん部",
+      "roles": [
+        "作曲",
+        "編曲"
+      ],
+      "date": "2024-08-25",
+      "url": "https://www.nicovideo.jp/watch/sm44021435",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-b429fd0f",
+      "category": "案件",
+      "title": "SUPER MURAKAMI BEST HITS",
+      "artist": "",
+      "roles": [
+        "コンピ参加"
+      ],
+      "date": "2024-08-16",
+      "url": "https://lostfrog.bandcamp.com/album/super-murakami-best-hits",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-6a1c4b36",
+      "category": "オリジナル",
+      "title": "エンドロールの箱で / 花奏かのんβ",
+      "artist": "三面相",
+      "roles": [
+        "作曲",
+        "編曲"
+      ],
+      "date": "2024-06-30",
+      "url": "https://youtu.be/n_s7wbispd4",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-019a76c2",
+      "category": "案件",
+      "title": "それと同じ陽の暖かさ/ ゲキヤクβ・カゼヒキβ",
+      "artist": "猫じゃらし道",
+      "roles": [
+        "編曲"
+      ],
+      "date": "2024-06-28",
+      "url": "https://youtu.be/15z0vwS77u0",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-40290f17",
+      "category": "案件",
+      "title": "鏡像異性体",
+      "artist": "",
+      "roles": [
+        "DJ"
+      ],
+      "date": "2024-05-15",
+      "url": "https://x.com/enantiomer_eve/status/1790714101284676068",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-b152b9c9",
+      "category": "案件",
+      "title": "ょく",
+      "artist": "三択はむり",
+      "roles": [
+        "編曲"
+      ],
+      "date": "2024-04-20",
+      "url": "https://www.nicovideo.jp/watch/sm43683720",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-110fbfc5",
+      "category": "オリジナル",
+      "title": "きっと : だれか ; ぼくら / 可不",
+      "artist": "三面相",
+      "roles": [
+        "作曲",
+        "映像"
+      ],
+      "date": "2024-02-25",
+      "url": "https://youtu.be/egZJaL9Lq3I",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-6c3f26cc",
+      "category": "オリジナル",
+      "title": "サンプルのみで作った曲",
+      "artist": "三面相",
+      "roles": [
+        "作曲",
+        "編曲"
+      ],
+      "date": "2023-12-26",
+      "url": "https://x.com/SANMENso/status/1739314334306807870",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-6f5f5fbc",
+      "category": "オリジナル",
+      "title": "宿木 REMIX",
+      "artist": "三面相",
+      "roles": [
+        "リミックス"
+      ],
+      "date": "2023-10-04",
+      "url": "https://x.com/SANMENso/status/1709501329494913491",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-f748af3d",
+      "category": "案件",
+      "title": "ダンスロボットダンス",
+      "artist": "DTＭ鯖",
+      "roles": [
+        "リミックス"
+      ],
+      "date": "2023-08-05",
+      "url": "https://www.nicovideo.jp/watch/sm42576695",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-c0315086",
+      "category": "案件",
+      "title": "バベル",
+      "artist": "ノア",
+      "roles": [
+        "作曲",
+        "編曲"
+      ],
+      "date": "2023-07-06",
+      "url": "https://youtu.be/KSlT4hv3QKw",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-52720f71",
+      "category": "オリジナル",
+      "title": "レボルシオン / 狐子",
+      "artist": "三面相",
+      "roles": [
+        "作曲",
+        "編曲"
+      ],
+      "date": "2023-04-30",
+      "url": "https://youtu.be/Nu3TOOYh6-4",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-987fc579",
+      "category": "オリジナル",
+      "title": "アイドル神椿",
+      "artist": "三面相",
+      "roles": [
+        "作曲",
+        "編曲"
+      ],
+      "date": "2023-04-05",
+      "url": "https://x.com/SANMENso/status/1643551148656283654",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-42d92cf5",
+      "category": "オリジナル",
+      "title": "ボカロの資金がありません！！ / 初音ミク",
+      "artist": "三面相",
+      "roles": [
+        "作曲",
+        "編曲"
+      ],
+      "date": "2023-02-04",
+      "url": "https://www.nicovideo.jp/watch/sm41743994",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-5b8c0f52",
+      "category": "オリジナル",
+      "title": "電話線、三番ホーム / 裏命",
+      "artist": "三面相",
+      "roles": [
+        "作曲",
+        "編曲"
+      ],
+      "date": "2022-12-31",
+      "url": "https://youtu.be/-tQC2JsnOwc",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-8e368b54",
+      "category": "オリジナル",
+      "title": "乱調ヒムノディ / 星界",
+      "artist": "三面相",
+      "roles": [
+        "作曲",
+        "編曲"
+      ],
+      "date": "2022-11-29",
+      "url": "https://youtu.be/d4iwXL_yZNc",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-070fb901",
+      "category": "オリジナル",
+      "title": "習作",
+      "artist": "三面相",
+      "roles": [
+        "作曲",
+        "編曲"
+      ],
+      "date": "2022-11-14",
+      "url": "https://x.com/SANMENso/status/1592088413087608835",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-4c18b60f",
+      "category": "オリジナル",
+      "title": "ピルグリムのRemix",
+      "artist": "三面相",
+      "roles": [
+        "リミックス"
+      ],
+      "date": "2022-10-18",
+      "url": "https://x.com/SANMENso/status/1582304811118080005",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-909040e6",
+      "category": "案件",
+      "title": "音楽と夢想",
+      "artist": "神椿の会",
+      "roles": [
+        "作曲",
+        "編曲"
+      ],
+      "date": "2022-10-18",
+      "url": "https://youtu.be/sDP95docQeA",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-49096362",
+      "category": "オリジナル",
+      "title": "産声 / 可不・星界",
+      "artist": "三面相",
+      "roles": [
+        "作曲",
+        "編曲"
+      ],
+      "date": "2022-08-05",
+      "url": "https://youtu.be/UOYN5jK454U",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-abae2b5d",
+      "category": "オリジナル",
+      "title": "ナイト・アモーレ / 星界",
+      "artist": "三面相",
+      "roles": [
+        "作曲",
+        "編曲"
+      ],
+      "date": "2022-07-17",
+      "url": "https://youtu.be/yupa62YiQFg",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-4cafd6ca",
+      "category": "オリジナル",
+      "title": "ButterflyEffectCity / 可不",
+      "artist": "三面相",
+      "roles": [
+        "作曲",
+        "編曲"
+      ],
+      "date": "2022-06-03",
+      "url": "https://youtu.be/TYKBm1GsSmA",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-f295a375",
+      "category": "オリジナル",
+      "title": "習作",
+      "artist": "三面相",
+      "roles": [],
+      "date": "2022-05-23",
+      "url": "https://x.com/SANMENso/status/1528667863367577601",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-b6d3b1f8",
+      "category": "案件",
+      "title": "電脳 / 32 Observers Chorus cover",
+      "artist": "神椿の会",
+      "roles": [
+        "MIX"
+      ],
+      "date": "2022-04-14",
+      "url": "https://youtu.be/ssPrdDRpBZw",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-361ee524",
+      "category": "オリジナル",
+      "title": "深夜の2時間DTM",
+      "artist": "三面相",
+      "roles": [
+        "作曲",
+        "編曲"
+      ],
+      "date": "2021-07-18",
+      "url": "https://x.com/SANMENso/status/1416416845645582336",
+      "image": "",
+      "description": ""
+    }
+  ]
+}

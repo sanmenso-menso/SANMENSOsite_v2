@@ -5,7 +5,7 @@ import reactRefresh from 'eslint-plugin-react-refresh';
 
 export default [
   {
-    ignores: ['dist/**', 'coverage/**', 'node_modules/**'],
+    ignores: ['dist/**', 'coverage/**', 'node_modules/**', '.wrangler/**'],
   },
   js.configs.recommended,
   {
@@ -31,7 +31,13 @@ export default [
     },
   },
   {
-    files: ['scripts/**/*.js', 'tests/**/*.js', '*.config.js'],
+    files: [
+      'scripts/**/*.js',
+      'tests/**/*.js',
+      'server/**/*.js',
+      'functions/**/*.js',
+      '*.config.js',
+    ],
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',

@@ -1,7 +1,7 @@
 /* Tailwind CSSの読み込み */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@import './tailwind-compat.css';
+@config '../tailwind.config.js';
 
 /* グローバルスタイル */
 body {

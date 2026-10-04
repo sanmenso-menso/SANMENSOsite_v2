@@ -584,7 +584,7 @@ const WorksPage = ({ filter = 'all', onFilterChange = () => {}, onRouteAnimation
                 <div className="whitespace-pre-line font-serif text-lg leading-loose text-gray-800">
                   {selectedWork.detailText || selectedWork.desc}
                 </div>
-                {selectedWork.credits && (
+                {selectedWork.credits?.length > 0 && (
                   <div className="mt-4 border-2 border-black/20 bg-gray-100 p-6">
                     <h3 className="mb-3 border-b border-black/20 pb-2 font-sans font-bold">
                       {isNumunumuMode ? numuText : 'CREDITS'}

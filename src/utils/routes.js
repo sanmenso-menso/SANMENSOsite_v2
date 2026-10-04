@@ -3,9 +3,19 @@ export const CONTENT_TITLES = {
     'kinetic-visualizer': 'デモトラック＠ポップスコーンマシーン',
 };
 
+export const PORTFOLIO_PAGES = {
+    '/portfolio': 'About',
+    '/portfolio/works': 'Works',
+    '/portfolio/contact': 'Contact',
+};
+
 export const PAGE_TITLES = {
     '/': 'ホーム',
     '/works': '作品',
+    '/portfolio': 'ポートフォリオ',
+    '/portfolio/about': '三面相について',
+    '/portfolio/works': '制作・参加実績',
+    '/portfolio/contact': 'ポートフォリオのお問い合わせ',
     '/contents': 'インタラクティブコンテンツ',
     '/links': 'リンク',
     '/contact': 'お問い合わせ',
@@ -15,6 +25,11 @@ export const PAGE_TITLES = {
 export const normalizePathname = (pathname) => {
     if (pathname === '/') return '/';
     return pathname.replace(/\/+$/, '') || '/';
+};
+
+export const resolvePortfolioPath = (pathname) => {
+    const path = normalizePathname(pathname);
+    return path === '/portfolio/about' ? '/portfolio' : path;
 };
 
 export const isKnownPath = (pathname) => {

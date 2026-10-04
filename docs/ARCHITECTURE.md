@@ -27,7 +27,13 @@ WORKSの作品panelは主categoryに対応する面色を持ち、複数category
 
 ## Build and deployment assets
 
-Viteが `dist/` を生成する。`public/_redirects` は既知のSPA routeをURLを維持したままroot documentへproxyし、未知のpathは `public/404.html` によるCloudflare Pages標準の404 responseへ委ねる。`public/_headers` はresponse header設定に使う。画像最適化は `scripts/` の既存Node scriptで扱う。
+Viteが `dist/` を生成する。`public/_redirects` は既知のSPA routeをURLを維持したままroot documentへproxyする。postbuildの `scripts/build-404.js` がコンパイル済みentryから `dist/404.html` を生成し、未知のpathはCloudflare Pages標準の404 responseとReactの従来の404演出を両立する。404のentryはnoindexであり、canonicalを持たない。`public/404.html` はビルド前のfallbackとして残す。`public/_headers` はresponse header設定に使う。画像最適化は `scripts/` の既存Node scriptで扱う。
+
+独立ポートフォリオは `/portfolio` がAboutトップ、`/portfolio/works` が案件一覧、`/portfolio/contact` が問い合わせフォーム。従来のトップと `/works` は維持する。公開データはスプレッドシートからコマンドで生成する `public/data/portfolio.json` に限り、管理メモや非公開行は含めない。詳細は `PORTFOLIO.md` を参照。
+
+問い合わせの `/api/contact` のみPages Functionsを実行する。秘密キーは本番のSecretに保存し、クライアントへ渡さない。送信先はサーバー内で固定し、同一origin・入力長・Turnstileのhostname/actionを検証した後にResendへ送信する。構成と実メール確認手順は `CONTACT-SETUP.md` を参照。
+
+Tailwind CSS 4のPostCSSプラグインを使う。旧版の依存にあった既知の脆弱性を解消し、`src/tailwind-compat.css` で従来の色・border・placeholder・小さいshadow/radius/blurを維持する。
 
 ## Validation
 
