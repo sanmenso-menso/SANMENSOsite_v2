@@ -1,3 +1,4 @@
+import { responsiveImage } from '../utils/responsive-image';
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { PortfolioGraphicText } from './PortfolioWorkNumber';
@@ -152,7 +153,10 @@ export default function PortfolioAboutTypography() {
     <div className="portfolio-about-composition portfolio-about-artwork" data-mood={mood}>
       <img
         className="portfolio-about-portrait"
-        src="/images/portfolio-graphics/about-portrait.webp"
+        {...responsiveImage(
+          '/images/portfolio-graphics/about-portrait.webp',
+          '(max-width: 700px) 180px, 260px',
+        )}
         alt="三面相のプロフィールアイコン"
         width="768"
         height="768"

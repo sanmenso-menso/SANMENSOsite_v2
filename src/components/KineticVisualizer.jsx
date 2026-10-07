@@ -3,6 +3,7 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { X } from 'lucide-react';
 import { NUMUNUMU_SHORT_TEXT, NUMUNUMU_TEXT, useNumunumu } from '../NumunumuContext';
 import './KineticVisualizer.css';
+import { createAnimationLoop } from '../utils/animation-loop';
 import { KINETIC_VISUALIZER_SONGS } from '../constants';
 
 // --- Popcorn Physics System ---
@@ -16,11 +17,10 @@ const KineticVisualizer = ({ onClose }) => {
   const { isNumunumuMode } = useNumunumu();
   // 再生する曲の状態管理
   const [song, setSong] = useState(KINETIC_VISUALIZER_SONGS.find(s => s.id === 1) || KINETIC_VISUALIZER_SONGS[0]);
-  const [statusText, setStatusText] = useState('Initializing...');
+  const [statusText, setStatusText] = useState('Ready to POP!');
   const [isAudioActive, setIsAudioActive] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const initialSongRef = useRef(song);
   // isPlaying の最新値を requestAnimationFrame ループ内で参照するための ref
   const isPlayingRef = useRef(isPlaying);
   useEffect(() => {
@@ -37,7 +37,7 @@ const KineticVisualizer = ({ onClose }) => {
   const analyserRef = useRef(null);
   const sourceRef = useRef(null);
   const particlesRef = useRef([]);
-  const animationFrameIdRef = useRef(null);
+  const loopRef = useRef(null);
   const renderFrameRef = useRef(null);
   const isRunningRef = useRef(false);
   const frequencyDataRef = useRef(new Uint8Array(0));
@@ -204,10 +204,7 @@ const KineticVisualizer = ({ onClose }) => {
   // オーディオ処理と描画ループ
   const renderFrame = useCallback(() => {
     if (!isRunningRef.current) return;
-    animationFrameIdRef.current = null;
-    if (!shouldReduceMotion) {
-      animationFrameIdRef.current = requestAnimationFrame(() => renderFrameRef.current?.());
-    }
+
 
     let bassVal = 0, midVal = 0, trebleVal = 0;
 
@@ -259,10 +256,7 @@ const KineticVisualizer = ({ onClose }) => {
     }
 
     isRunningRef.current = false;
-    if (animationFrameIdRef.current) {
-      cancelAnimationFrame(animationFrameIdRef.current);
-      animationFrameIdRef.current = null;
-    }
+    loopRef.current?.stop();
 
     if (sourceRef.current) {
       try {
@@ -309,6 +303,8 @@ const KineticVisualizer = ({ onClose }) => {
     let audioContext = null;
     try {
       audioContext = new AudioContext();
+      // Unlock on the Play gesture, before network/decode work loses user activation.
+      await audioContext.resume();
       const analyser = audioContext.createAnalyser();
       analyser.fftSize = 512;
 
@@ -329,7 +325,6 @@ const KineticVisualizer = ({ onClose }) => {
       source.connect(analyser);
       analyser.connect(audioContext.destination);
 
-      await audioContext.suspend();
       if (!mountedRef.current || controller.signal.aborted || requestId !== loadRequestIdRef.current) {
         return;
       }
@@ -343,8 +338,8 @@ const KineticVisualizer = ({ onClose }) => {
 
       isRunningRef.current = true;
       setIsAudioActive(true);
-      setStatusText('Ready to POP!');
-      renderFrameRef.current?.();
+      setIsPlaying(true);
+      setStatusText('Popping!');
     } catch (err) {
       if (requestId === loadRequestIdRef.current && mountedRef.current) {
         if (timedOut) {
@@ -373,9 +368,7 @@ const KineticVisualizer = ({ onClose }) => {
   const togglePlayPause = async () => {
     const audioContext = audioContextRef.current;
     if (!audioContext || audioContext.state === 'closed') {
-      setIsPlaying(false);
-      setIsAudioActive(false);
-      setStatusText('Audio Error');
+      if (!isLoading) await loadAudio(song);
       return;
     }
 
@@ -402,7 +395,11 @@ const KineticVisualizer = ({ onClose }) => {
 
     // 状態をリセットして新しい曲を設定
     setSong(newSong);
-    void loadAudio(newSong);
+    loadRequestIdRef.current += 1;
+    releaseAudioResources();
+    setIsPlaying(false);
+    setIsAudioActive(false);
+    setStatusText('Ready to POP!');
   };
 
   const handleClose = () => {
@@ -418,8 +415,7 @@ const KineticVisualizer = ({ onClose }) => {
   useEffect(() => {
     mountedRef.current = true;
     const popTimeouts = popTimeoutsRef.current;
-    // 初回マウント時にデフォルトの曲をロード
-    void loadAudio(initialSongRef.current);
+    // No audio download or AudioContext until an explicit Play gesture.
 
     return () => {
       mountedRef.current = false;
@@ -428,13 +424,16 @@ const KineticVisualizer = ({ onClose }) => {
       popTimeouts.forEach(timeoutId => window.clearTimeout(timeoutId));
       popTimeouts.clear();
     };
-  }, [loadAudio, releaseAudioResources]);
+  }, [releaseAudioResources]);
 
   useEffect(() => {
-    if (!shouldReduceMotion && isAudioActive && isRunningRef.current && animationFrameIdRef.current === null) {
-      renderFrameRef.current?.();
-    }
-  }, [isAudioActive, shouldReduceMotion]);
+    const loop = createAnimationLoop(() => renderFrameRef.current?.(), {
+      element: stageRef.current,
+      active: () => isRunningRef.current && isPlayingRef.current && !shouldReduceMotion,
+    });
+    loopRef.current = loop;
+    return () => { loop.dispose(); loopRef.current = null; };
+  }, [isPlaying, isAudioActive, shouldReduceMotion]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -506,7 +505,7 @@ const KineticVisualizer = ({ onClose }) => {
         </div>
 
         {isLoading && <button disabled>{isNumunumuMode ? NUMUNUMU_TEXT : 'Loading...'}</button>}
-        {!isLoading && isAudioActive && (
+        {!isLoading && (
           <button onClick={togglePlayPause}>
             {isNumunumuMode ? NUMUNUMU_TEXT : isPlaying ? 'Pause' : 'Play'}
           </button>

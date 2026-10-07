@@ -15,6 +15,7 @@ import {
 } from '../utils/shootingGallery';
 import { workMatchesCategory } from '../utils/works';
 import WorkCard from './WorkCard';
+import { createAnimationLoop } from '../utils/animation-loop';
 
 const FLOW_LAYOUTS = [
   { y: -108, rotate: -2.6, gap: 44, z: 3 },
@@ -93,6 +94,8 @@ const FlowingWorksLane = ({
   const [hitStates, setHitStates] = useState(() => new Map());
   const viewportRef = useRef(null);
   const primarySetRef = useRef(null);
+  const setWidthRef = useRef(0);
+  const loopRef = useRef(null);
   const dragStateRef = useRef(null);
   const inertiaVelocityRef = useRef(0);
   const previousShotTokenRef = useRef(shotToken);
@@ -175,6 +178,7 @@ const FlowingWorksLane = ({
     if (!viewport || !primarySet) return undefined;
 
     let previousSetWidth = primarySet.offsetWidth;
+    setWidthRef.current = previousSetWidth;
     scrollRemainderRef.current = 0;
     viewport.scrollLeft = previousSetWidth;
 
@@ -184,6 +188,7 @@ const FlowingWorksLane = ({
 
       viewport.scrollLeft += nextSetWidth - previousSetWidth;
       previousSetWidth = nextSetWidth;
+      setWidthRef.current = nextSetWidth;
       normalizeLoopingScrollPosition(viewport, nextSetWidth);
     });
 
@@ -196,15 +201,13 @@ const FlowingWorksLane = ({
     const primarySet = primarySetRef.current;
     if (!viewport || !primarySet) return undefined;
 
-    let animationFrameId;
-    let previousTime = performance.now();
 
-    const advanceFlow = (currentTime) => {
-      const elapsed = Math.min(currentTime - previousTime, MAX_AUTO_SCROLL_FRAME_MS);
-      previousTime = currentTime;
+
+    const advanceFlow = (delta) => {
+      const elapsed = Math.min(delta, MAX_AUTO_SCROLL_FRAME_MS);
 
       if (!dragStateRef.current?.moved) {
-        const setWidth = primarySet.offsetWidth;
+        const setWidth = setWidthRef.current;
         if (setWidth > 0) {
           let scrollDelta = 0;
 
@@ -228,11 +231,15 @@ const FlowingWorksLane = ({
         }
       }
 
-      animationFrameId = window.requestAnimationFrame(advanceFlow);
+
     };
 
-    animationFrameId = window.requestAnimationFrame(advanceFlow);
-    return () => window.cancelAnimationFrame(animationFrameId);
+    const loop = createAnimationLoop(advanceFlow, {
+      element: viewport,
+      active: () => !isPaused || (!isDialogOpen && Math.abs(inertiaVelocityRef.current) >= INERTIA_MIN_SPEED_PX_PER_SECOND),
+    });
+    loopRef.current = loop;
+    return () => { loop.dispose(); loopRef.current = null; };
   }, [duration, isDialogOpen, isPaused]);
 
   useEffect(
@@ -356,6 +363,8 @@ const FlowingWorksLane = ({
 
     dragStateRef.current = null;
     setIsDragging(false);
+    // Manual inertia must restart even when the persisted auto-flow stop state stays true.
+    loopRef.current?.invalidate();
 
     if (suppressClickRef.current) {
       suppressClickTimerRef.current = window.setTimeout(() => {

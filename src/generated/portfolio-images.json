@@ -1,0 +1,302 @@
+{
+  "/images/sublimeru.webp": {
+    "src": "/images/responsive/13a3cc21fcce0bf2-480.webp",
+    "srcSet": "/images/responsive/13a3cc21fcce0bf2-320.webp 320w, /images/responsive/13a3cc21fcce0bf2-480.webp 480w",
+    "width": 480,
+    "height": 360
+  },
+  "/images/portfolio/osaka-in-da-party-2.webp": {
+    "src": "/images/responsive/ca6e25931be3e666-640.webp",
+    "srcSet": "/images/responsive/ca6e25931be3e666-320.webp 320w, /images/responsive/ca6e25931be3e666-640.webp 640w, /images/responsive/ca6e25931be3e666-906.webp 906w",
+    "width": 906,
+    "height": 1280
+  },
+  "/images/dream-jail-set.webp": {
+    "src": "/images/responsive/db756e80b18a0e31-640.webp",
+    "srcSet": "/images/responsive/db756e80b18a0e31-320.webp 320w, /images/responsive/db756e80b18a0e31-640.webp 640w, /images/responsive/db756e80b18a0e31-960.webp 960w",
+    "width": 1280,
+    "height": 720
+  },
+  "/images/cds-youtube-music-weekend-2026.webp": {
+    "src": "/images/responsive/a84f66e42d29003a-640.webp",
+    "srcSet": "/images/responsive/a84f66e42d29003a-320.webp 320w, /images/responsive/a84f66e42d29003a-640.webp 640w, /images/responsive/a84f66e42d29003a-960.webp 960w",
+    "width": 1280,
+    "height": 720
+  },
+  "/images/portfolio/sister-other-paranoia.webp": {
+    "src": "/images/responsive/985bfaa11d881309-616.webp",
+    "srcSet": "/images/responsive/985bfaa11d881309-320.webp 320w, /images/responsive/985bfaa11d881309-616.webp 616w",
+    "width": 616,
+    "height": 353
+  },
+  "/images/portfolio/kamikaze-empire.webp": {
+    "src": "/images/responsive/5b7e0566769ee633-616.webp",
+    "srcSet": "/images/responsive/5b7e0566769ee633-320.webp 320w, /images/responsive/5b7e0566769ee633-616.webp 616w",
+    "width": 616,
+    "height": 353
+  },
+  "/images/flow-vol11-800w.webp": {
+    "src": "/images/responsive/b778c6489b4670e3-636.webp",
+    "srcSet": "/images/responsive/b778c6489b4670e3-320.webp 320w, /images/responsive/b778c6489b4670e3-636.webp 636w",
+    "width": 636,
+    "height": 899
+  },
+  "/images/viral-in-da-dnb-1280w.webp": {
+    "src": "/images/responsive/a5807ee57c87520c-640.webp",
+    "srcSet": "/images/responsive/a5807ee57c87520c-320.webp 320w, /images/responsive/a5807ee57c87520c-640.webp 640w, /images/responsive/a5807ee57c87520c-960.webp 960w",
+    "width": 1280,
+    "height": 1596
+  },
+  "/images/smile.webp": {
+    "src": "/images/responsive/991c0f95af3d5938-640.webp",
+    "srcSet": "/images/responsive/991c0f95af3d5938-320.webp 320w, /images/responsive/991c0f95af3d5938-640.webp 640w, /images/responsive/991c0f95af3d5938-960.webp 960w",
+    "width": 1000,
+    "height": 1000
+  },
+  "/images/adatidati.webp": {
+    "src": "/images/responsive/91a2afd65b5ed318-640.webp",
+    "srcSet": "/images/responsive/91a2afd65b5ed318-320.webp 320w, /images/responsive/91a2afd65b5ed318-640.webp 640w, /images/responsive/91a2afd65b5ed318-960.webp 960w",
+    "width": 1000,
+    "height": 1000
+  },
+  "/images/kyousoukansoku.webp": {
+    "src": "/images/responsive/7bc132370fb65db6-640.webp",
+    "srcSet": "/images/responsive/7bc132370fb65db6-320.webp 320w, /images/responsive/7bc132370fb65db6-640.webp 640w, /images/responsive/7bc132370fb65db6-960.webp 960w",
+    "width": 1000,
+    "height": 1000
+  },
+  "/images/vocamyaku.webp": {
+    "src": "/images/responsive/1ebeb2a1275ca270-640.webp",
+    "srcSet": "/images/responsive/1ebeb2a1275ca270-320.webp 320w, /images/responsive/1ebeb2a1275ca270-640.webp 640w, /images/responsive/1ebeb2a1275ca270-960.webp 960w",
+    "width": 1536,
+    "height": 2048
+  },
+  "/images/portfolio/soundcloud-soul-soul-floats.webp": {
+    "src": "/images/responsive/08022506a0ca9ad7-500.webp",
+    "srcSet": "/images/responsive/08022506a0ca9ad7-320.webp 320w, /images/responsive/08022506a0ca9ad7-500.webp 500w",
+    "width": 500,
+    "height": 500
+  },
+  "/images/vocalife.webp": {
+    "src": "/images/responsive/744b2dcbeda03a39-640.webp",
+    "srcSet": "/images/responsive/744b2dcbeda03a39-320.webp 320w, /images/responsive/744b2dcbeda03a39-640.webp 640w, /images/responsive/744b2dcbeda03a39-888.webp 888w",
+    "width": 888,
+    "height": 510
+  },
+  "/images/portfolio/soundcloud-pountan-tan.webp": {
+    "src": "/images/responsive/868ceac2c23a70ed-500.webp",
+    "srcSet": "/images/responsive/868ceac2c23a70ed-320.webp 320w, /images/responsive/868ceac2c23a70ed-500.webp 500w",
+    "width": 500,
+    "height": 500
+  },
+  "/images/vocachillconpi.webp": {
+    "src": "/images/responsive/9ca16ac545fcc813-250.webp",
+    "srcSet": "/images/responsive/9ca16ac545fcc813-250.webp 250w",
+    "width": 250,
+    "height": 250
+  },
+  "/images/endkikou.webp": {
+    "src": "/images/responsive/2bf56c52ff597825-640.webp",
+    "srcSet": "/images/responsive/2bf56c52ff597825-320.webp 320w, /images/responsive/2bf56c52ff597825-640.webp 640w, /images/responsive/2bf56c52ff597825-960.webp 960w",
+    "width": 1200,
+    "height": 1186
+  },
+  "/images/VIRAL.webp": {
+    "src": "/images/responsive/27221bfa2f66b45f-640.webp",
+    "srcSet": "/images/responsive/27221bfa2f66b45f-320.webp 320w, /images/responsive/27221bfa2f66b45f-640.webp 640w, /images/responsive/27221bfa2f66b45f-720.webp 720w",
+    "width": 720,
+    "height": 900
+  },
+  "/images/portfolio/soundcloud-epaepa.webp": {
+    "src": "/images/responsive/868ceac2c23a70ed-500.webp",
+    "srcSet": "/images/responsive/868ceac2c23a70ed-320.webp 320w, /images/responsive/868ceac2c23a70ed-500.webp 500w",
+    "width": 500,
+    "height": 500
+  },
+  "/images/UtageOsaka.webp": {
+    "src": "/images/responsive/a1049db8381526cc-640.webp",
+    "srcSet": "/images/responsive/a1049db8381526cc-320.webp 320w, /images/responsive/a1049db8381526cc-640.webp 640w, /images/responsive/a1049db8381526cc-960.webp 960w",
+    "width": 2481,
+    "height": 3508
+  },
+  "/images/Tunagari.webp": {
+    "src": "/images/responsive/17d0c85f48adedf3-640.webp",
+    "srcSet": "/images/responsive/17d0c85f48adedf3-320.webp 320w, /images/responsive/17d0c85f48adedf3-640.webp 640w, /images/responsive/17d0c85f48adedf3-960.webp 960w",
+    "width": 1937,
+    "height": 1368
+  },
+  "/images/basschill.webp": {
+    "src": "/images/responsive/2175d86139dfd74e-640.webp",
+    "srcSet": "/images/responsive/2175d86139dfd74e-320.webp 320w, /images/responsive/2175d86139dfd74e-640.webp 640w, /images/responsive/2175d86139dfd74e-848.webp 848w",
+    "width": 848,
+    "height": 1199
+  },
+  "/images/CDsYMW2025.webp": {
+    "src": "/images/responsive/aa5436843c5f7249-640.webp",
+    "srcSet": "/images/responsive/aa5436843c5f7249-320.webp 320w, /images/responsive/aa5436843c5f7249-640.webp 640w, /images/responsive/aa5436843c5f7249-960.webp 960w",
+    "width": 1280,
+    "height": 720
+  },
+  "/images/portfolio/soundcloud-it-started-to-rein.webp": {
+    "src": "/images/responsive/868ceac2c23a70ed-500.webp",
+    "srcSet": "/images/responsive/868ceac2c23a70ed-320.webp 320w, /images/responsive/868ceac2c23a70ed-500.webp 500w",
+    "width": 500,
+    "height": 500
+  },
+  "/images/portfolio/soundcloud-ir1bnh0hlkct.webp": {
+    "src": "/images/responsive/868ceac2c23a70ed-500.webp",
+    "srcSet": "/images/responsive/868ceac2c23a70ed-320.webp 320w, /images/responsive/868ceac2c23a70ed-500.webp 500w",
+    "width": 500,
+    "height": 500
+  },
+  "/images/GoldDiscCds.webp": {
+    "src": "/images/responsive/fe81947618891f5b-640.webp",
+    "srcSet": "/images/responsive/fe81947618891f5b-320.webp 320w, /images/responsive/fe81947618891f5b-640.webp 640w, /images/responsive/fe81947618891f5b-960.webp 960w",
+    "width": 2048,
+    "height": 2048
+  },
+  "/images/amidakuji.webp": {
+    "src": "/images/responsive/69682496a6ce5108-640.webp",
+    "srcSet": "/images/responsive/69682496a6ce5108-320.webp 320w, /images/responsive/69682496a6ce5108-640.webp 640w, /images/responsive/69682496a6ce5108-960.webp 960w",
+    "width": 1200,
+    "height": 1186
+  },
+  "/images/Lololo3.webp": {
+    "src": "/images/responsive/6c46e13b73563448-640.webp",
+    "srcSet": "/images/responsive/6c46e13b73563448-320.webp 320w, /images/responsive/6c46e13b73563448-640.webp 640w, /images/responsive/6c46e13b73563448-849.webp 849w",
+    "width": 849,
+    "height": 1200
+  },
+  "/images/DJs1.webp": {
+    "src": "/images/responsive/6dd3757bcd008153-640.webp",
+    "srcSet": "/images/responsive/6dd3757bcd008153-320.webp 320w, /images/responsive/6dd3757bcd008153-640.webp 640w, /images/responsive/6dd3757bcd008153-900.webp 900w",
+    "width": 900,
+    "height": 366
+  },
+  "/images/litetoflac.webp": {
+    "src": "/images/responsive/db9fec64496d6367-640.webp",
+    "srcSet": "/images/responsive/db9fec64496d6367-320.webp 320w, /images/responsive/db9fec64496d6367-640.webp 640w, /images/responsive/db9fec64496d6367-960.webp 960w",
+    "width": 1000,
+    "height": 1000
+  },
+  "/images/おいかける.webp": {
+    "src": "/images/responsive/4ba527367c7ab178-640.webp",
+    "srcSet": "/images/responsive/4ba527367c7ab178-320.webp 320w, /images/responsive/4ba527367c7ab178-640.webp 640w, /images/responsive/4ba527367c7ab178-777.webp 777w",
+    "width": 777,
+    "height": 767
+  },
+  "/images/kyoudouiseitaivol2.webp": {
+    "src": "/images/responsive/6da0394204fc6b2d-640.webp",
+    "srcSet": "/images/responsive/6da0394204fc6b2d-320.webp 320w, /images/responsive/6da0394204fc6b2d-640.webp 640w, /images/responsive/6da0394204fc6b2d-849.webp 849w",
+    "width": 849,
+    "height": 1200
+  },
+  "/images/kuriraji.webp": {
+    "src": "/images/responsive/59abec86144d2838-640.webp",
+    "srcSet": "/images/responsive/59abec86144d2838-320.webp 320w, /images/responsive/59abec86144d2838-640.webp 640w, /images/responsive/59abec86144d2838-875.webp 875w",
+    "width": 875,
+    "height": 884
+  },
+  "/images/try3.webp": {
+    "src": "/images/responsive/16d99580c012df0c-640.webp",
+    "srcSet": "/images/responsive/16d99580c012df0c-320.webp 320w, /images/responsive/16d99580c012df0c-640.webp 640w, /images/responsive/16d99580c012df0c-960.webp 960w",
+    "width": 2894,
+    "height": 4093
+  },
+  "/images/HelloJacket.webp": {
+    "src": "/images/responsive/3d2d0e8bcb6e61e5-640.webp",
+    "srcSet": "/images/responsive/3d2d0e8bcb6e61e5-320.webp 320w, /images/responsive/3d2d0e8bcb6e61e5-640.webp 640w, /images/responsive/3d2d0e8bcb6e61e5-960.webp 960w",
+    "width": 1200,
+    "height": 1200
+  },
+  "/images/otyameRemix.webp": {
+    "src": "/images/responsive/8ba2adf9ab88dfb1-640.webp",
+    "srcSet": "/images/responsive/8ba2adf9ab88dfb1-320.webp 320w, /images/responsive/8ba2adf9ab88dfb1-640.webp 640w, /images/responsive/8ba2adf9ab88dfb1-960.webp 960w",
+    "width": 1280,
+    "height": 720
+  },
+  "/images/seki.webp": {
+    "src": "/images/responsive/516fc8f207961ad0-640.webp",
+    "srcSet": "/images/responsive/516fc8f207961ad0-320.webp 320w, /images/responsive/516fc8f207961ad0-640.webp 640w, /images/responsive/516fc8f207961ad0-960.webp 960w",
+    "width": 1500,
+    "height": 1500
+  },
+  "/images/DJ24.webp": {
+    "src": "/images/responsive/5ea593647a961f44-640.webp",
+    "srcSet": "/images/responsive/5ea593647a961f44-320.webp 320w, /images/responsive/5ea593647a961f44-640.webp 640w, /images/responsive/5ea593647a961f44-960.webp 960w",
+    "width": 2896,
+    "height": 4096
+  },
+  "/images/zatuboka.webp": {
+    "src": "/images/responsive/b4c56d886e9a2916-640.webp",
+    "srcSet": "/images/responsive/b4c56d886e9a2916-320.webp 320w, /images/responsive/b4c56d886e9a2916-640.webp 640w, /images/responsive/b4c56d886e9a2916-960.webp 960w",
+    "width": 1200,
+    "height": 1600
+  },
+  "/images/gareriremixCds.webp": {
+    "src": "/images/responsive/06134763b7700e4a-640.webp",
+    "srcSet": "/images/responsive/06134763b7700e4a-320.webp 320w, /images/responsive/06134763b7700e4a-640.webp 640w, /images/responsive/06134763b7700e4a-960.webp 960w",
+    "width": 1280,
+    "height": 720
+  },
+  "/images/soumenbu.webp": {
+    "src": "/images/responsive/ea64be6db3b8e0eb-640.webp",
+    "srcSet": "/images/responsive/ea64be6db3b8e0eb-320.webp 320w, /images/responsive/ea64be6db3b8e0eb-640.webp 640w, /images/responsive/ea64be6db3b8e0eb-960.webp 960w",
+    "width": 1280,
+    "height": 720
+  },
+  "/images/murakamibest.webp": {
+    "src": "/images/responsive/a9c623a6a52a7a14-640.webp",
+    "srcSet": "/images/responsive/a9c623a6a52a7a14-320.webp 320w, /images/responsive/a9c623a6a52a7a14-640.webp 640w, /images/responsive/a9c623a6a52a7a14-700.webp 700w",
+    "width": 700,
+    "height": 700
+  },
+  "/images/soretoonaji.webp": {
+    "src": "/images/responsive/1d34d8f24ce0edb8-640.webp",
+    "srcSet": "/images/responsive/1d34d8f24ce0edb8-320.webp 320w, /images/responsive/1d34d8f24ce0edb8-640.webp 640w, /images/responsive/1d34d8f24ce0edb8-960.webp 960w",
+    "width": 1280,
+    "height": 720
+  },
+  "/images/kyoudouiseitaiVol1.webp": {
+    "src": "/images/responsive/c88e15a5f9a45029-640.webp",
+    "srcSet": "/images/responsive/c88e15a5f9a45029-320.webp 320w, /images/responsive/c88e15a5f9a45029-640.webp 640w, /images/responsive/c88e15a5f9a45029-960.webp 960w",
+    "width": 2516,
+    "height": 3544
+  },
+  "/images/yoku.webp": {
+    "src": "/images/responsive/0e6bfd6a106657b2-640.webp",
+    "srcSet": "/images/responsive/0e6bfd6a106657b2-320.webp 320w, /images/responsive/0e6bfd6a106657b2-640.webp 640w, /images/responsive/0e6bfd6a106657b2-960.webp 960w",
+    "width": 1280,
+    "height": 719
+  },
+  "/images/dancerobotRemix.webp": {
+    "src": "/images/responsive/dbdb7c97c1fa1f69-640.webp",
+    "srcSet": "/images/responsive/dbdb7c97c1fa1f69-320.webp 320w, /images/responsive/dbdb7c97c1fa1f69-640.webp 640w, /images/responsive/dbdb7c97c1fa1f69-960.webp 960w",
+    "width": 1280,
+    "height": 720
+  },
+  "/images/babel.webp": {
+    "src": "/images/responsive/45f3fc5fbfd09cf1-640.webp",
+    "srcSet": "/images/responsive/45f3fc5fbfd09cf1-320.webp 320w, /images/responsive/45f3fc5fbfd09cf1-640.webp 640w, /images/responsive/45f3fc5fbfd09cf1-960.webp 960w",
+    "width": 1280,
+    "height": 720
+  },
+  "/images/portfolio/youtube-sDP95docQeA.webp": {
+    "src": "/images/responsive/385d704d4a847465-640.webp",
+    "srcSet": "/images/responsive/385d704d4a847465-320.webp 320w, /images/responsive/385d704d4a847465-640.webp 640w, /images/responsive/385d704d4a847465-960.webp 960w",
+    "width": 1280,
+    "height": 720
+  },
+  "/images/portfolio/youtube-ssPrdDRpBZw.webp": {
+    "src": "/images/responsive/c75b53f084063131-640.webp",
+    "srcSet": "/images/responsive/c75b53f084063131-320.webp 320w, /images/responsive/c75b53f084063131-640.webp 640w, /images/responsive/c75b53f084063131-960.webp 960w",
+    "width": 1280,
+    "height": 720
+  },
+  "/images/portfolio-graphics/about-portrait.webp": {
+    "src": "/images/responsive/9f4b6de98d126c3e-640.webp",
+    "srcSet": "/images/responsive/9f4b6de98d126c3e-320.webp 320w, /images/responsive/9f4b6de98d126c3e-640.webp 640w, /images/responsive/9f4b6de98d126c3e-768.webp 768w",
+    "width": 768,
+    "height": 768
+  }
+}

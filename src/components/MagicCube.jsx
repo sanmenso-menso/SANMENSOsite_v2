@@ -1,7 +1,10 @@
 import React, { useCallback, useState, useEffect, useRef } from 'react';
-import { motion, useMotionValue, useAnimationFrame, animate, AnimatePresence, useIsPresent, useReducedMotion } from 'framer-motion';
+import { motion, useMotionValue, animate, AnimatePresence, useIsPresent, useReducedMotion } from 'framer-motion';
 import { Music, Palette, RadioTower } from 'lucide-react';
-import * as THREE from 'three';
+import { Quaternion } from 'three/src/math/Quaternion.js';
+import { Vector3 } from 'three/src/math/Vector3.js';
+import { Matrix4 } from 'three/src/math/Matrix4.js';
+import { createAnimationLoop } from '../utils/animation-loop';
 import { useNumunumu } from '../NumunumuContext';
 import SecretProfileFace from './SecretProfileFace';
 import AboutPage from './AboutPage';
@@ -28,8 +31,15 @@ const MagicCube = ({
     const containerRef = useRef(null);
     
     // Quaternion rotation state
-    const targetQ = useRef(new THREE.Quaternion());
-    const currentQ = useRef(new THREE.Quaternion());
+    const loopRef = useRef(null);
+    const mathRef = useRef(null);
+    if (!mathRef.current) mathRef.current = {
+        qx: new Quaternion(), qy: new Quaternion(), renderQ: new Quaternion(),
+        axisX: new Vector3(1, 0, 0), axisY: new Vector3(0, 1, 0),
+        matrix: new Matrix4(), rotZ: new Matrix4().makeRotationZ(-5 * Math.PI / 180),
+    };
+    const targetQ = useRef(new Quaternion());
+    const currentQ = useRef(new Quaternion());
     const transformMV = useMotionValue('');
     const introRotationY = useMotionValue(0);
     const introRotationX = useMotionValue(0);
@@ -96,8 +106,8 @@ const MagicCube = ({
         rotationSpeed.current = { x: 0, y: 0 };
 
         // Reset rotation to the final resting pose before applying the intro offsets.
-        const qx = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), -20 * Math.PI / 180);
-        const qy = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), -25 * Math.PI / 180);
+        const qx = new Quaternion().setFromAxisAngle(new Vector3(1, 0, 0), -20 * Math.PI / 180);
+        const qy = new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), -25 * Math.PI / 180);
         targetQ.current.multiplyQuaternions(qx, qy);
         currentQ.current.copy(targetQ.current);
 
@@ -150,7 +160,9 @@ const MagicCube = ({
         }
     }, [isOpening, isReturningFromWorks, markIntroComplete]);
 
-    useAnimationFrame(() => {
+    useEffect(() => {
+      const math = mathRef.current;
+      const render = () => {
         if (!isPresent || showAbout || showHistory) return; // Stop animation if a page is open or exiting
 
         if (shouldReduceMotion) {
@@ -158,8 +170,8 @@ const MagicCube = ({
         } else if (!isOpening && !isDragging.current) {
             // Apply inertia
             if (Math.abs(rotationSpeed.current.x) > 0.0001 || Math.abs(rotationSpeed.current.y) > 0.0001) {
-                const qy = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), rotationSpeed.current.x);
-                const qx = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), rotationSpeed.current.y);
+                const qy = math.qy.setFromAxisAngle(math.axisY, rotationSpeed.current.x);
+                const qx = new Quaternion().setFromAxisAngle(new Vector3(1, 0, 0), rotationSpeed.current.y);
                 targetQ.current.premultiply(qy);
                 targetQ.current.premultiply(qx);
                 rotationSpeed.current.x *= 0.95;
@@ -171,33 +183,45 @@ const MagicCube = ({
         if (!shouldReduceMotion) currentQ.current.slerp(targetQ.current, 0.1);
 
         // Calculate render quaternion with intro animations applied
-        const renderQ = currentQ.current.clone();
+        const renderQ = math.renderQ.copy(currentQ.current);
         
         const valY = introRotationY.get();
         if (valY > 0.001) {
-            const qY = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), valY);
+            const qY = new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), valY);
             renderQ.premultiply(qY);
         }
 
         const valX = introRotationX.get();
         if (valX > 0.001) {
-            const qX = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(-1, 0, 0), valX);
+            const qX = new Quaternion().setFromAxisAngle(new Vector3(-1, 0, 0), valX);
             renderQ.premultiply(qX);
         }
 
         // Build transformation matrix
-        const matrix = new THREE.Matrix4();
+        const matrix = math.matrix;
         matrix.makeRotationFromQuaternion(renderQ);
         
         // Keep the cube on a stable depth plane. The intro uses rotation only.
         matrix.setPosition(0, 0, 0);
 
         // Apply fixed Z rotation (-5deg)
-        const rotZ = new THREE.Matrix4().makeRotationZ(-5 * Math.PI / 180);
+        const rotZ = math.rotZ;
         matrix.premultiply(rotZ);
 
         transformMV.set(`matrix3d(${matrix.elements.join(',')})`);
-    });
+      };
+      const loop = createAnimationLoop(render, {
+        element: containerRef.current,
+        active: () => isPresent && !showAbout && !showHistory && !shouldReduceMotion && (
+          isDragging.current || Math.abs(rotationSpeed.current.x) > 0.0001 ||
+          Math.abs(rotationSpeed.current.y) > 0.0001 || currentQ.current.angleTo(targetQ.current) > 0.00001
+        ),
+      });
+      loopRef.current = loop;
+      const offY = introRotationY.on('change', () => loop.invalidate());
+      const offX = introRotationX.on('change', () => loop.invalidate());
+      return () => { offY(); offX(); loop.dispose(); loopRef.current = null; };
+    }, [introRotationX, introRotationY, isPresent, isOpening, shouldReduceMotion, showAbout, showHistory, transformMV]);
 
     useEffect(() => {
         const handlePointerMove = (e) => {
@@ -218,13 +242,14 @@ const MagicCube = ({
             prevPos.current = { x: e.clientX, y: e.clientY };
 
             const sensitivity = 0.005;
-            const qy = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), deltaX * sensitivity);
-            const qx = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), -deltaY * sensitivity);
+            const qy = new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), deltaX * sensitivity);
+            const qx = new Quaternion().setFromAxisAngle(new Vector3(1, 0, 0), -deltaY * sensitivity);
             
             targetQ.current.premultiply(qy);
             targetQ.current.premultiply(qx);
 
             rotationSpeed.current = { x: deltaX * sensitivity, y: -deltaY * sensitivity };
+            loopRef.current?.invalidate();
         };
         const handlePointerUp = () => {
             isDragging.current = false;

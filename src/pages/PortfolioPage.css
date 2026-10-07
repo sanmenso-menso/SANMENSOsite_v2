@@ -1209,3 +1209,8 @@
     transform: rotateX(-54deg);
   }
 }
+
+/* Keep the footer out of the initial viewport while the work grid loads. */
+.portfolio-loading {
+  min-height: 100svh;
+}

@@ -13,6 +13,7 @@ import PortfolioAboutTypography from '../components/PortfolioAboutTypography';
 import PortfolioContactForm from '../components/PortfolioContactForm';
 import PortfolioWorkNumber, { PortfolioGraphicText } from '../components/PortfolioWorkNumber';
 import { assignWorkNumbers } from '../utils/portfolio-numbers';
+import { responsiveImage } from '../utils/responsive-image';
 import './PortfolioPage.css';
 
 function WorkImage({ work }) {
@@ -22,7 +23,10 @@ function WorkImage({ work }) {
       <div className="portfolio-image-media">
         {work.image && !failed ? (
           <img
-            src={work.image}
+            {...responsiveImage(
+              work.image,
+              '(max-width: 600px) 90vw, (max-width: 1000px) 44vw, (max-width: 1600px) 29vw, 461px',
+            )}
             alt=""
             loading="lazy"
             decoding="async"
@@ -294,7 +298,7 @@ function WorksContent() {
         </>
       )}
       {state.status === 'loading' && (
-        <p className="portfolio-state" role="status">
+        <p className="portfolio-state portfolio-loading" role="status">
           作品を読み込んでいます…
         </p>
       )}

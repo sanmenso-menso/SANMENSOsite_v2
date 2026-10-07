@@ -3,6 +3,9 @@
 @import './tailwind-compat.css';
 @config '../tailwind.config.js';
 
+/* Reserve the scrollbar before async route/data content arrives. */
+html { scrollbar-gutter: stable; }
+
 /* グローバルスタイル */
 body {
   margin: 0;

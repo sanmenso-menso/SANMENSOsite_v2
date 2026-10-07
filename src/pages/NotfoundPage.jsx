@@ -1,5 +1,6 @@
+import { createAnimationLoop } from '../utils/animation-loop';
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion, useSpring, useTransform } from 'framer-motion';
 import { ArrowLeft, Zap, HelpCircle, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { NUMUNUMU_SHORT_TEXT, NUMUNUMU_TEXT, useNumunumu } from '../NumunumuContext';
@@ -16,12 +17,23 @@ const TIPS_LIST = [
 
 const NotFoundPage = () => {
   const canvasRef = useRef(null);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const shouldReduceMotion = useReducedMotion();
+  const mouseX = useSpring(0, { stiffness: 200, damping: 20 });
+  const mouseY = useSpring(0, { stiffness: 200, damping: 20 });
   const [mounted, setMounted] = useState(false);
   const [showTips, setShowTips] = useState(true);
   const [randomTip, setRandomTip] = useState(TIPS_LIST[0]);
   const [isHovering, setIsHovering] = useState(false);
   const [isCanvasVisible, setIsCanvasVisible] = useState(false);
+  const gain = isHovering ? 50 : 30;
+  const distortion = isHovering ? 40 : 20;
+  const tilt = isHovering ? 10 : 5;
+  const small = isHovering ? 10 : 5;
+  const pink = { x: useTransform(mouseX, x => x * -20), y: useTransform(mouseY, y => y * -20) };
+  const blue = { x: useTransform(mouseX, x => x * 30), y: useTransform(mouseY, y => y * 30), rotate: useTransform(mouseX, x => 12 + x * 10) };
+  const cyan = { x: useTransform(mouseX, x => x * gain), y: useTransform(mouseY, y => y * gain), skewX: useTransform(mouseX, x => x * distortion), rotate: useTransform(mouseX, x => x * -tilt) };
+  const magenta = { x: useTransform(mouseX, x => x * -gain), y: useTransform(mouseY, y => y * -gain), skewX: useTransform(mouseX, x => x * -distortion), rotate: useTransform(mouseX, x => x * tilt) };
+  const white = { x: useTransform(mouseX, x => x * small), y: useTransform(mouseY, y => y * small), skewX: useTransform(mouseX, x => x * small), scaleY: useTransform(mouseY, y => 1 + Math.abs(y) * (isHovering ? 0.4 : 0.2)), scaleX: useTransform(mouseY, y => 1 - Math.abs(y) * (isHovering ? 0.1 : 0.05)) };
   const navigate = useNavigate();
   const { isNumunumuMode } = useNumunumu();
   const numuText = NUMUNUMU_TEXT;
@@ -32,7 +44,7 @@ const NotFoundPage = () => {
     if (!canvas) return;
 
     const ctx = canvas.getContext('2d');
-    let animationFrameId;
+    let loop;
     let timeoutId;
 
     const resize = () => {
@@ -86,36 +98,34 @@ const NotFoundPage = () => {
           // リセット時のみ新しい文字を抽選
           currentChars[i] = getRandomChar(i);
         }
-        drops[i] += 0.092;
+        drops[i] += 0.184;
       }
-      animationFrameId = requestAnimationFrame(draw);
+
     };
 
     timeoutId = setTimeout(() => {
       setIsCanvasVisible(true);
-      draw();
+      loop = createAnimationLoop(draw, { element: canvas, active: () => !shouldReduceMotion, fps: () => 30 });
     }, 900);
 
     return () => {
       window.removeEventListener('resize', resize);
-      cancelAnimationFrame(animationFrameId);
+      loop?.dispose();
       clearTimeout(timeoutId);
     };
-  }, [mounted, isNumunumuMode]);
+  }, [mounted, isNumunumuMode, shouldReduceMotion]);
 
   useEffect(() => {
     setMounted(true);
     setRandomTip(TIPS_LIST[Math.floor(Math.random() * TIPS_LIST.length)]);
     const handleMouseMove = (e) => {
-      // 正規化 (-1 to 1)
-      setMousePosition({
-        x: (e.clientX / window.innerWidth) * 2 - 1,
-        y: (e.clientY / window.innerHeight) * 2 - 1,
-      });
+      if (shouldReduceMotion || document.hidden) return;
+      mouseX.set((e.clientX / window.innerWidth) * 2 - 1);
+      mouseY.set((e.clientY / window.innerHeight) * 2 - 1);
     };
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
+  }, [mouseX, mouseY, shouldReduceMotion]);
 
   if (!mounted) return null;
 
@@ -151,11 +161,11 @@ const NotFoundPage = () => {
       {/* Floating Pop Shapes (Parallax) */}
       <motion.div 
         className="absolute top-10 right-[10%] w-20 h-20 md:w-32 md:h-32 bg-[#FF0080] rounded-full border-4 border-black z-0 mix-blend-multiply opacity-80"
-        animate={{ x: mousePosition.x * -20, y: mousePosition.y * -20 }}
+        style={pink}
       />
       <motion.div 
         className="absolute bottom-[20%] left-[5%] w-16 h-16 md:w-24 md:h-24 bg-[#00E0FF] rotate-12 border-4 border-black z-0 mix-blend-multiply opacity-80"
-        animate={{ x: mousePosition.x * 30, y: mousePosition.y * 30, rotate: 12 + mousePosition.x * 10 }}
+        style={blue}
       />
 
       {/* 2. Main Content */}
@@ -182,17 +192,13 @@ const NotFoundPage = () => {
           <motion.h1 
             className="absolute top-0 left-0 text-[35vw] md:text-[25vw] leading-[0.8] font-syne font-extrabold text-[#00E0FF] select-none z-0"
             animate={{ 
-              x: isHovering ? mousePosition.x * 50 : mousePosition.x * 30, 
-              y: isHovering ? mousePosition.y * 50 : mousePosition.y * 30,
-              skewX: isHovering ? mousePosition.x * 40 : mousePosition.x * 20, // 横方向の歪み
-              rotate: isHovering ? mousePosition.x * -10 : mousePosition.x * -5, // わずかな回転
-              color: ["#00E0FF", "#00FF99", "#FFFF00", "#FF0099", "#00E0FF"]
+              color: shouldReduceMotion ? "#00E0FF" : ["#00E0FF", "#00FF99", "#FFFF00", "#FF0099", "#00E0FF"]
             }}
             transition={{ 
               default: { type: "spring", stiffness: 150, damping: 15 },
               color: { duration: 42, repeat: Infinity, ease: "linear" }
             }}
-            style={{ WebkitTextStroke: '3px black' }}
+            style={{ ...cyan, WebkitTextStroke: '3px black' }}
           >
             {isNumunumuMode ? NUMUNUMU_SHORT_TEXT : '404'}
           </motion.h1>
@@ -201,17 +207,13 @@ const NotFoundPage = () => {
           <motion.h1 
             className="absolute top-0 left-0 text-[35vw] md:text-[25vw] leading-[0.8] font-syne font-extrabold text-[#FF0080] select-none z-10 mix-blend-multiply"
             animate={{ 
-              x: isHovering ? mousePosition.x * -50 : mousePosition.x * -30, 
-              y: isHovering ? mousePosition.y * -50 : mousePosition.y * -30,
-              skewX: isHovering ? mousePosition.x * -40 : mousePosition.x * -20,
-              rotate: isHovering ? mousePosition.x * 10 : mousePosition.x * 5,
-              color: ["#FF0080", "#8000FF", "#0080FF", "#FF8000", "#FF0080"]
+              color: shouldReduceMotion ? "#FF0080" : ["#FF0080", "#8000FF", "#0080FF", "#FF8000", "#FF0080"]
             }}
             transition={{ 
               default: { type: "spring", stiffness: 150, damping: 15 },
               color: { duration: 42, repeat: Infinity, ease: "linear" }
             }}
-            style={{ WebkitTextStroke: '3px black' }}
+            style={{ ...magenta, WebkitTextStroke: '3px black' }}
           >
             {isNumunumuMode ? NUMUNUMU_SHORT_TEXT : '404'}
           </motion.h1>
@@ -219,17 +221,11 @@ const NotFoundPage = () => {
           {/* Main White Layer - 中心に留まりつつ、伸縮する */}
           <motion.h1 
             className="relative text-[35vw] md:text-[25vw] leading-[0.8] font-syne font-extrabold text-white select-none z-20 drop-shadow-2xl"
-            animate={{ 
-              x: isHovering ? mousePosition.x * 10 : mousePosition.x * 5,
-              y: isHovering ? mousePosition.y * 10 : mousePosition.y * 5,
-              skewX: isHovering ? mousePosition.x * 10 : mousePosition.x * 5,
-              scaleY: 1 + Math.abs(mousePosition.y) * (isHovering ? 0.4 : 0.2), // マウスが上下に動くと文字が縦に伸びる
-              scaleX: 1 - Math.abs(mousePosition.y) * (isHovering ? 0.1 : 0.05), // 少し横に縮む（ストレッチ感）
-            }}
+
             transition={{ 
               default: { type: "spring", stiffness: 200, damping: 20 }
             }}
-            style={{ WebkitTextStroke: '4px black' }}
+            style={{ ...white, WebkitTextStroke: '4px black' }}
           >
             {isNumunumuMode ? NUMUNUMU_SHORT_TEXT : '404'}
           </motion.h1>
