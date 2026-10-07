@@ -25,7 +25,12 @@ export function existingImage(work, candidates) {
   return matches.length === 1 ? safeImage(matches[0].image) : '';
 }
 
-const imageHosts = new Set(['i.ytimg.com', 'pbs.twimg.com', 'shared.akamai.steamstatic.com']);
+const imageHosts = new Set([
+  'i.ytimg.com',
+  'pbs.twimg.com',
+  'shared.akamai.steamstatic.com',
+  'i1.sndcdn.com',
+]);
 
 export function validateMedia(entries) {
   if (!Array.isArray(entries)) throw new Error('portfolio-media.json は配列にしてください。');

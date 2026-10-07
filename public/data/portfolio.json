@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-02T12:01:29.834Z",
+  "generatedAt": "2026-10-07T14:38:17.141Z",
   "works": [
     {
       "id": "work-de501c58",
-      "number": 44,
+      "number": 49,
       "category": "案件",
       "title": "サブリメる",
       "artist": "星界",
@@ -15,12 +15,12 @@
       ],
       "date": "2026-08-31",
       "url": "https://youtu.be/_19lBxlk-bs",
-      "image": "/images/portfolio/youtube-_19lBxlk-bs.webp",
+      "image": "/images/sublimeru.webp",
       "description": ""
     },
     {
       "id": "work-a67b0cba",
-      "number": 43,
+      "number": 48,
       "category": "案件",
       "title": "おお阪 IN DA PARTY!2",
       "artist": "",
@@ -34,7 +34,7 @@
     },
     {
       "id": "work-54b8a5f9",
-      "number": 41,
+      "number": 46,
       "category": "案件",
       "title": "Dream Jail set",
       "artist": "d.j.ァネイロ",
@@ -44,12 +44,12 @@
       ],
       "date": "2026-08-21",
       "url": "https://youtu.be/H2VHHma9Z9c",
-      "image": "/images/portfolio/youtube-H2VHHma9Z9c.webp",
+      "image": "/images/dream-jail-set.webp",
       "description": ""
     },
     {
       "id": "work-e017e5c6",
-      "number": 42,
+      "number": 47,
       "category": "案件",
       "title": "CDs YouTubeMusicWeekend 2026",
       "artist": "CDs",
@@ -61,12 +61,12 @@
       ],
       "date": "2026-08-21",
       "url": "https://youtu.be/UCd6Sw4P8Xk",
-      "image": "/images/portfolio/youtube-UCd6Sw4P8Xk.webp",
+      "image": "/images/cds-youtube-music-weekend-2026.webp",
       "description": ""
     },
     {
       "id": "work-f91e3574",
-      "number": 40,
+      "number": 45,
       "category": "案件",
       "title": "妹、他者、パラノイア",
       "artist": "HazeDenki",
@@ -80,7 +80,7 @@
     },
     {
       "id": "work-4a8b5a3c",
-      "number": 39,
+      "number": 44,
       "category": "案件",
       "title": "神風帝国 メインテーマ",
       "artist": "神風帝国（Kamikaze Kobo）",
@@ -95,7 +95,7 @@
     },
     {
       "id": "work-5161ca56",
-      "number": 38,
+      "number": 43,
       "category": "案件",
       "title": "Flow vol.11",
       "artist": "",
@@ -109,7 +109,7 @@
     },
     {
       "id": "work-3a6ca54c",
-      "number": 37,
+      "number": 42,
       "category": "案件",
       "title": "VIRAL with In_da_DnB",
       "artist": "",
@@ -123,7 +123,7 @@
     },
     {
       "id": "work-0928c582",
-      "number": 34,
+      "number": 39,
       "category": "案件",
       "title": "SMILEVIDEO in Osaka",
       "artist": "",
@@ -137,7 +137,7 @@
     },
     {
       "id": "work-173db83e",
-      "number": 35,
+      "number": 40,
       "category": "案件",
       "title": "足立って俺のダチ！？",
       "artist": "足立って俺のダチ！？",
@@ -151,7 +151,7 @@
     },
     {
       "id": "work-ce862c65",
-      "number": 36,
+      "number": 41,
       "category": "案件",
       "title": "『共創の測地線』アフターDJパーティ",
       "artist": "",
@@ -165,7 +165,7 @@
     },
     {
       "id": "work-e5f65d1c",
-      "number": 33,
+      "number": 38,
       "category": "案件",
       "title": "ボカ脈in関西 Vol.2",
       "artist": "",
@@ -178,8 +178,23 @@
       "description": ""
     },
     {
+      "id": "work-7634ef2b",
+      "number": 37,
+      "category": "案件",
+      "title": "Soul Soul Floats",
+      "artist": "Rinienna(skebより)",
+      "roles": [
+        "作曲",
+        "編曲"
+      ],
+      "date": "2026-02-17",
+      "url": "https://soundcloud.com/sanmenso/soul-soul-floats",
+      "image": "",
+      "description": ""
+    },
+    {
       "id": "work-9b331b68",
-      "number": 32,
+      "number": 36,
       "category": "案件",
       "title": "2025's VOCALIFE",
       "artist": "",
@@ -192,8 +207,23 @@
       "description": ""
     },
     {
+      "id": "work-96798c23",
+      "number": 35,
+      "category": "案件",
+      "title": "PouNtan tan",
+      "artist": "Tiko(skebより)",
+      "roles": [
+        "作曲",
+        "編曲"
+      ],
+      "date": "2025-11-28",
+      "url": "https://soundcloud.com/sanmenso/pountan-tan",
+      "image": "/images/portfolio/soundcloud-pountan-tan.webp",
+      "description": ""
+    },
+    {
       "id": "work-f7137382",
-      "number": 31,
+      "number": 34,
       "category": "案件",
       "title": "『Chill』コンピ",
       "artist": "あなざ～せかい",
@@ -207,7 +237,7 @@
     },
     {
       "id": "work-2af48c8c",
-      "number": 30,
+      "number": 33,
       "category": "案件",
       "title": "終点帰行",
       "artist": "ああああ",
@@ -221,7 +251,7 @@
     },
     {
       "id": "work-033e578b",
-      "number": 29,
+      "number": 32,
       "category": "案件",
       "title": "VIRAL 2025.10.19",
       "artist": "",
@@ -234,8 +264,23 @@
       "description": ""
     },
     {
+      "id": "work-8978d2df",
+      "number": 31,
+      "category": "案件",
+      "title": "EPA EPA Txapeka",
+      "artist": "匿名(skebより)",
+      "roles": [
+        "作曲",
+        "編曲"
+      ],
+      "date": "2025-10-14",
+      "url": "https://soundcloud.com/sanmenso/epaepa",
+      "image": "/images/portfolio/soundcloud-epaepa.webp",
+      "description": ""
+    },
+    {
       "id": "work-19d2b7b6",
-      "number": 28,
+      "number": 30,
       "category": "案件",
       "title": "FOR UNREAL TO REAL",
       "artist": "",
@@ -249,7 +294,7 @@
     },
     {
       "id": "work-56e8246d",
-      "number": 27,
+      "number": 29,
       "category": "案件",
       "title": "つながり v1.0",
       "artist": "",
@@ -263,7 +308,7 @@
     },
     {
       "id": "work-663f7f62",
-      "number": 26,
+      "number": 28,
       "category": "案件",
       "title": "ℬaⓢ9 - Chill",
       "artist": "",
@@ -277,7 +322,7 @@
     },
     {
       "id": "work-ecce519b",
-      "number": 25,
+      "number": 27,
       "category": "案件",
       "title": "CDs YouTubeMusicWeekend 2025",
       "artist": "CDs",
@@ -288,6 +333,36 @@
       "date": "2025-08-31",
       "url": "https://youtu.be/ci4NOQnobyc",
       "image": "/images/CDsYMW2025.webp",
+      "description": ""
+    },
+    {
+      "id": "work-5dace6ae",
+      "number": 26,
+      "category": "案件",
+      "title": "It started to Rein",
+      "artist": "Barg(skebより)",
+      "roles": [
+        "作曲",
+        "編曲"
+      ],
+      "date": "2025-08-28",
+      "url": "https://soundcloud.com/sanmenso/it-started-to-rein",
+      "image": "/images/portfolio/soundcloud-it-started-to-rein.webp",
+      "description": ""
+    },
+    {
+      "id": "work-e06918ca",
+      "number": 25,
+      "category": "案件",
+      "title": "お花畑にいこう！",
+      "artist": "綿英(skebより)",
+      "roles": [
+        "作曲",
+        "編曲"
+      ],
+      "date": "2025-08-21",
+      "url": "https://soundcloud.com/sanmenso/ir1bnh0hlkct",
+      "image": "/images/portfolio/soundcloud-ir1bnh0hlkct.webp",
       "description": ""
     },
     {
@@ -824,6 +899,20 @@
       "description": ""
     },
     {
+      "id": "work-7634ef2b",
+      "category": "案件",
+      "title": "Soul Soul Floats",
+      "artist": "Rinienna(skebより)",
+      "roles": [
+        "作曲",
+        "編曲"
+      ],
+      "date": "2026-02-17",
+      "url": "https://soundcloud.com/sanmenso/soul-soul-floats",
+      "image": "",
+      "description": ""
+    },
+    {
       "id": "work-9b331b68",
       "category": "案件",
       "title": "2025's VOCALIFE",
@@ -833,6 +922,20 @@
       ],
       "date": "2026-01-18",
       "url": "https://x.com/mimi0heart/status/2012774449011949640",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-96798c23",
+      "category": "案件",
+      "title": "PouNtan tan",
+      "artist": "Tiko(skebより)",
+      "roles": [
+        "作曲",
+        "編曲"
+      ],
+      "date": "2025-11-28",
+      "url": "https://soundcloud.com/sanmenso/pountan-tan",
       "image": "",
       "description": ""
     },
@@ -918,6 +1021,20 @@
       "description": ""
     },
     {
+      "id": "work-8978d2df",
+      "category": "案件",
+      "title": "EPA EPA Txapeka",
+      "artist": "匿名(skebより)",
+      "roles": [
+        "作曲",
+        "編曲"
+      ],
+      "date": "2025-10-14",
+      "url": "https://soundcloud.com/sanmenso/epaepa",
+      "image": "",
+      "description": ""
+    },
+    {
       "id": "work-19d2b7b6",
       "category": "案件",
       "title": "FOR UNREAL TO REAL",
@@ -971,6 +1088,34 @@
       "description": ""
     },
     {
+      "id": "work-5dace6ae",
+      "category": "案件",
+      "title": "It started to Rein",
+      "artist": "Barg(skebより)",
+      "roles": [
+        "作曲",
+        "編曲"
+      ],
+      "date": "2025-08-28",
+      "url": "https://soundcloud.com/sanmenso/it-started-to-rein",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-e06918ca",
+      "category": "案件",
+      "title": "お花畑にいこう！",
+      "artist": "綿英(skebより)",
+      "roles": [
+        "作曲",
+        "編曲"
+      ],
+      "date": "2025-08-21",
+      "url": "https://soundcloud.com/sanmenso/ir1bnh0hlkct",
+      "image": "",
+      "description": ""
+    },
+    {
       "id": "work-8102ef39",
       "category": "案件",
       "title": "GOLD DISC 25.08.16",
@@ -1006,6 +1151,19 @@
       ],
       "date": "2025-07-16",
       "url": "https://x.com/Quartz_Tea/status/1945453379670720820",
+      "image": "",
+      "description": ""
+    },
+    {
+      "id": "work-a7554945",
+      "category": "オリジナル",
+      "title": "ロゴ制作",
+      "artist": "三面相",
+      "roles": [
+        "ロゴデザイン"
+      ],
+      "date": "2025-07-13",
+      "url": "",
       "image": "",
       "description": ""
     },
@@ -1251,19 +1409,6 @@
       ],
       "date": "2025-01-11",
       "url": "https://www.nicovideo.jp/watch/sm44518881",
-      "image": "",
-      "description": ""
-    },
-    {
-      "id": "work-a7554945",
-      "category": "オリジナル",
-      "title": "ロゴ制作",
-      "artist": "三面相",
-      "roles": [
-        "ロゴデザイン"
-      ],
-      "date": "2025",
-      "url": "",
       "image": "",
       "description": ""
     },
