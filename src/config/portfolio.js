@@ -6,6 +6,7 @@ export const SELECTED_WORK_IDS = [
   'work-4a8b5a3c', // 神風帝国 メインテーマ
   'work-033e578b', // VIRAL 2025.10.19
   'work-8102ef39', // GOLD DISC 25.08.16
+  'work-5dace6ae', // It started to Rein
 ];
 
 export const WORKS_SHUFFLE_INTERVAL = 30_000;
