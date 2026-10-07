@@ -41,7 +41,7 @@
 - [It started to Rein](https://soundcloud.com/sanmenso/it-started-to-rein)
 - [お花畑にいこう！](https://soundcloud.com/sanmenso/ir1bnh0hlkct)
 
-[Soul Soul Floats](https://soundcloud.com/sanmenso/soul-soul-floats) の応答はSoundCloud共通のplaceholderだったため作品画像として採用せず、既定の文字表示を使います。
+2026-10-08、[Soul Soul Floats](https://soundcloud.com/sanmenso/soul-soul-floats) の作品ページで現在表示されている画像を確認し、`soundcloud-soul-soul-floats.webp` として追加しました。oEmbed応答では共通のplaceholderが返されたため、作品ページ上の公開画像を採用しています。取得元は `portfolio-media.json` に記録しています。
 
 ## ポートフォリオのグラフィック・数字（2026-10-03）
 
