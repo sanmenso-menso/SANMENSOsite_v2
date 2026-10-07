@@ -253,7 +253,9 @@ describe('portfolio page', () => {
         ]),
       );
     const initialNumbers = numbers();
-    expect(initial.slice(0, 6)).toEqual(SELECTED_WORK_IDS.map((_id, index) => `固定${index}`));
+    expect(initial.slice(0, SELECTED_WORK_IDS.length)).toEqual(
+      SELECTED_WORK_IDS.map((_id, index) => `固定${index}`),
+    );
     await act(async () => vi.advanceTimersByTime(WORKS_SHUFFLE_INTERVAL - 1));
     expect(titles()).toEqual(initial);
     await act(async () => vi.advanceTimersByTime(1));

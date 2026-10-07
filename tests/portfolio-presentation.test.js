@@ -8,7 +8,7 @@ import {
 import { SELECTED_WORK_IDS } from '../src/config/portfolio.js';
 
 describe('portfolio presentation', () => {
-  it('pins the six requested works in order, and excludes them from the random pool', async () => {
+  it('shows the requested representative works first in order on initial display', async () => {
     const data = JSON.parse(
       await readFile(new URL('../public/data/portfolio.json', import.meta.url), 'utf8'),
     );
@@ -21,8 +21,9 @@ describe('portfolio presentation', () => {
       '神風帝国 メインテーマ',
       'VIRAL 2025.10.19',
       'GOLD DISC 25.08.16',
+      'It started to Rein',
     ]);
-    expect(remaining).toHaveLength(data.works.length - 6);
+    expect(remaining).toHaveLength(data.works.length - SELECTED_WORK_IDS.length);
     expect(remaining.some((work) => SELECTED_WORK_IDS.includes(work.id))).toBe(false);
   });
   it('shuffles without dropping, duplicating, mutating or sorting by dates', () => {
