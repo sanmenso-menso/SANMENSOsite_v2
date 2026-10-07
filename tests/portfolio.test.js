@@ -95,6 +95,21 @@ describe('spreadsheet to public portfolio', () => {
     expect(changed.map((work) => work.id).sort()).toEqual(first.map((work) => work.id).sort());
   });
 
+  it('normalizes unpadded spreadsheet dates while rejecting impossible calendar dates', () => {
+    const datedRows = [headers, ['2025-1-11', ...rows[1].slice(1)]];
+    expect(rowsToPortfolio(datedRows).works[0].date).toBe('2025-01-11');
+    expect(rowsToActivities(datedRows)[0].date).toBe('2025-01-11');
+    expect(rowsToPortfolio([headers, ['2025-1', ...rows[1].slice(1)]]).works[0].date).toBe(
+      '2025-01',
+    );
+    expect(() => rowsToPortfolio([headers, ['2025-2-29', ...rows[1].slice(1)]])).toThrow(
+      '実在しない',
+    );
+    expect(() => rowsToPortfolio([headers, ['2025-13-1', ...rows[1].slice(1)]])).toThrow(
+      '実在しない',
+    );
+  });
+
   it('fails on schema drift, duplicate works, unsafe URLs and invalid dates', () => {
     expect(() => rowsToPortfolio([['作品名'], ['test']])).toThrow('ヘッダー');
     expect(() => rowsToPortfolio([headers, rows[1], rows[1]])).toThrow('重複');

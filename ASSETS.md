@@ -32,6 +32,17 @@
 
 今後のYouTube補完画像は、ファイル名 `youtube-{動画ID}.webp` とJSONの作品URLで出典を追跡できます。取得先は `https://i.ytimg.com/vi/{動画ID}/maxresdefault.jpg`、未提供時は `hqdefault.jpg` です。
 
+## SoundCloud作品の公開画像（2026-10-07）
+
+以下の作品ページの公開画像を、SoundCloudの公式oEmbed応答で確認し、`public/images/portfolio/soundcloud-{slug}.webp` に保存しました。取得元のURLは `portfolio-media.json` に記録し、画像ホストは `i1.sndcdn.com` のみに限定しています。既存の画像サイズ・データ量制限とメタデータ除去を適用します。
+
+- [PouNtan tan](https://soundcloud.com/sanmenso/pountan-tan)
+- [EPA EPA Txapeka](https://soundcloud.com/sanmenso/epaepa)
+- [It started to Rein](https://soundcloud.com/sanmenso/it-started-to-rein)
+- [お花畑にいこう！](https://soundcloud.com/sanmenso/ir1bnh0hlkct)
+
+[Soul Soul Floats](https://soundcloud.com/sanmenso/soul-soul-floats) の応答はSoundCloud共通のplaceholderだったため作品画像として採用せず、既定の文字表示を使います。
+
 ## ポートフォリオのグラフィック・数字（2026-10-03）
 
 ユーザーが制作・提供した `ポートフォリオアセット２.svg` を、ポートフォリオのページ内の区切りと数字表示として使用します。4種類のグラフィックと0〜9の手描き数字です。原版のコピーは `src/assets/images_original/portfolio-assets.svg` に保管し、元ファイルは変更していません。

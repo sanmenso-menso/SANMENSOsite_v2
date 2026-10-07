@@ -27,11 +27,17 @@ export function safeImage(value) {
 }
 
 function validDate(value) {
-  const date = text(value);
-  if (!date) return '';
-  if (!/^\d{4}(-\d{2}(-\d{2})?)?$/.test(date)) {
+  const source = text(value);
+  if (!source) return '';
+  const parts = source.match(/^(\d{4})(?:-(\d{1,2})(?:-(\d{1,2}))?)?$/);
+  if (!parts) {
     throw new Error('公開日は YYYY、YYYY-MM、YYYY-MM-DD のいずれかにしてください。');
   }
+  const date = parts
+    .slice(1)
+    .filter(Boolean)
+    .map((part) => part.padStart(2, '0'))
+    .join('-');
   const full = date.length === 4 ? `${date}-01-01` : date.length === 7 ? `${date}-01` : date;
   const parsed = new Date(`${full}T00:00:00Z`);
   if (!Number.isFinite(parsed.getTime()) || parsed.toISOString().slice(0, 10) !== full) {
