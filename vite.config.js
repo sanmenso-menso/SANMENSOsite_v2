@@ -72,7 +72,11 @@ export default defineConfig(({ mode }) => ({
     strictPort: true,
     // Generated static files are read on page reload, not imported as modules.
     watch: {
-      ignored: ['**/public/data/portfolio.json', '**/public/images/portfolio/**'],
+      ignored: [
+        '**/public/data/portfolio.json',
+        '**/public/images/portfolio/**',
+        '**/public/images/responsive/**',
+      ],
     },
     cors: {
       origin: /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/,

@@ -1,3 +1,4 @@
+import { generateResponsiveImages } from './responsive-images.js';
 // @ts-check
 import { mkdir, readFile, rename, rm, writeFile } from 'node:fs/promises';
 import { randomUUID } from 'node:crypto';
@@ -72,6 +73,7 @@ async function main() {
 
   portfolio = await enrichImages(portfolio, root, WORKS_DATA, await readMedia(root));
   portfolio = validatePortfolio(portfolio);
+  await generateResponsiveImages(root, portfolio);
 
   const numbersPath = path.join(root, 'portfolio-numbers.json');
   const numbered = assignWorkNumbers(portfolio.works);

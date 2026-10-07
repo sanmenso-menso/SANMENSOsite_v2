@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "prebuild": "node scripts/clean-dist.js",
+    "prebuild": "node scripts/responsive-images.js && node scripts/clean-dist.js",
     "build": "vite build",
     "postbuild": "node scripts/build-404.js",
     "preview": "vite preview",
