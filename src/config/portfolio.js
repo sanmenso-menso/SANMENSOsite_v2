@@ -11,6 +11,12 @@ export const SELECTED_WORK_IDS = [
 
 export const WORKS_SHUFFLE_INTERVAL = 30_000;
 
+// Hide only from the Works gallery; keep public data and About activities intact.
+export const HIDDEN_WORK_IDS = [
+  'work-b6d3b1f8', // 電脳 / 32 Observers Chorus cover
+  'work-909040e6', // 音楽と夢想
+];
+
 // Overrides take precedence over URL/role inference for mixed-media works.
 export const WORK_FIELD_OVERRIDES = {
   'work-4a8b5a3c': 'game',

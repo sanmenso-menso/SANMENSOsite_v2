@@ -7,6 +7,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import PortfolioPage from '../src/pages/PortfolioPage.jsx';
+import portfolio from '../public/data/portfolio.json';
 import { rowsToPortfolio } from '../src/utils/portfolio.js';
 import { SELECTED_WORK_IDS, WORKS_SHUFFLE_INTERVAL } from '../src/config/portfolio.js';
 
@@ -50,6 +51,44 @@ async function renderPage(path = '/portfolio/works') {
 }
 
 describe('portfolio page', () => {
+  it('hides the two configured commissions from Works, filters and shuffle without renumbering or removing About activities', async () => {
+    vi.useFakeTimers();
+    vi.spyOn(document, 'hidden', 'get').mockReturnValue(false);
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => portfolio }));
+    const snapshot = JSON.stringify(portfolio);
+    const hiddenTitles = ['電脳 / 32 Observers Chorus cover', '音楽と夢想'];
+    const assertWorks = () => {
+      const cards = [...container.querySelectorAll('.portfolio-work')];
+      expect(cards).toHaveLength(portfolio.works.length - 2);
+      expect(container.querySelector('.portfolio-total').textContent).toBe(
+        `${String(portfolio.works.length - 2).padStart(2, '0')} WORKS`,
+      );
+      for (const title of hiddenTitles) {
+        expect(cards.some((card) => card.querySelector('h3').textContent === title)).toBe(false);
+      }
+      for (const card of cards) {
+        const work = portfolio.works.find(
+          (item) => item.title === card.querySelector('h3').textContent,
+        );
+        expect(card.querySelector('.portfolio-work-number').getAttribute('aria-label')).toBe(
+          `作品ID ${String(work.number).padStart(2, '0')}`,
+        );
+      }
+      expect(
+        container.querySelector('.portfolio-filters select:last-child option[value="2022"]'),
+      ).toBeNull();
+    };
+    await renderPage();
+    assertWorks();
+    await act(async () => vi.advanceTimersByTime(WORKS_SHUFFLE_INTERVAL * 2));
+    assertWorks();
+    await act(async () => container.querySelector('nav a[href="/portfolio"]').click());
+    const table = container.querySelector('.portfolio-activity-table');
+    expect(table.querySelectorAll('tbody tr')).toHaveLength(portfolio.activities.length);
+    for (const title of hiddenTitles) expect(table.textContent).toContain(title);
+    expect(JSON.stringify(portfolio)).toBe(snapshot);
+  });
+
   it('scatters the role only on activation, restores it, and clears the timer on leaving About', async () => {
     vi.useFakeTimers();
     const scheduled = vi.spyOn(window, 'setTimeout');
