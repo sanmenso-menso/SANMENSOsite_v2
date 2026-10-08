@@ -6,7 +6,7 @@ import { ArrowUpRight, Search } from 'lucide-react';
 import { filterWorks, validatePortfolio } from '../utils/portfolio';
 import { resolvePortfolioPath, PORTFOLIO_PAGES } from '../utils/routes';
 import { shuffleWorks, splitSelectedWorks, workField } from '../utils/portfolio-presentation';
-import { WORKS_SHUFFLE_INTERVAL } from '../config/portfolio';
+import { HIDDEN_WORK_IDS, WORKS_SHUFFLE_INTERVAL } from '../config/portfolio';
 import PortfolioMasks from '../components/PortfolioMasks';
 import PortfolioBackdrop from '../components/PortfolioBackdrop';
 import PortfolioAboutTypography from '../components/PortfolioAboutTypography';
@@ -104,7 +104,7 @@ function WorkCard({ work }) {
   );
 }
 
-function usePortfolioData() {
+function usePortfolioData({ hideWorks = false } = {}) {
   const [state, setState] = useState({ status: 'loading', data: null, orderedWorks: [] });
   const [attempt, setAttempt] = useState(0);
 
@@ -122,6 +122,12 @@ function usePortfolioData() {
       .then((data) => {
         // Recalculate old and new JSON before the initial selection or any display shuffle.
         data = { ...data, works: assignWorkNumbers(data.works).works };
+        if (hideWorks) {
+          data = {
+            ...data,
+            works: data.works.filter((work) => !HIDDEN_WORK_IDS.includes(work.id)),
+          };
+        }
         const { selected, remaining } = splitSelectedWorks(data.works);
         if (active)
           setState({
@@ -139,12 +145,12 @@ function usePortfolioData() {
       window.clearTimeout(timeout);
       controller.abort();
     };
-  }, [attempt]);
+  }, [attempt, hideWorks]);
   return { state, setState, retry: () => setAttempt((value) => value + 1) };
 }
 
 function WorksContent() {
-  const { state, setState, retry } = usePortfolioData();
+  const { state, setState, retry } = usePortfolioData({ hideWorks: true });
   const [query, setQuery] = useState('');
   const [role, setRole] = useState('');
   const [year, setYear] = useState('');

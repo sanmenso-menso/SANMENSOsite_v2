@@ -97,6 +97,8 @@ UTF-8（BOM可）のCSV、引用符で囲まれたカンマ・改行を扱えま
 
 ### Selected Worksと並べ替え
 
+`src/config/portfolio.js` の `HIDDEN_WORK_IDS` に登録した作品は、案件でもWorksには表示しません。「電脳 / 32 Observers Chorus cover」と「音楽と夢想」を設定済みです。検索・絞り込み・自動並べ替えの対象にもならず、Worksの件数も表示対象だけを数えます。AboutのActivitiesと公開JSONには残し、他作品の番号も変えません。スプシを再取得してもこの除外設定は維持されます。作品名・アーティスト・公開リンクを変更してIDが変わった場合は、除外設定も更新してください。
+
 Selected Worksは内部の分類として扱い、画面上に見出しは表示しません。
 
 `src/config/portfolio.js` の `SELECTED_WORK_IDS` に、指定7件を指定順で設定しています。IDは作品名・アーティスト・公開リンクから生成されるため、これらを変更した場合は新しいJSONのIDに合わせて設定を更新してください。行順や公開日の変更ではIDは変わりません。
